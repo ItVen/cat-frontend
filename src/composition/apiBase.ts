@@ -3,11 +3,16 @@ import { Notify, LocalStorage } from 'quasar';
 import axios, { AxiosError } from 'axios';
 import { useConfig } from './baseConfig';
 const TOKEN_KEY = 'scToken';
-function getToken(): string {
+export const CAT_DATA = 'cat_data';
+export function getToken(): string | null {
   return LocalStorage.getItem(TOKEN_KEY);
 }
-function setToken(token: string): void {
-  LocalStorage.set(TOKEN_KEY, token);
+
+function setStorage(key: string, val: string): void {
+  LocalStorage.set(key, val);
+}
+export function getStorage(key: string): string | null {
+  return LocalStorage.getItem(key);
 }
 interface ApiResponse {
   code: number;
@@ -185,7 +190,8 @@ export async function createUserInfo(email: string, address: string) {
   );
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const token = res.data.token;
-  setToken(token);
+  setStorage(TOKEN_KEY, token);
+  setStorage(CAT_DATA, res.data);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return res.data;
 }

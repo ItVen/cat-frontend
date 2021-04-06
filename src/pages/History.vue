@@ -2,22 +2,24 @@
  * @Author: Aven
  * @Date: 2021-04-05 18:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-05 19:02:16
+ * @LastEditTime: 2021-04-07 00:01:17
  * @Description: 
 -->
 <template>
-  <div class="fullscreen flex flex-center">
-    _History
-  </div>
+  <q-page class="fullscreen flex flex-center">
+    <history-list />
+  </q-page>
 </template>
 
 <script>
 import { defineComponent } from '@vue/composition-api';
+import HistoryList from 'src/components/HistoryList.vue';
 
 export default defineComponent({
+  components: { HistoryList },
   name: 'History',
   setup() {
-    return { tab: 'mails' };
+    return {};
   }
 });
 </script>

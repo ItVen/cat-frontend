@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-05 18:23:47
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-05 19:00:46
+ * @LastEditTime: 2021-04-06 23:18:15
  * @Description: 
 -->
 <template>
@@ -38,19 +38,22 @@ export default defineComponent({
     value: Number
   },
   setup(props) {
-    const progress = props.value;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    const progress = props.value | 0;
     return {
       progress,
       ...getStateData(props.value, props.state, props.contexst)
     };
+  },
+  methods: {
+    login: {
+      //  window.location.href = 'https://unipass-demo.vercel.app/#/';
+    }
   }
 });
 </script>
 <style lang="scss">
 .lay2btn {
   display: flex;
-  height: 40px;
   width: 200px;
   flex-direction: row;
   align-items: center;

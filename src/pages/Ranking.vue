@@ -2,22 +2,28 @@
  * @Author: Aven
  * @Date: 2021-04-05 18:03:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-05 19:02:09
+ * @LastEditTime: 2021-04-07 00:01:09
  * @Description: 
 -->
 <template>
-  <div class="fullscreen flex flex-center">
-    _Ranking
-  </div>
+  <q-page class="fit column  justify-center items-center content-start">
+    <ranking-list :title="fishesTitle" />
+    <ranking-list :title="victoriesTitle" />
+  </q-page>
 </template>
 
 <script>
 import { defineComponent } from '@vue/composition-api';
+import RankingList from 'src/components/RankingList.vue';
 
 export default defineComponent({
+  components: { RankingList },
   name: 'Ranking',
   setup() {
-    return { tab: 'mails' };
+    return {
+      fishesTitle: 'Ranking of Fishes',
+      victoriesTitle: 'Ranking of Victories'
+    };
   }
 });
 </script>
