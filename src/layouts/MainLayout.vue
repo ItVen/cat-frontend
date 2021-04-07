@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-07 22:24:59
+ * @LastEditTime: 2021-04-08 00:39:26
  * @Description: 
 -->
 <template>
@@ -63,11 +63,12 @@
 import { defineComponent } from '@vue/composition-api';
 import StateButton from 'src/components/StateButtons.vue';
 import { login } from '../composition/getLoginStatus';
+import { toHash } from '../composition/getHash';
 export default defineComponent({
   name: 'MainLayout',
   components: { StateButton },
   setup() {
-    return { tab: '/', login };
+    return { tab: '/', login, toHash };
   },
   methods: {
     async clickToLogin() {
@@ -75,10 +76,7 @@ export default defineComponent({
       // todo 跳转到unipass登录
       this.contexst = 'user.email';
       console.log(this.contexst);
-      const user = await login(
-        'hi.ellen@qq.com',
-        'ckt1qyqz0njzt6xjh705nd4plqs5nhh5ls4kpksq3ur7j2'
-      );
+      toHash('ss', 'ss');
     },
     jumb() {
       void this.$router.push(this.tab);

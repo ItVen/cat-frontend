@@ -26,10 +26,10 @@ export default defineComponent({
       columns: [],
       data: [
         {
-          Player: '',
-          Opponent: '',
-          Result: '',
-          Fishes: '',
+          Player: 'Player',
+          Opponent: 'Opponent',
+          Result: 'Result',
+          Fishes: '10',
           Record: ''
         }
       ]
