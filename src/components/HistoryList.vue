@@ -24,7 +24,15 @@ export default defineComponent({
   setup() {
     return {
       columns: [],
-      data: []
+      data: [
+        {
+          Player: '',
+          Opponent: '',
+          Result: '',
+          Fishes: '',
+          Record: ''
+        }
+      ]
     };
   }
 });

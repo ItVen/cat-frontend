@@ -2,12 +2,13 @@
  * @Author: Aven
  * @Date: 2021-04-05 18:03:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-07 00:01:09
+ * @LastEditTime: 2021-04-07 09:46:05
  * @Description: 
 -->
 <template>
   <q-page class="fit column  justify-center items-center content-start">
     <ranking-list :title="fishesTitle" />
+    <br />
     <ranking-list :title="victoriesTitle" />
   </q-page>
 </template>

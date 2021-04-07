@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-06 22:07:47
+ * @LastEditTime: 2021-04-07 09:38:30
  * @Description:
  */
 import { RouteConfig } from 'vue-router';
@@ -13,7 +13,7 @@ const routes: RouteConfig[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
-        path: '/home',
+        path: '/',
         component: () => import('src/pages/Home.vue')
       },
       {

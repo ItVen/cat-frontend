@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-06 23:36:14
+ * @LastEditTime: 2021-04-07 22:27:08
  * @Description: 
 -->
 <template>
@@ -26,9 +26,8 @@ export default defineComponent({
   components: { CatInfo, CreatCat },
   name: 'LoginHome',
   setup() {
-    const data = getUserInfo();
-    console.log(data);
-    return { ...data };
+    let data = getUserInfo();
+    return { create_cat: 0, ...data };
   }
 });
 </script>

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 10:19:36
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-06 23:35:26
+ * @LastEditTime: 2021-04-07 22:35:05
  * @Description:
  */
 import { getToken, createUserInfo, CAT_DATA, getStorage } from './apiBase';

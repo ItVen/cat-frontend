@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-05 18:23:47
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-06 23:18:15
+ * @LastEditTime: 2021-04-07 22:32:06
  * @Description: 
 -->
 <template>
@@ -30,18 +30,21 @@
 <script>
 import { getStateData } from 'src/composition/stateButton';
 import { defineComponent } from '@vue/composition-api';
+import { getUserInfo } from '../composition/getLoginStatus';
 export default defineComponent({
   name: 'StateButton',
   props: {
-    contexst: String,
     state: String,
     value: Number
   },
   setup(props) {
     const progress = props.value | 0;
+    const data = getUserInfo();
+    let contexst = 'Connect To Unipass';
+    if (data) contexst = data.email;
     return {
       progress,
-      ...getStateData(props.value, props.state, props.contexst)
+      ...getStateData(props.value, props.state, contexst)
     };
   },
   methods: {

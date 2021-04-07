@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-06 16:32:46
+ * @LastEditTime: 2021-04-07 13:44:21
  * @Description: 
 -->
 <template>
@@ -29,27 +29,32 @@
         </div>
       </q-card-section>
       <q-separator />
-
       <q-card-actions>
-        <q-btn no-caps label="send" color="primary" @click="_send" />
-        <q-btn flat @click="_copy"> 复制 </q-btn>
+        <q-btn
+          no-caps
+          label="send"
+          color="primary"
+          @click="send"
+          style="width: 200px"
+        />
+        <!-- <q-btn flat @click="_copy"> 复制 </q-btn>
         <q-btn flat @click="_export"> 导出 </q-btn>
-        <q-btn flat @click="_share"> 分享 </q-btn>
+        <q-btn flat @click="_share"> 分享 </q-btn> -->
       </q-card-actions>
     </q-card>
+    <bottom-sheet :name="name" v-show="_show" @close="send" />
   </div>
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import { getAttribute } from '../composition/getHash';
+import { getCatIcon } from '../composition/utils';
+import BottomSheet from './BottomSheet.vue';
 export default defineComponent({
+  components: { BottomSheet },
   name: 'CatInfo',
   props: {
-    icon: {
-      type: String,
-      default: 'https://placeimg.com/500/300/nature'
-    },
     name: {
       type: String,
       default: 'name'
@@ -62,26 +67,18 @@ export default defineComponent({
   },
   setup(props) {
     const attr = getAttribute(props.hash);
+    const icon = getCatIcon(props.name);
     return {
+      _show: false,
+      icon,
       ...attr
     };
   },
   methods: {
-    _copy() {
+    send() {
       // todo
-      console.log('copy');
-    },
-    _share() {
-      // todo
-      console.log('share');
-    },
-    _export() {
-      // todo
-      console.log('export');
-    },
-    _send() {
-      // todo
-      console.log('export');
+      this._show = !this._show;
+      console.log('export', this.icon);
     }
   }
 });

@@ -2,11 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-06 23:48:37
+ * @LastEditTime: 2021-04-07 09:45:47
  * @Description: 
 -->
 <template>
-  <q-page class="flex column">
+  <div class="flex column">
     <span class="text-h6">{{ title }} </span>
     <q-list bordered separator>
       <q-item clickable v-ripple>
@@ -19,7 +19,6 @@
           <q-item-label caption>Caption</q-item-label>
         </q-item-section>
       </q-item>
-
       <q-item clickable v-ripple>
         <q-item-section>
           <q-item-label overline>OVERLINE</q-item-label>
@@ -27,7 +26,7 @@
         </q-item-section>
       </q-item>
     </q-list>
-  </q-page>
+  </div>
 </template>
 <script>
 import { defineComponent } from '@vue/composition-api';
