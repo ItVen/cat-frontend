@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-08 00:39:26
+ * @LastEditTime: 2021-04-08 21:46:43
  * @Description: 
 -->
 <template>
@@ -64,19 +64,31 @@ import { defineComponent } from '@vue/composition-api';
 import StateButton from 'src/components/StateButtons.vue';
 import { login } from '../composition/getLoginStatus';
 import { toHash } from '../composition/getHash';
+import TestData from '../composition/testJson';
+import { getLiveCell, getTransaction, getTip } from '../composition/rpcApi';
 export default defineComponent({
   name: 'MainLayout',
   components: { StateButton },
   setup() {
-    return { tab: '/', login, toHash };
+    const datas = new TestData();
+    return {
+      tab: '/',
+      login,
+      toHash,
+      datas,
+      getLiveCell,
+      getTransaction,
+      getTip
+    };
   },
   methods: {
     async clickToLogin() {
-      console.log('clickToLogin');
-      // todo 跳转到unipass登录
-      this.contexst = 'user.email';
-      console.log(this.contexst);
-      toHash('ss', 'ss');
+      // todo unipass 交互
+      // window.location.href = 'https://unipass-demo.vercel.app/#/';
+      const user = this.datas.login();
+      await getLiveCell(user);
+      // todo 服务器交互
+      await login(user);
     },
     jumb() {
       void this.$router.push(this.tab);

@@ -2,19 +2,19 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-07 13:44:21
+ * @LastEditTime: 2021-04-09 00:27:27
  * @Description: 
 -->
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
+  <div class="q-pa-md row items-start q-gutter-md" @click="more">
     <q-card class="my-card" flat bordered>
       <q-card-section horizontal>
         <q-card-section
           class="fit column  justify-center items-center content-start"
         >
           <q-img class="my-icon" :src="icon" :ratio="1" />
-          <div class="text-subtitle2 q-mt-sm q-mb-xs">{{ name }}</div>
-          <div class="text-subtitle2 text-grey">{{ frishes }}</div>
+          <div class="text-subtitle2 q-mt-sm q-mb-xs">{{ cat.name }}</div>
+          <div class="text-subtitle2 text-grey">{{ cat.frishes }}</div>
         </q-card-section>
       </q-card-section>
       <q-separator />
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { getAttribute } from '../composition/getHash';
 import { getCatIcon } from '../composition/utils';
 import BottomSheet from './BottomSheet.vue';
@@ -55,30 +55,29 @@ export default defineComponent({
   components: { BottomSheet },
   name: 'CatInfo',
   props: {
-    name: {
-      type: String,
-      default: 'name'
-    },
-    frishes: {
-      type: Number,
-      default: 100
-    },
-    hash: String // todo  根据hash 计算属性
+    cat: {
+      name: String,
+      frishes: Number,
+      hash: String // todo  根据hash 计算属性
+    }
   },
   setup(props) {
-    const attr = getAttribute(props.hash);
-    const icon = getCatIcon(props.name);
+    console.log(props);
+    const attr = getAttribute(props.cat.hash);
+    const icon = getCatIcon(props.cat.name);
     return {
-      _show: false,
       icon,
       ...attr
     };
   },
   methods: {
     send() {
-      // todo
-      this._show = !this._show;
-      console.log('export', this.icon);
+      // todo unipass 交互
+      window.location.href = 'https://unipass-demo.vercel.app/#/';
+    },
+    more() {
+      console.log('展示详情');
+      void this.$router.push('/challenge');
     }
   }
 });
@@ -88,7 +87,7 @@ export default defineComponent({
   max-width: 350px;
   height: 300px;
   .my-icon {
-    width: 100px;
+    width: 80px;
     height: 80px;
   }
 }

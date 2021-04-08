@@ -6,7 +6,7 @@
  * @Description: 
 -->
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="full-width column">
     <history-list />
   </q-page>
 </template>

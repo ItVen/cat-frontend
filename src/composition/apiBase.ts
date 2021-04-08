@@ -2,6 +2,10 @@
 import { Notify, LocalStorage } from 'quasar';
 import axios, { AxiosError } from 'axios';
 import { useConfig } from './baseConfig';
+import { Cells } from './interface';
+import { ApiResponse } from './interface';
+
+import TestData from '../composition/testJson';
 const TOKEN_KEY = 'scToken';
 export const CAT_DATA = 'cat_data';
 export function getToken(): string | null {
@@ -14,11 +18,7 @@ function setStorage(key: string, val: string): void {
 export function getStorage(key: string): string | null {
   return LocalStorage.getItem(key);
 }
-interface ApiResponse {
-  code: number;
-  msg: string;
-  data: unknown;
-}
+
 const apiGet = async (
   url: string,
   params?: Record<string, string | undefined>,
@@ -47,22 +47,21 @@ const get = async (
   console.log('[apiGet] url: ', url);
   try {
     ret = await axios.get(url, config);
+    console.log(ret, config);
   } catch (e) {
+    console.log(e);
     if ((e as AxiosError).response?.status === 401) {
       // todo  跳转登录
       return;
     }
-    Notify.create({
-      message: `[API] - ${(e as Error).toString()}`,
-      position: 'top',
-      timeout: 2000,
-      color: 'negative'
-    });
+    // Notify.create({
+    //   message: `[API] - ${(e as Error).toString()}`,
+    //   position: 'top',
+    //   timeout: 2000,
+    //   color: 'negative'
+    // });
   }
-  if (ret?.data) {
-    ret.data = (ret?.data as ApiResponse).data;
-  }
-
+  console.log(ret);
   return ret;
 };
 const apiPost = async (
@@ -89,17 +88,17 @@ const post = async (
     if ((e as AxiosError).response?.status === 401) {
       return;
     }
-    Notify.create({
-      message: `[API] - ${(e as Error).message} Params: ${JSON.stringify(
-        params
-      )}`,
-      position: 'top',
-      timeout: 2000,
-      color: 'negative'
-    });
+    // Notify.create({
+    //   message: `[API] - ${(e as Error).message} Params: ${JSON.stringify(
+    //     params
+    //   )}`,
+    //   position: 'top',
+    //   timeout: 2000,
+    //   color: 'negative'
+    // });
   }
   if (ret?.data) {
-    ret.data = (ret?.data as ApiResponse).data;
+    ret = (ret?.data as ApiResponse).data;
   }
   return ret;
 };
@@ -127,30 +126,23 @@ const patch = async (
     if ((e as AxiosError).response?.status === 401) {
       return;
     }
-    Notify.create({
-      message: `[API] - ${(e as Error).message} Params: ${JSON.stringify(
-        params
-      )}`,
-      position: 'top',
-      timeout: 2000,
-      color: 'negative'
-    });
+    // Notify.create({
+    //   message: `[API] - ${(e as Error).message} Params: ${JSON.stringify(
+    //     params
+    //   )}`,
+    //   position: 'top',
+    //   timeout: 2000,
+    //   color: 'negative'
+    // });
   }
   if (ret?.data) {
     ret.data = (ret?.data as ApiResponse).data;
   }
   return ret;
 };
-const apiPUT = async (
-  url: string,
-  params: Record<string, unknown>,
-  authorization?: boolean
-) => put(useConfig().base_url + url, params, authorization);
-const put = async (
-  url: string,
-  params: Record<string, unknown>,
-  authorization?: boolean
-) => {
+const apiPUT = async (url: string, params: unknown, authorization?: boolean) =>
+  put(useConfig().base_url + url, params, authorization);
+const put = async (url: string, params: unknown, authorization?: boolean) => {
   let config = undefined;
   if (authorization) {
     const token = getToken();
@@ -165,14 +157,14 @@ const put = async (
     if ((e as AxiosError).response?.status === 401) {
       return;
     }
-    Notify.create({
-      message: `[API] - ${(e as Error).message} Params: ${JSON.stringify(
-        params
-      )}`,
-      position: 'top',
-      timeout: 2000,
-      color: 'negative'
-    });
+    // Notify.create({
+    //   message: `[API] - ${(e as Error).message} Params: ${JSON.stringify(
+    //     params
+    //   )}`,
+    //   position: 'top',
+    //   timeout: 2000,
+    //   color: 'negative'
+    // });
   }
   if (ret?.data) {
     ret.data = (ret?.data as ApiResponse).data;
@@ -180,7 +172,7 @@ const put = async (
   return ret;
 };
 export async function createUserInfo(email: string, address: string) {
-  const res = await apiPost(
+  let res = await apiPost(
     '/user',
     {
       address,
@@ -188,6 +180,10 @@ export async function createUserInfo(email: string, address: string) {
     },
     false
   );
+  if (!res) {
+    // todo 假数据
+    res = new TestData().bind();
+  }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const token = res.data.token;
   setStorage(TOKEN_KEY, token);
@@ -204,8 +200,7 @@ export async function getNameUsed(name: string) {
     },
     true
   );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return res.data;
+  return res?.data as ApiResponse;
 }
 
 export async function getCatInfoByName(name: string) {
@@ -216,30 +211,12 @@ export async function getCatInfoByName(name: string) {
     },
     true
   );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return res.data;
+  return res?.data as ApiResponse;
 }
-export interface Cell {
-  capacity: string;
-  lock: string;
-  data: {
-    name: string;
-    hash: string;
-    fishes: number;
-  };
-}
-export async function putMyUserData(cell: Cell) {
-  const res = await apiPUT(
-    '/user',
-    {
-      capacity: cell.capacity,
-      lock: cell.lock,
-      data: cell.data
-    },
-    true
-  );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return res.data;
+
+export async function putMyUserData(cell: Cells) {
+  const res = await apiPUT('/user', cell, true);
+  return res?.data as ApiResponse;
 }
 
 export async function patchTxStatusData(
@@ -256,8 +233,7 @@ export async function patchTxStatusData(
     },
     true
   );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return res.data;
+  return res?.data as ApiResponse;
 }
 
 export async function postMyTxData(
@@ -276,6 +252,5 @@ export async function postMyTxData(
     },
     true
   );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return res.data;
 }

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-05 18:23:47
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-07 22:32:06
+ * @LastEditTime: 2021-04-08 21:46:22
  * @Description: 
 -->
 <template>
@@ -29,7 +29,7 @@
 </template>
 <script>
 import { getStateData } from 'src/composition/stateButton';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import { getUserInfo } from '../composition/getLoginStatus';
 export default defineComponent({
   name: 'StateButton',
@@ -40,17 +40,18 @@ export default defineComponent({
   setup(props) {
     const progress = props.value | 0;
     const data = getUserInfo();
+    console.log(data);
     let contexst = 'Connect To Unipass';
-    if (data) contexst = data.email;
+    let login = false;
+    if (data) {
+      login = true;
+      contexst = data.email;
+    }
     return {
       progress,
+      login,
       ...getStateData(props.value, props.state, contexst)
     };
-  },
-  methods: {
-    login: {
-      //  window.location.href = 'https://unipass-demo.vercel.app/#/';
-    }
   }
 });
 </script>

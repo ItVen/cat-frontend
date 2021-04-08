@@ -2,23 +2,23 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-07 22:27:08
+ * @LastEditTime: 2021-04-09 00:10:10
  * @Description: 
 -->
 <template>
   <q-page class="flex column">
     <span class="text-h4">Welcome to Sourly Cat </span>
-    <creat-cat v-if="create_cat > 0"></creat-cat>
+    <creat-cat v-if="create_cat > 0" @show="update"></creat-cat>
     <div v-else>
       <span class="text-subtitle1"> your cat</span>
       <div class="fit row wrap justify-between items-center content-end">
-        <cat-info></cat-info>
+        <cat-info :cat="cat"></cat-info>
       </div>
     </div>
   </q-page>
 </template>
 <script>
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import { getUserInfo } from '../composition/getLoginStatus';
 import CatInfo from './CatInfo.vue';
 import CreatCat from './CreatCat.vue';
@@ -27,7 +27,18 @@ export default defineComponent({
   name: 'LoginHome',
   setup() {
     let data = getUserInfo();
-    return { create_cat: 0, ...data };
+    return {
+      create_cat: ref(0),
+      ...data,
+      cat: {}
+    };
+  },
+  methods: {
+    update(data) {
+      console.log('update', data);
+      this.create_cat = 0;
+      this.cat = data;
+    }
   }
 });
 </script>

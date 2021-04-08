@@ -14,6 +14,7 @@
       row-key="name"
       flat
       bordered
+      hide-bottom
     />
   </div>
 </template>

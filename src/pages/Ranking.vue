@@ -6,7 +6,7 @@
  * @Description: 
 -->
 <template>
-  <q-page class="fit column  justify-center items-center content-start">
+  <q-page class="full-width column">
     <ranking-list :title="fishesTitle" />
     <br />
     <ranking-list :title="victoriesTitle" />
