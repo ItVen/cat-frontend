@@ -30,8 +30,10 @@ export default defineComponent({
     return {};
   },
   methods: {
-    async login() {
-      await login('email', 'address');
+    login() {
+      // await login('email', 'address');
+      // todo unipass交互
+      window.location.href = 'https://unipass-demo.vercel.app/#/';
     }
   }
 });
