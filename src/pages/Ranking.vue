@@ -7,9 +7,9 @@
 -->
 <template>
   <q-page class="full-width column">
-    <ranking-list :title="fishesTitle" />
+    <ranking-list :title="fishesTitle" :data="rankf" />
     <br />
-    <ranking-list :title="victoriesTitle" />
+    <ranking-list :title="victoriesTitle" :data="rankv" />
   </q-page>
 </template>
 
@@ -19,11 +19,18 @@ import RankingList from 'src/components/RankingList.vue';
 
 export default defineComponent({
   components: { RankingList },
+
   name: 'Ranking',
+  name: 'History',
   setup() {
+    const datas = new TestData();
+    rankf = datas.fishesList();
+    rankv = datas.VictoryList();
     return {
       fishesTitle: 'Ranking of Fishes',
-      victoriesTitle: 'Ranking of Victories'
+      victoriesTitle: 'Ranking of Victories',
+      rankf,
+      rankv
     };
   }
 });

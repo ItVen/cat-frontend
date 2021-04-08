@@ -37,4 +37,76 @@ export default class TestData {
     };
     return data;
   }
+
+  fishesList(): Record<string, unknown> {
+    const data = {
+      list: [
+        {
+          name: 'ssssss',
+          fishes: 60,
+          hash:
+            '0x36a491bcf8ff9e94e49f2bd99969ed51ceb256a8cfbe1ed0583da0c6edb15cd8'
+        },
+        {
+          name: 'zzzsasa',
+          fishes: 56,
+          hash:
+            '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
+        }
+      ],
+      page: 0
+    };
+    return data;
+  }
+  VictoryList(): Record<string, unknown> {
+    const data = {
+      list: [
+        {
+          name: 'ssssss',
+          fishes: 60,
+          hash:
+            '0x36a491bcf8ff9e94e49f2bd99969ed51ceb256a8cfbe1ed0583da0c6edb15cd8',
+          count: 20
+        },
+        {
+          name: 'zzzsasa',
+          fishes: 56,
+          hash:
+            '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601',
+          count: 10
+        }
+      ],
+      page: 0
+    };
+
+    return data;
+  }
+
+  historyList(): Record<string, unknown> {
+    const data = {
+      list: [
+        {
+          from: 'ssssss',
+          to: 'sss',
+          win: false,
+          fishes: '-3',
+          time: '2021/04/09 10:00',
+          tx_hash:
+            '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
+        },
+        {
+          from: 'zzzzz',
+          to: 's',
+          win: true,
+          fishes: '3',
+          time: '2021/04/09 10:00',
+          tx_hash:
+            '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
+        }
+      ],
+      page: 0
+    };
+
+    return data;
+  }
 }

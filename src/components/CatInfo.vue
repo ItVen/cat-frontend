@@ -14,7 +14,7 @@
         >
           <q-img class="my-icon" :src="icon" :ratio="1" />
           <div class="text-subtitle2 q-mt-sm q-mb-xs">{{ cat.name }}</div>
-          <div class="text-subtitle2 text-grey">{{ cat.frishes }}</div>
+          <div class="text-subtitle2 text-grey">{{ cat.fishes }}</div>
         </q-card-section>
       </q-card-section>
       <q-separator />

@@ -22,18 +22,22 @@
 import { defineComponent } from '@vue/composition-api';
 export default defineComponent({
   name: 'HistoryList',
-  setup() {
+  props: {
+    list: {
+      list: Array,
+      paget: Number
+    }
+  },
+  setup(props) {
     return {
-      columns: [],
-      data: [
-        {
-          Player: 'Player',
-          Opponent: 'Opponent',
-          Result: 'Result',
-          Fishes: '10',
-          Record: ''
-        }
-      ]
+      columns: [
+        { name: 'from', label: 'from', field: 'from' },
+        { name: 'to', label: 'to', field: 'to' },
+        { name: 'win', label: 'win', field: 'win' },
+        { name: 'fishes', label: 'fishes', field: 'fishes' },
+        { name: 'tx_hash', label: 'tx_hash', field: 'tx_hash' }
+      ],
+      data: props.list
     };
   }
 });

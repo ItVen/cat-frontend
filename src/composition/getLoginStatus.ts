@@ -41,7 +41,11 @@ export async function login(account: Account): Promise<UserData | null> {
 export async function getNameIsUsed(name: string): Promise<Cells | boolean> {
   // todo 假数据
   const data = await getNameUsed(name);
-  const used = (data.data as NameUsed).used;
+  let used = (data.data as NameUsed).used;
+  if (!data) {
+    // todo 假数据
+    used = false;
+  }
   if (!used) {
     const cell = await setCellData(name);
     if (cell) return cell;
