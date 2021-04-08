@@ -34,6 +34,7 @@ export default defineComponent({
       // await login('email', 'address');
       // todo unipass交互
       window.location.href = 'https://unipass-demo.vercel.app/#/';
+      // todo  获取到账户数据
     }
   }
 });
