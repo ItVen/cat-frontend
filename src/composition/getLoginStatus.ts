@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 10:19:36
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 09:49:05
+ * @LastEditTime: 2021-04-09 10:42:05
  * @Description:
  */
 import {
@@ -10,9 +10,9 @@ import {
   createUserInfo,
   CAT_DATA,
   getStorage,
-  getNameUsed
+  setStorage
 } from './apiBase';
-import { Account, NameUsed, Cells } from './interface';
+import { Account, Cells } from './interface';
 import { getLiveCell } from './rpcApi';
 import { setCellData } from './getHash';
 export function isLogin(): boolean {
@@ -52,18 +52,31 @@ export async function getNameIsUsed(name: string): Promise<Cells | boolean> {
   if (!used) {
     const cell = await setCellData(name);
     console.log(cell);
-    if (cell) return cell;
+    if (cell) {
+      // todo 假数据 保存cell
+      setStorage('cell', cell);
+      return cell;
+    }
+
     return false;
   } else {
   }
   return false;
 }
 export function getUserInfo(): UserData | string | null {
-  const data = getStorage(CAT_DATA);
-
+  let data = getStorage(CAT_DATA);
+  const cat = getStorage('cell');
+  data = Object.assign(data, { cat });
+  console.log(data);
   return data;
 }
 
+export function resetUserInfo(): void {
+  const data = getStorage(CAT_DATA);
+  console.log(data.create_cat);
+  data.create_cat = parseInt(data.create_cat) - 1;
+  setStorage(CAT_DATA, data);
+}
 export function updateMyCell(cells: unknown): void {
   console.log(cells);
 }

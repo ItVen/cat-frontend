@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 21:54:55
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 00:35:10
+ * @LastEditTime: 2021-04-09 10:53:58
  * @Description: 
 -->
 <template>
@@ -14,17 +14,22 @@
       :rightUrl="'signup'"
       :leftUrl="'/'"
     ></top-bars>
+    <div class="fit row wrap justify-between items-center content-end">
+      <cat-info :cat="cat"></cat-info>
+    </div>
   </q-page>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import CatInfo from '../components/CatInfo.vue';
 import TopBars from 'src/components/TopBars.vue';
 
 export default defineComponent({
   name: 'Challenge',
-  components: { TopBars },
-  setup() {
+  components: { TopBars, CatInfo },
+  setup(props, context) {
+    // cat = context.
     return {};
   }
 });

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 00:10:10
+ * @LastEditTime: 2021-04-09 10:40:29
  * @Description: 
 -->
 <template>
@@ -18,7 +18,7 @@
   </q-page>
 </template>
 <script>
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { getUserInfo } from '../composition/getLoginStatus';
 import CatInfo from './CatInfo.vue';
 import CreatCat from './CreatCat.vue';
@@ -27,10 +27,11 @@ export default defineComponent({
   name: 'LoginHome',
   setup() {
     let data = getUserInfo();
+    console.log(data);
     return {
-      create_cat: ref(0),
-      ...data,
-      cat: {}
+      create_cat: 0,
+      cat: {},
+      ...data
     };
   },
   methods: {
