@@ -2,9 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 00:04:40
+ * @LastEditTime: 2021-04-09 11:56:26
  * @Description:
  */
+
+import { Amount } from '@lay2/pw-core';
 export interface Account {
   email: string;
   address: string;
@@ -76,4 +78,26 @@ export interface Cat {
   def: number;
   lck: number;
   ph: number;
+}
+
+export interface ChainsModel {
+  name: string;
+  shortName: string;
+  chain: string;
+  network: string;
+  chainId: number;
+  networkId: number;
+  rpcUrl: string;
+  nativeCurrency: {
+    symbol: string;
+    name: string;
+    decimals: string;
+    contractAddress: string;
+    balance: string;
+  };
+}
+export interface PWCoreData {
+  ckbBalance: Amount | null;
+  address: string | undefined;
+  ethAddress: string | undefined;
 }

@@ -24,7 +24,7 @@ const routes: RouteConfig[] = [
         path: '/ranking',
         component: () => import('src/pages/Ranking.vue')
       },
-      { path: '/challenge', component: () => import('src/pages/Challenge.vue') }
+      { path: '/account', component: () => import('src/pages/Account.vue') }
     ]
   },
 

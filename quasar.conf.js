@@ -9,7 +9,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { configure } = require('quasar/wrappers');
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function(/* ctx */) {
   return {
     // https://v1.quasar.dev/quasar-cli/supporting-ts
     supportTS: {
@@ -24,16 +24,10 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v1.quasar.dev/quasar-cli/boot-files
-    boot: [
-      'composition-api',
-      'i18n',
-      'axios',
-    ],
+    boot: ['composition-api', 'i18n', 'axios'],
 
     // https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
-    css: [
-      'app.scss'
-    ],
+    css: ['app.scss'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -71,9 +65,9 @@ module.exports = configure(function (/* ctx */) {
 
       // https://v1.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpack (/* chain */) {
+      chainWebpack(/* chain */) {
         //
-      },
+      }
     },
 
     // Full list of options: https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
@@ -102,7 +96,14 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-       plugins: ['Notify', 'Loading', 'LocalStorage', 'Cookies', 'Dialog','BottomSheet']
+      plugins: [
+        'Notify',
+        'Loading',
+        'LocalStorage',
+        'Cookies',
+        'Dialog',
+        'BottomSheet'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
@@ -172,13 +173,11 @@ module.exports = configure(function (/* ctx */) {
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-
         // OS X / Mac App Store
         // appBundleId: '',
         // appCategoryType: '',
         // osxSign: '',
         // protocol: 'myapp://path',
-
         // Windows only
         // win32metadata: { ... }
       },
@@ -192,10 +191,10 @@ module.exports = configure(function (/* ctx */) {
       // More info: https://v1.quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
 
-      extendWebpack (/* cfg */) {
+      extendWebpack(/* cfg */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       }
     }
-  }
+  };
 });

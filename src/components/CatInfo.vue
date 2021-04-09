@@ -9,40 +9,58 @@
   <div class="q-pa-md row items-start q-gutter-md" @click="more">
     <q-card class="my-card" flat bordered>
       <q-card-section horizontal>
-        <q-card-section
-          class="fit column  justify-center items-center content-start"
-        >
+        <q-card-section class="fit column  justify-center items-center ">
           <q-img class="my-icon" :src="icon" :ratio="1" />
-          <div class="text-subtitle2 q-mt-sm q-mb-xs">{{ cat.name }}</div>
-          <div class="text-subtitle2 text-grey">{{ cat.fishes }}</div>
+          <div class="text-h5 text-weight-bold q-mt-sm q-mb-xs">
+            {{ cat.name }}
+          </div>
+          <div
+            class="text-h6 text-weight-regular fit row  justify-center items-center content-center"
+          >
+            <br />
+            <q-icon
+              class="self-center"
+              name="img:icons/fishes.png"
+              size="30px"
+            />
+            <span class="self-center">{{ cat.fishes }} </span>
+          </div>
+
+          <div
+            class="fit row  justify-around q-mt-sm q-mb-xs items-center text-subtitle1 text-weight-bold"
+          >
+            <div class="row  justify-center items-center content-center">
+              <q-icon
+                class="self-center"
+                name="img:icons/health-outline.png"
+                size="20px"
+              />
+              <span class="self-center">{{ ph }} </span>
+            </div>
+            <div class="row  justify-center items-center content-center">
+              <q-icon
+                class="self-center"
+                name="img:icons/attack-outline.png"
+                size="20px"
+              />
+              <span class="self-center">{{ atk }} </span>
+            </div>
+            <div class="row  justify-center items-center content-center">
+              <q-icon name="img:icons/defense-outline.png" size="20px" />
+              <span class="self-center">{{ def }} </span>
+            </div>
+            <div class="row  justify-center items-center content-center">
+              <q-icon
+                class="self-center"
+                name="img:icons/lucky-outline.png"
+                size="20px"
+              />
+              <span class="self-center">{{ lck }} </span>
+            </div>
+          </div>
         </q-card-section>
       </q-card-section>
-      <q-separator />
-      <q-card-section class="col-5 flex flex-center">
-        <div class="fit row  justify-around">
-          <div>HP:{{ ph }}</div>
-          <div>ATK:{{ atk }}</div>
-        </div>
-        <div class="fit row  justify-around">
-          <div>DEF:{{ def }}</div>
-          <div>LCK:{{ lck }}</div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-actions>
-        <q-btn
-          no-caps
-          label="send"
-          color="primary"
-          @click="send"
-          style="width: 200px"
-        />
-        <!-- <q-btn flat @click="_copy"> 复制 </q-btn>
-        <q-btn flat @click="_export"> 导出 </q-btn>
-        <q-btn flat @click="_share"> 分享 </q-btn> -->
-      </q-card-actions>
     </q-card>
-    <bottom-sheet :name="name" v-show="_show" @close="send" />
   </div>
 </template>
 
@@ -53,7 +71,7 @@ import { getCatIcon } from '../composition/utils';
 import BottomSheet from './BottomSheet.vue';
 export default defineComponent({
   components: { BottomSheet },
-  name: 'CatInfo',
+  name: 'CatDtails',
   props: {
     cat: {
       name: String,
@@ -62,7 +80,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    console.log(props);
     const attr = getAttribute(props.cat.hash);
     const icon = getCatIcon(props.cat.name);
     return {
@@ -76,19 +93,26 @@ export default defineComponent({
       window.location.href = 'https://unipass-demo.vercel.app/#/';
     },
     more() {
-      console.log('展示详情');
-      void this.$router.push('/challenge');
+      void this.$router.push({
+        path: '/account',
+        query: {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          name: this.cat.name,
+          cat: this.cat
+        }
+      });
     }
   }
 });
 </script>
 <style lang="scss" scoped>
 .my-card {
-  max-width: 350px;
-  height: 300px;
+  width: 250px;
   .my-icon {
-    width: 80px;
-    height: 80px;
+    width: 90%;
   }
+}
+span {
+  margin-left: 3px;
 }
 </style>

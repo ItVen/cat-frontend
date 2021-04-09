@@ -2,96 +2,92 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-08 21:46:43
+ * @LastEditTime: 2021-04-09 13:27:40
  * @Description: 
 -->
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-grey-1">
-      <div class="top row reverse">
-        <state-button
-          @send="clickToLogin"
-          :state="false"
-          to="test1"
-          :value="0"
-        ></state-button>
-      </div>
+    <q-header elevated class="bg-grey-1">
+      <q-toolbar>
+        <q-btn
+          flat
+          dense
+          icon="assignment_ind"
+          label="sourly cat"
+          class="text-black"
+          @click="route = '/'"
+          to="/"
+        />
+        <q-space />
+        <q-btn
+          flat
+          no-caps
+          class="q-mr-xs"
+          label="Home"
+          @click="route = '/'"
+          to="/"
+          :class="route != '/' ? 'q-mr-xs text-black' : 'q-mr-xs text-blue'"
+        />
+        <q-btn
+          flat
+          no-caps
+          label="Account"
+          @click="route = '/account'"
+          to="/account"
+          :class="
+            route != '/account' ? 'q-mr-xs text-black' : 'q-mr-xs text-blue'
+          "
+        />
+        <q-btn
+          class=" q-mr-xs text-black"
+          flat
+          no-caps
+          :label="address"
+          @click="loginMetamask"
+        />
+        <q-btn flat round dense icon="gamepad" class="text-black" />
+        <q-btn flat round dense icon="more" class="text-black" />
+      </q-toolbar>
     </q-header>
     <q-page-container class="bg-grey-1">
       <router-view class="bg-grey-2" />
     </q-page-container>
-
-    <q-footer elevated class="bg-grey-1">
-      <div class="q-gutter-y-md">
-        <q-tabs
-          v-model="tab"
-          narrow-indicator
-          dense
-          align="justify"
-          @click="jumb"
-        >
-          <q-tab
-            :class="tab != '/' ? 'text-grey' : 'text-teal'"
-            :ripple="{ color: 'primary' }"
-            no-caps
-            name="/"
-            label="Home"
-            :to="home"
-          />
-          <q-tab
-            :class="tab != '/ranking' ? 'text-grey' : 'text-teal'"
-            :ripple="{ color: 'primary' }"
-            no-caps
-            name="/ranking"
-            label="Ranking"
-            :to="ranking"
-          />
-          <q-tab
-            :class="tab != '/history' ? 'text-grey' : 'text-teal'"
-            :ripple="{ color: 'primary' }"
-            no-caps
-            name="/history"
-            label="History"
-            :to="history"
-          />
-        </q-tabs>
-      </div>
-    </q-footer>
   </q-layout>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import StateButton from 'src/components/StateButtons.vue';
-import { login } from '../composition/getLoginStatus';
-import { toHash } from '../composition/getHash';
+import { defineComponent, ref, computed } from '@vue/composition-api';
+import { login } from '../composition/getLoginStatus'; //
+import { showAddress } from '../composition/utils'; //
+
 import TestData from '../composition/testJson';
-import { getLiveCell, getTransaction, getTip } from '../composition/rpcApi';
+import { initPWCore } from 'src/composition/loginMetamask';
 export default defineComponent({
   name: 'MainLayout',
-  components: { StateButton },
+  components: {},
   setup() {
+    let address = ref('Connect a wallet');
     const datas = new TestData();
     return {
-      tab: '/',
+      route: '/',
       login,
-      toHash,
       datas,
-      getLiveCell,
-      getTransaction,
-      getTip
+      address,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      showAddress
     };
   },
   methods: {
-    async clickToLogin() {
-      // todo unipass 交互
-      // window.location.href = 'https://unipass-demo.vercel.app/#/';
-      const user = this.datas.login();
-      await getLiveCell(user);
-      // todo 服务器交互
-      await login(user);
-    },
-    jumb() {
-      void this.$router.push(this.tab);
+    async loginMetamask() {
+      console.log('lolo', this.address);
+      this.ckb = await initPWCore();
+      this.address = showAddress(this.ckb.ethAddress);
+      console.log(this.ckb);
+      // // todo unipass 交互
+      // // window.location.href = 'https://unipass-demo.vercel.app/#/';
+      // const user = this.datas.login();
+      // await getLiveCell(user);
+      // // todo 服务器交互
+      // await login(user);
     }
   }
 });

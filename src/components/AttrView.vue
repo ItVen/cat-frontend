@@ -1,0 +1,49 @@
+<template>
+  <div style="margin-right: 30px;">
+    <div>
+      <dev class="text-grey" style="font-size: 1pt;"> {{ title }}</dev>
+    </div>
+    <div class="my-card row items-center">
+      <q-icon v-show="show" :name="name" :size="size" />
+      <span :class="textClass" @click="$emit('more')" style="margin-left: 3px;">
+        {{ text }}</span
+      >
+    </div>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from '@vue/composition-api';
+export default defineComponent({
+  name: 'AttrView',
+  props: {
+    size: {
+      type: String,
+      default: '25px'
+    },
+    textClass: {
+      type: String,
+      default: 'self-center text-h6'
+    },
+    title: {
+      type: String,
+      default: 'title'
+    },
+    text: {
+      type: String,
+      default: 'Name'
+    },
+    name: {
+      type: String,
+      default: 'img:icons/attack-outline.png'
+    },
+    show: {
+      type: Boolean,
+      default: true
+    }
+  },
+  setup() {
+    return {};
+  }
+});
+</script>

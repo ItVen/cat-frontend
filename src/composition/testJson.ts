@@ -9,7 +9,7 @@ import { Account, ApiResponse } from './interface';
 export default class TestData {
   login(): Account {
     const user = {
-      email: 'test@gamil.com',
+      email: 'test1234@gamil.com',
       address: 'ckt1qyqz0njzt6xjh705nd4plqs5nhh5ls4kpksq3ur7j2',
       lock_arg: '0x27ce425e8d2bf9f49b6a1f82149def4fc2b60da0',
       code_hash:
@@ -26,7 +26,7 @@ export default class TestData {
       message: '请求绑定我的账户成功',
       data: {
         id: 3,
-        email: 'test@gamil.com',
+        email: 'test1234@gamil.com',
         create_cat: 1,
         address: 'ckt1qyqz0njzt6xjh705nd4plqs5nhh5ls4kpksq3ur7j2',
         fishes: 0,
