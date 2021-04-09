@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 00:12:44
+ * @LastEditTime: 2021-04-09 09:50:09
  * @Description:
  */
 
@@ -46,7 +46,11 @@ export async function setCellData(
 ): Promise<Record<string, unknown> | boolean> {
   // todo 获取还活在的cell
   const account = new TestData().login();
+  console.log(account);
+
   const cells = await getLiveCell(account);
+  console.log(cells);
+
   const hash = toHash(name, account.lock_hash);
   const attr = getAttribute(hash);
   // 计算小鱼干属性

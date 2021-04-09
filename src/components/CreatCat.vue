@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 09:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-08 23:59:18
+ * @LastEditTime: 2021-04-09 09:54:14
  * @Description: 
 -->
 <template>
@@ -44,7 +44,7 @@ export default defineComponent({
       // todo 验证名字是否已经创建
       if (this.name) {
         const data = await getNameIsUsed(this.name);
-        console.log(data);
+        console.log('ntf', data);
         // todo 展示卡片
         this.$emit('show', data);
       }

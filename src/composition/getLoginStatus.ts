@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 10:19:36
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-08 23:45:41
+ * @LastEditTime: 2021-04-09 09:49:05
  * @Description:
  */
 import {
@@ -40,14 +40,18 @@ export async function login(account: Account): Promise<UserData | null> {
 
 export async function getNameIsUsed(name: string): Promise<Cells | boolean> {
   // todo 假数据
-  const data = await getNameUsed(name);
-  let used = (data.data as NameUsed).used;
+  // const data = await getNameUsed(name);
+  // let used = (data.data as NameUsed).used;
+  const data = null;
+  let used = true;
   if (!data) {
     // todo 假数据
     used = false;
   }
+  console.log(used);
   if (!used) {
     const cell = await setCellData(name);
+    console.log(cell);
     if (cell) return cell;
     return false;
   } else {
