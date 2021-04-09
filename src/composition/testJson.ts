@@ -2,11 +2,10 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:39:37
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-08 23:19:37
+ * @LastEditTime: 2021-04-09 10:01:23
  * @Description:
  */
-import { info } from 'console';
-import { Account, ApiResponse, Cells } from './interface';
+import { Account, ApiResponse } from './interface';
 export default class TestData {
   login(): Account {
     const user = {
@@ -27,9 +26,9 @@ export default class TestData {
       message: '请求绑定我的账户成功',
       data: {
         id: 3,
-        email: 'email',
+        email: 'test@gamil.com',
         create_cat: 1,
-        address: 'address',
+        address: 'ckt1qyqz0njzt6xjh705nd4plqs5nhh5ls4kpksq3ur7j2',
         fishes: 0,
         token:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJzc3NzIiwiaWF0IjoxNjE3ODg0ODQ4LCJleHAiOjE2MTc5NzEyNDh9.fq85-llXIAAdEojwvcsFePNKplA5sU8Mzl--OzOpn88'
