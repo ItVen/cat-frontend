@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 13:27:40
+ * @LastEditTime: 2021-04-10 11:23:35
  * @Description: 
 -->
 <template>
@@ -32,11 +32,9 @@
           flat
           no-caps
           label="Account"
-          @click="route = '/account'"
-          to="/account"
-          :class="
-            route != '/account' ? 'q-mr-xs text-black' : 'q-mr-xs text-blue'
-          "
+          @click="route = '/nfts'"
+          to="/nfts"
+          :class="route != '/nfts' ? 'q-mr-xs text-black' : 'q-mr-xs text-blue'"
         />
         <q-btn
           class=" q-mr-xs text-black"

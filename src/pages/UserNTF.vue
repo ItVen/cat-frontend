@@ -2,28 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-05 18:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 12:14:17
+ * @LastEditTime: 2021-04-10 11:24:22
  * @Description: 
 -->
 <template>
   <q-page class="fit column  justify-start  content-center">
-    <div calss="fit row" style=" margin-top: 30px;">
-      <q-input
-        outlined
-        flat
-        round
-        dense
-        v-model="search"
-        calss="col-7  self-center"
-        placeholder="Search name and address"
-        style="width: 35vw; margin-left: 30px;"
-        @keyup.enter="onSearch"
-      >
-        <template v-slot:prepend>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-    </div>
     <cat-list :list="cat" title="10 Sourly Cat"></cat-list>
   </q-page>
 </template>
@@ -32,7 +15,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 import CatList from 'src/components/CatList.vue';
 import { isLogin } from '../composition/getLoginStatus';
 export default defineComponent({
-  name: 'UserNTF',
+  name: 'Home',
   components: { CatList },
   setup() {
     const login = isLogin();

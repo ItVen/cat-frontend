@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 00:27:27
+ * @LastEditTime: 2021-04-10 09:37:47
  * @Description: 
 -->
 <template>
@@ -68,10 +68,8 @@
 import { defineComponent } from '@vue/composition-api';
 import { getAttribute } from '../composition/getHash';
 import { getCatIcon } from '../composition/utils';
-import BottomSheet from './BottomSheet.vue';
 export default defineComponent({
-  components: { BottomSheet },
-  name: 'CatDtails',
+  name: 'CatInfo',
   props: {
     cat: {
       name: String,

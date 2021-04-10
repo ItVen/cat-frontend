@@ -1,6 +1,12 @@
+<!--
+ * @Author: Aven
+ * @Date: 2021-04-09 15:07:08
+ * @LastEditors: Aven
+ * @LastEditTime: 2021-04-10 12:07:01
+ * @Description: 
+-->
 <template>
   <q-toolbar style=" width: 60vw; margin-top: 10px;">
-    <dev class="text-h6">{{ all }} Sourly Cat</dev>
     <q-space />
     <q-select
       outlined
@@ -28,13 +34,6 @@ import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
   name: 'AllCat',
-  props: {
-    all: {
-      required: true,
-      type: Number,
-      defualt: 0
-    }
-  },
   setup() {
     return {
       state: 'All',

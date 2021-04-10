@@ -1,25 +1,20 @@
 <template>
-  <div class="fit row  justify-center " style="margin-right: 50px;">
+  <div class="fit row  justify-center ">
     <q-card
-      style=" border-radius: 15px;"
-      class="my-card row  justify-center items-center"
+      style="border-radius: 15px; "
+      class="my-card row  justify-center items-center col-4"
       flat
       bordered
     >
       <q-img class="my-icon self-center" :src="icon" :ratio="1" />
     </q-card>
 
-    <div
-      flat
-      bordered
-      class="column  justify-center items-start content-center"
-      style="margin-left: 50px;"
-    >
+    <div flat bordered class="column  justify-around  content-around col-4">
       <attr-view
         :show="false"
         title="NAME"
         :text="cat.name"
-        textClass="self-center text-h5"
+        textClass="self-center text-h3"
       ></attr-view>
       <br />
       <attr-view
@@ -72,8 +67,10 @@
       </div>
       <div class=" row  justify-start  ">
         <q-btn
-          style="margin-top: 35px;width: 150px;border-radius: 10px;font-size: 14pt; "
+          style="margin-top: 42px;width: 120px;border-radius: 10px;font-size: 14pt; "
           no-caps
+          round
+          dense
           color="primary"
           :label="label"
           @click="action"
@@ -90,7 +87,7 @@ import { getCatIcon, showEmail, showAddress } from '../composition/utils';
 import AttrView from './AttrView.vue';
 export default defineComponent({
   components: { AttrView },
-  name: 'CatInfo',
+  name: 'CatDetails',
   props: {
     cat: {
       name: String,
@@ -155,7 +152,7 @@ export default defineComponent({
       // todo 查看账户下的所有ntf
       console.log('查看账户下的所有ntf');
       void this.$router.push({
-        path: '/all',
+        path: '/nfts',
         query: {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           address: this.cat.address
@@ -167,12 +164,10 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .my-card {
-  width: 330px;
-  height: 330px;
-  margin-top: 10px;
+  padding-bottom: 10px;
   .my-icon {
-    width: 80%;
-    height: 80%;
+    width: 70%;
+    height: 100%;
   }
 }
 span {
