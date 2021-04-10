@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 10:48:17
+ * @LastEditTime: 2021-04-10 15:48:29
  * @Description: 
 -->
 <template>
@@ -24,7 +24,7 @@
         <all-cat />
       </template>
       <template v-slot:item="props">
-        <cat-info :cat="props.row"></cat-info>
+        <cat-info :cat="props.row" :mine="mine"></cat-info>
       </template>
     </q-table>
   </div>
@@ -38,7 +38,11 @@ export default defineComponent({
   name: 'CatList',
   props: {
     list: Array,
-    title: String
+    title: String,
+    mine: {
+      type: Boolean,
+      defluat: false
+    }
   },
   setup() {
     return {

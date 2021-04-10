@@ -1,3 +1,10 @@
+/*
+ * @Author: Aven
+ * @Date: 2021-04-07 15:31:25
+ * @LastEditors: Aven
+ * @LastEditTime: 2021-04-10 17:11:39
+ * @Description:
+ */
 export function isEmail(email: string): boolean {
   const regexp = new RegExp(
     /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
@@ -11,8 +18,13 @@ export function getCatIcon(name: string): string {
   return 'https://robohash.org/sourlycat?set=set4';
 }
 
-export function showAddress(address: string): string {
+export function showAddress(address: string, style?: number): string {
   if (address.length <= 13) return address;
+  if (style) {
+    const start = address.substr(0, 20);
+    address = start + '...';
+    return address;
+  }
   const start = address.substr(0, 6);
   const end = address.substr(address.length - 4, address.length);
   address = start + '...' + end;

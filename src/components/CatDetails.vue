@@ -155,7 +155,10 @@ export default defineComponent({
         path: '/nfts',
         query: {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          address: this.cat.address
+          address: this.cat.address,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          email: this.cat.email,
+          mine: this.mine
         }
       });
     }

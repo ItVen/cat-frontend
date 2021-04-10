@@ -1,30 +1,34 @@
 <!--
  * @Author: Aven
- * @Date: 2021-04-05 18:02:44
+ * @Date: 2021-04-06 22:04:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 12:14:17
+ * @LastEditTime: 2021-04-10 17:02:33
  * @Description: 
 -->
 <template>
-  <q-page class="fit column  justify-start  content-center">
-    <div calss="fit row" style=" margin-top: 30px;">
-      <q-input
-        outlined
-        flat
-        round
-        dense
-        v-model="search"
-        calss="col-7  self-center"
-        placeholder="Search name and address"
-        style="width: 35vw; margin-left: 30px;"
-        @keyup.enter="onSearch"
-      >
-        <template v-slot:prepend>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-    </div>
-    <cat-list :list="cat" title="10 Sourly Cat"></cat-list>
+  <q-page class="fit column wrap justify-start items-start content-center">
+    <q-input
+      outlined
+      flat
+      round
+      dense
+      v-model="search"
+      style="width:40vw;   margin-left: 35px; margin-top: 30px;"
+      placeholder="Search name and address"
+      @keyup.enter="onSearch"
+    >
+      <template v-slot:prepend>
+        <q-icon name="search" />
+      </template>
+    </q-input>
+    <q-card class="col-8 my-card" style="margin: 30px;">
+      <cat-list
+        class="col-8 self-center"
+        :list="cat"
+        title="10 Sourly Cat"
+        :mine="mine"
+      ></cat-list>
+    </q-card>
   </q-page>
 </template>
 <script>

@@ -2,11 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-09 15:07:08
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 12:07:01
+ * @LastEditTime: 2021-04-10 16:40:33
  * @Description: 
 -->
 <template>
-  <q-toolbar style=" width: 60vw; margin-top: 10px;">
+  <q-toolbar class="row">
     <q-space />
     <q-select
       outlined

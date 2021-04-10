@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 09:37:47
+ * @LastEditTime: 2021-04-10 15:48:56
  * @Description: 
 -->
 <template>
@@ -75,7 +75,8 @@ export default defineComponent({
       name: String,
       frishes: Number,
       hash: String // todo  根据hash 计算属性
-    }
+    },
+    mine: Boolean
   },
   setup(props) {
     const attr = getAttribute(props.cat.hash);
@@ -96,7 +97,8 @@ export default defineComponent({
         query: {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           name: this.cat.name,
-          cat: this.cat
+          cat: this.cat,
+          mine: this.mine
         }
       });
     }
