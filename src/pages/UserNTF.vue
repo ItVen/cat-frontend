@@ -24,7 +24,7 @@ import CatList from 'src/components/CatList.vue';
 import { isLogin } from '../composition/getLoginStatus';
 import { showAddress } from '../composition/utils'; //
 export default defineComponent({
-  name: 'Home',
+  name: 'UserNTF',
   components: { CatList, AddressView },
   setup(props, ctx) {
     let address = ctx.root.$route.query.address;

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 22:04:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 17:02:33
+ * @LastEditTime: 2021-04-10 19:51:13
  * @Description: 
 -->
 <template>
@@ -36,7 +36,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 import CatList from 'src/components/CatList.vue';
 import { isLogin } from '../composition/getLoginStatus';
 export default defineComponent({
-  name: 'UserNTF',
+  name: 'Home',
   components: { CatList },
   setup() {
     const login = isLogin();

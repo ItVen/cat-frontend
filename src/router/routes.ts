@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 15:19:10
+ * @LastEditTime: 2021-04-10 19:48:38
  * @Description:
  */
 import { RouteConfig } from 'vue-router';
@@ -17,8 +17,8 @@ const routes: RouteConfig[] = [
         component: () => import('src/pages/Home.vue')
       },
       {
-        path: '/history',
-        component: () => import('src/pages/History.vue')
+        path: '/battle',
+        component: () => import('src/pages/Battle.vue')
       },
       {
         path: '/nfts',

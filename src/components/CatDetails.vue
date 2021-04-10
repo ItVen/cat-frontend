@@ -1,14 +1,14 @@
 <template>
   <div class="fit row  justify-center ">
     <q-card
+      class="row fix justify-center items-center col-3"
       style="border-radius: 15px; "
-      class="my-card row  justify-center items-center col-4"
-      flat
-      bordered
     >
-      <q-img class="my-icon self-center" :src="icon" :ratio="1" />
+      <div class="col-8">
+        <q-img class="my-icon self-center" :src="icon" :ratio="1" />
+      </div>
     </q-card>
-
+    <div class="col-1"></div>
     <div flat bordered class="column  justify-around  content-around col-4">
       <attr-view
         :show="false"
@@ -139,12 +139,7 @@ export default defineComponent({
         console.log('开始 battle');
         void this.$router.push({
           path: '/battle',
-          query: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            name: this.cat.name,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            email: this.cat.email
-          }
+          query: { cat: this.cat }
         });
       }
     },

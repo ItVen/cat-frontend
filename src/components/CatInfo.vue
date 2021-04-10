@@ -2,11 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 15:48:56
+ * @LastEditTime: 2021-04-10 20:16:38
  * @Description: 
 -->
 <template>
-  <div class="q-pa-md row items-start q-gutter-md" @click="more">
+  <div class="q-pa-md row items-start self-center" @click="more">
     <q-card class="my-card" flat bordered>
       <q-card-section horizontal>
         <q-card-section class="fit column  justify-center items-center ">
