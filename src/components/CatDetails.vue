@@ -14,6 +14,7 @@
         :show="false"
         title="NAME"
         :text="cat.name"
+        @name="getName"
         :create="create"
         textClass="self-center text-h3"
       ></attr-view>
@@ -21,7 +22,7 @@
       <attr-view
         :show="false"
         title="OWNED BY"
-        :text="address"
+        :text="cat.address"
         @more="showAllNtf"
         textClass="self-center text-body2"
       ></attr-view>
@@ -86,9 +87,12 @@
 
 <script>
 import { defineComponent, ref } from '@vue/composition-api';
-import { getAttribute } from '../composition/getHash';
-import { getCatIcon, showEmail, showAddress } from '../composition/utils';
+import { getAttribute, getCellCreateData } from '../composition/getHash';
+import { getCatIcon, showAddress } from '../composition/utils';
 import AttrView from './AttrView.vue';
+import { sendTransaction } from '../composition/loginMetamask';
+import SDBuilder from '../composition/sd-builder';
+import { setCell, getAddress, getLockHash } from 'src/composition/userCells';
 export default defineComponent({
   components: { AttrView },
   name: 'CatDetails',
@@ -133,13 +137,18 @@ export default defineComponent({
     }
   },
   setup(props) {
-    let label = ref('Challenge');
+    console.log('cat-details');
+    let label = ref('Transfer');
+    let address = ref('');
     if (props.mine) {
-      label = ref('Transfer');
+      address = showAddress(getAddress());
+      // if (props.create) label = ref('Submit');
+      label = ref('Submit');
+      console.log(label, 'llll');
+    } else {
+      label = ref('Challenge');
     }
-    if (props.create) label = ref('Submit');
-    let address = ref('unll');
-    console.log(props.create);
+    console.log(label);
     if (props.cat.address) {
       address = showAddress(props.cat.address);
     }
@@ -149,28 +158,25 @@ export default defineComponent({
       icon,
       label,
       address,
+      setCell,
       loading: ref(false),
-      ...attr
+      ...attr,
+      sendTransaction,
+      SDBuilder,
+      createName: ref(''),
+      getCellCreateData,
+      getLockHash
     };
   },
   methods: {
-    action() {
+    async action() {
       // todo 转账或者battle
       if (this.create) {
         console.log('提交创建自己的cat');
-        this.createCat();
+        await this.createCat();
       } else if (this.mine) {
         // todo 发起转账
-        console.log('发起转账');
-        void this.$router.push({
-          path: '/tranfer',
-          query: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            address: this.cat.address,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            email: this.cat.email
-          }
-        });
+        console.log('发起转账', this.label);
       } else {
         // 开始 battle
         console.log('开始 battle');
@@ -180,13 +186,18 @@ export default defineComponent({
         });
       }
     },
-    createCat() {
-      // todo 创建自己的cat
-      console.log('cat');
+    async createCat() {
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 5000);
+      // todo 创建自己的cat
+      const data = getCellCreateData(this.createName, getLockHash());
+      // 整理cell
+      const cellData = setCell('create', null, JSON.stringify(data));
+      // todo 发起交易
+      console.log(cellData);
+      const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
+      const txHash = await sendTransaction(builder);
+      console.log('----------txHash', txHash);
+      this.loading = false;
     },
     showAllNtf() {
       // todo 查看账户下的所有ntf
@@ -201,6 +212,9 @@ export default defineComponent({
           mine: this.mine
         }
       });
+    },
+    getName(data) {
+      this.createName = data;
     }
   }
 });

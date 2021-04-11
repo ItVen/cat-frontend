@@ -2,11 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 11:56:26
+ * @LastEditTime: 2021-04-11 18:14:19
  * @Description:
  */
 
-import { Amount } from '@lay2/pw-core';
+import { Amount, Cell } from '@lay2/pw-core';
 export interface Account {
   email: string;
   address: string;
@@ -27,6 +27,8 @@ export interface OutputCell {
 }
 
 export interface Cells {
+  type: any;
+  isEmpty();
   block_number: string;
   out_point: {
     index: string;
@@ -68,6 +70,10 @@ export interface BindInfo {
 
 export interface NameUsed {
   used: boolean;
+}
+export interface MyCell {
+  inputCell: Cell;
+  outputCell: Cell;
 }
 
 export interface Cat {

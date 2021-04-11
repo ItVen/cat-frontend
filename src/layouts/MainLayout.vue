@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 15:42:21
+ * @LastEditTime: 2021-04-11 18:51:53
  * @Description: 
 -->
 <template>
@@ -43,7 +43,14 @@
           :label="address"
           @click="loginMetamask"
         />
-        <q-btn flat round dense icon="gamepad" class="text-black" />
+        <q-btn
+          flat
+          round
+          dense
+          icon="gamepad"
+          class="text-black"
+          @click="test"
+        />
         <q-btn flat round dense icon="more" class="text-black" />
       </q-toolbar>
     </q-header>
@@ -59,6 +66,7 @@ import { showAddress } from '../composition/utils'; //
 
 import TestData from '../composition/testJson';
 import { initPWCore } from 'src/composition/loginMetamask';
+import { setCell } from 'src/composition/userCells';
 export default defineComponent({
   name: 'MainLayout',
   components: {},
@@ -70,6 +78,7 @@ export default defineComponent({
       login,
       datas,
       address,
+      setCell,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       showAddress
     };
@@ -78,6 +87,7 @@ export default defineComponent({
     async loginMetamask() {
       console.log('lolo', this.address);
       this.ckb = await initPWCore();
+      console.log(this.ckb);
       this.address = showAddress(this.ckb.ethAddress);
       console.log(this.ckb);
       // // todo unipass 交互
@@ -86,6 +96,15 @@ export default defineComponent({
       // await getLiveCell(user);
       // // todo 服务器交互
       // await login(user);
+    },
+    test() {
+      console.log('test');
+      const data = {
+        name: 'name',
+        fishes: 60,
+        hash: 'sssss'
+      };
+      console.log(setCell('create', null, JSON.stringify(data)));
     }
   }
 });

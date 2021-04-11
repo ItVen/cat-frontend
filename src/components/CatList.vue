@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 15:48:29
+ * @LastEditTime: 2021-04-11 23:04:46
  * @Description: 
 -->
 <template>
@@ -10,15 +10,11 @@
   <div class="q-pa-md">
     <q-table
       grid
-      :card-container-class="cardContainerClass"
       :title="title"
       :data="list"
-      :columns="columns"
       row-key="name"
       :filter="filter"
       hide-header
-      :pagination.sync="pagination"
-      :rows-per-page-options="rowsPerPageOptions"
     >
       <template v-slot:top-right>
         <all-cat />

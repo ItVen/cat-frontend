@@ -2,13 +2,14 @@
  * @Author: Aven
  * @Date: 2021-04-08 12:16:20
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 09:51:18
+ * @LastEditTime: 2021-04-11 18:14:07
  * @Description:
  */
 import { useConfig } from './baseConfig';
 import { Cells, RpcResponse } from './interface';
 import { Account } from './interface';
 import { updateMyCell } from './getLoginStatus';
+import { Address, Cell } from '@lay2/pw-core';
 
 const prcPost = async (params: Record<string, unknown>, url?: string) =>
   post(params);
@@ -29,31 +30,26 @@ const post = async (params: Record<string, unknown>, url?: string) => {
 };
 
 // Returns the live cells collection by the lock or type script.
-export async function getLiveCell(data: Account): Promise<Cells[]> {
+export async function getLiveCell(address: Address): Promise<Cell[]> {
   const params = {
     id: 2,
     jsonrpc: '2.0',
     method: 'get_cells',
     params: [
       {
-        script: {
-          code_hash: data.code_hash,
-          hash_type: 'type',
-          args: data.lock_arg
-        },
+        script: address.toLockScript().serializeJson(),
         script_type: 'lock'
       },
       'asc',
       '0x64'
     ]
   };
-  console.log(params);
   const res = await prcPost(params);
   console.log(res);
 
   // todo  根据cells更新后台的数据
   // updateMyCell(res.result.objects as unknown);
-  return res.result.objects as Cells[];
+  return res.result.objects;
 }
 // Returns the transactions collection by the lock or type script.
 export async function getTransaction(): Promise<RpcResponse> {

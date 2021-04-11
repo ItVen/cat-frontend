@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-10 15:38:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 12:26:12
+ * @LastEditTime: 2021-04-11 22:53:06
  * @Description: 
 -->
 <template>
@@ -55,7 +55,6 @@ export default defineComponent({
       cat.mur = 10;
       create = ref(false);
     }
-    console.log(create);
     return {
       cat,
       mine,
@@ -66,7 +65,7 @@ export default defineComponent({
     ok() {
       console.log(this.$route.query);
     },
-    ntfs(data) {
+    ntfs(data: { address: any; email: any }) {
       console.log('ntfs', data);
       // todo 查看账户下的所有ntf
       console.log('查看账户下的所有ntf');

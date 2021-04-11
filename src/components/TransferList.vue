@@ -2,14 +2,13 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 01:20:48
+ * @LastEditTime: 2021-04-11 23:12:04
  * @Description: 
 -->
 <template>
   <q-table
     title="TransferList"
     :data="list"
-    :filter="filter"
     no-data-label="I didn't find anything for you"
   >
     <template v-slot:body="props">

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 22:04:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 19:51:13
+ * @LastEditTime: 2021-04-11 23:05:29
  * @Description: 
 -->
 <template>
@@ -26,7 +26,6 @@
         class="col-8 self-center"
         :list="cat"
         title="10 Sourly Cat"
-        :mine="mine"
       ></cat-list>
     </q-card>
   </q-page>

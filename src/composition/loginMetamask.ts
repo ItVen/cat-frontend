@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 11:59:33
+ * @LastEditTime: 2021-04-11 22:35:04
  * @Description:
  */
 
@@ -11,13 +11,15 @@ import PWCore, {
   PwCollector,
   Address,
   Amount,
-  AddressType
+  AddressType,
+  Builder
 } from '@lay2/pw-core';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import supported from 'src/composition/chains';
 import { ChainsModel, PWCoreData } from './interface';
 import { useConfig } from './baseConfig';
+import CellCollector from './cellCollertor';
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
@@ -67,6 +69,7 @@ export async function initPWCore(): Promise<PWCoreData> {
     pw = await new PWCore(useConfig().ckb_test_net).init(
       new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
       new PwCollector(useConfig().socket_url)
+      // new CellCollector()
     );
   }
   const ethAddress = PWCore.provider.address.addressString;
@@ -83,11 +86,31 @@ export async function initPWCore(): Promise<PWCoreData> {
     ethAddress
   };
 }
+
+export async function getPw(): Promise<PWCore> {
+  console.log('=======console.log(pw);');
+  web3 = await haveWeb3();
+  if (!pw) {
+    pw = await new PWCore(useConfig().ckb_test_net).init(
+      new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
+      new PwCollector(useConfig().socket_url)
+    );
+  }
+  console.log(pw);
+  return pw;
+}
 // 发起交易 todo buider
 export async function send(address: string, amount: string): Promise<string> {
   if (!pw) return '';
   const ckbAddress = new Address(address, AddressType.ckb);
   console.log(ckbAddress);
   const txHash = await pw.send(ckbAddress, new Amount(amount));
+  return txHash;
+}
+
+export async function sendTransaction(builder: Builder): Promise<string> {
+  if (!pw) return '';
+  console.log(builder);
+  const txHash = await pw.sendTransaction(builder);
   return txHash;
 }

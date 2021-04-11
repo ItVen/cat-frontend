@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 10:19:23
+ * @LastEditTime: 2021-04-11 23:13:16
  * @Description: 
 -->
 <template>
@@ -11,15 +11,9 @@
     :data="list"
     row-key="name"
     title="Battle Tistoty"
-    :filter="filter"
     :loading="loading"
-    :pagination.sync="pagination"
-    :rows-per-page-options="rowsPerPageOptions"
     no-data-label="I didn't find anything for you"
   >
-    <!-- <template v-slot:top>
-      <history-header title="battle histoty"></history-header>
-    </template> -->
     <template v-slot:body="props">
       <q-tr :props="props">
         <q-td key="from" :props="props">
@@ -57,10 +51,8 @@
   </q-table>
 </template>
 <script>
-import { defineComponent, ref } from '@vue/composition-api';
-import HistoryHeader from './HistoryHeader.vue';
+import { defineComponent } from '@vue/composition-api';
 export default defineComponent({
-  components: { HistoryHeader },
   name: 'HistoryList',
   setup() {
     return {
