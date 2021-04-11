@@ -134,9 +134,12 @@ export default defineComponent({
   },
   setup(props) {
     let label = ref('Challenge');
-    if (props.mine) label = ref('Transfer');
+    if (props.mine) {
+      label = ref('Transfer');
+    }
     if (props.create) label = ref('Submit');
     let address = ref('unll');
+    console.log(props.create);
     if (props.cat.address) {
       address = showAddress(props.cat.address);
     }
@@ -155,7 +158,7 @@ export default defineComponent({
       // todo 转账或者battle
       if (this.create) {
         console.log('提交创建自己的cat');
-        this.create();
+        this.createCat();
       } else if (this.mine) {
         // todo 发起转账
         console.log('发起转账');
@@ -177,7 +180,7 @@ export default defineComponent({
         });
       }
     },
-    create() {
+    createCat() {
       // todo 创建自己的cat
       console.log('cat');
       this.loading = true;

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-10 15:38:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 12:05:56
+ * @LastEditTime: 2021-04-11 12:26:12
  * @Description: 
 -->
 <template>
@@ -55,7 +55,7 @@ export default defineComponent({
       cat.mur = 10;
       create = ref(false);
     }
-
+    console.log(create);
     return {
       cat,
       mine,

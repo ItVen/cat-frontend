@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 20:11:54
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 11:55:38
+ * @LastEditTime: 2021-04-11 12:22:02
  * @Description: 
 -->
 <template>
@@ -12,7 +12,7 @@
     </div>
     <div class="my-card row items-center">
       <q-icon v-show="show" :name="name" :size="size" />
-      <input v-if="create" />
+      <input v-if="create" v-model="catName" />
       <span
         v-else
         :class="textClass"
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 export default defineComponent({
   name: 'AttrView',
   props: {
@@ -60,7 +60,9 @@ export default defineComponent({
     }
   },
   setup() {
-    return {};
+    return {
+      catName: ref('')
+    };
   }
 });
 </script>
