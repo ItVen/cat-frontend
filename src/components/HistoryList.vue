@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 01:22:55
+ * @LastEditTime: 2021-04-11 10:19:23
  * @Description: 
 -->
 <template>
@@ -10,6 +10,7 @@
     :card-container-class="cardContainerClass"
     :data="list"
     row-key="name"
+    title="Battle Tistoty"
     :filter="filter"
     :loading="loading"
     :pagination.sync="pagination"

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 09:50:09
+ * @LastEditTime: 2021-04-11 11:24:59
  * @Description:
  */
 
@@ -12,6 +12,13 @@ import { Blake2bHasher, Cell } from '@lay2/pw-core';
 import { getLiveCell } from '../composition/rpcApi';
 import TestData from '../composition/testJson';
 export function getAttribute(hash: string): Record<string, unknown> {
+  if (!hash)
+    return {
+      ph: '?',
+      atk: '?',
+      def: '?',
+      lck: '?'
+    };
   hash = hash.replace('0x', '');
   const array = Buffer.from(hash);
   const ph = getCount(array.slice(0, 5));

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 20:16:38
+ * @LastEditTime: 2021-04-11 11:23:59
  * @Description: 
 -->
 <template>
@@ -72,8 +72,14 @@ export default defineComponent({
   name: 'CatInfo',
   props: {
     cat: {
-      name: String,
-      frishes: Number,
+      name: {
+        type: String,
+        default: '?'
+      },
+      frishes: {
+        type: Number,
+        default: 0
+      },
       hash: String // todo  根据hash 计算属性
     },
     mine: Boolean

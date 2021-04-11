@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 20:11:54
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 23:49:10
+ * @LastEditTime: 2021-04-11 11:55:38
  * @Description: 
 -->
 <template>
@@ -12,7 +12,13 @@
     </div>
     <div class="my-card row items-center">
       <q-icon v-show="show" :name="name" :size="size" />
-      <span :class="textClass" @click="$emit('more')" style="margin-left: 3px;">
+      <input v-if="create" />
+      <span
+        v-else
+        :class="textClass"
+        @click="$emit('more')"
+        style="margin-left: 3px;"
+      >
         {{ text }}</span
       >
     </div>
@@ -38,7 +44,7 @@ export default defineComponent({
     },
     text: {
       type: String,
-      default: 'Name'
+      default: '?'
     },
     name: {
       type: String,
@@ -47,6 +53,10 @@ export default defineComponent({
     show: {
       type: Boolean,
       default: true
+    },
+    create: {
+      type: Boolean,
+      default: false
     }
   },
   setup() {

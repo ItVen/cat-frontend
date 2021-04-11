@@ -14,6 +14,7 @@
         :show="false"
         title="NAME"
         :text="cat.name"
+        :create="create"
         textClass="self-center text-h3"
       ></attr-view>
       <br />
@@ -77,6 +78,9 @@
         />
       </div>
     </div>
+    <q-inner-loading :showing="loading">
+      <q-spinner-gears size="50px" color="primary" />
+    </q-inner-loading>
   </div>
 </template>
 
@@ -90,15 +94,40 @@ export default defineComponent({
   name: 'CatDetails',
   props: {
     cat: {
-      name: String,
-      fishes: Number,
-      win: Number,
-      mur: Number,
-      hash: String, // todo  根据hash 计算属性
-      address: String,
-      email: String
+      name: {
+        type: String,
+        default: '?'
+      },
+      fishes: {
+        type: Number,
+        default: 0
+      },
+      win: {
+        type: Number,
+        default: 0
+      },
+      mur: {
+        type: Number,
+        default: 0
+      },
+      hash: {
+        type: String,
+        default: '?'
+      }, // todo  根据hash 计算属性
+      address: {
+        type: String,
+        default: '?'
+      },
+      email: {
+        type: String,
+        default: '?'
+      }
     },
     mine: {
+      type: Boolean,
+      default: false
+    },
+    create: {
       type: Boolean,
       default: false
     }
@@ -106,6 +135,7 @@ export default defineComponent({
   setup(props) {
     let label = ref('Challenge');
     if (props.mine) label = ref('Transfer');
+    if (props.create) label = ref('Submit');
     let address = ref('unll');
     if (props.cat.address) {
       address = showAddress(props.cat.address);
@@ -116,13 +146,17 @@ export default defineComponent({
       icon,
       label,
       address,
+      loading: ref(false),
       ...attr
     };
   },
   methods: {
     action() {
       // todo 转账或者battle
-      if (this.mine) {
+      if (this.create) {
+        console.log('提交创建自己的cat');
+        this.create();
+      } else if (this.mine) {
         // todo 发起转账
         console.log('发起转账');
         void this.$router.push({
@@ -142,6 +176,14 @@ export default defineComponent({
           query: { cat: this.cat }
         });
       }
+    },
+    create() {
+      // todo 创建自己的cat
+      console.log('cat');
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 5000);
     },
     showAllNtf() {
       // todo 查看账户下的所有ntf
