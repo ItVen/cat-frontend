@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-07 15:31:25
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 17:11:39
+ * @LastEditTime: 2021-04-13 00:46:19
  * @Description:
  */
 export function isEmail(email: string): boolean {
@@ -40,4 +40,18 @@ export function showEmail(context: string): string {
     return text;
   }
   return context;
+}
+export function hexToByteArray(h: string) {
+  if (!/^(0x)?([0-9a-fA-F][0-9a-fA-F])*$/.test(h)) {
+    throw new Error('Invalid hex string!');
+  }
+  if (h.startsWith('0x')) {
+    h = h.slice(2);
+  }
+  const array = [];
+  while (h.length >= 2) {
+    array.push(parseInt(h.slice(0, 2), 16));
+    h = h.slice(2);
+  }
+  return array;
 }

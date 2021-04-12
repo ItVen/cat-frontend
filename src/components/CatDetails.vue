@@ -31,40 +31,40 @@
         <attr-view
           name="img:icons/fishes.png"
           title="FISHES"
-          :text="cat.fishes"
+          :text="fishes"
         ></attr-view>
-        <attr-view
+        <!-- <attr-view
           name="img:icons/wins.png"
           title="WINS"
           :text="cat.win"
-        ></attr-view>
-        <attr-view
+        ></attr-view> -->
+        <!-- <attr-view
           name="img:icons/mutations.png"
           title="MURARIONS"
           :text="cat.mur"
-        ></attr-view>
+        ></attr-view> -->
       </div>
       <br />
       <div class="row  justify-start ">
         <attr-view
           name="img:icons/health-outline.png"
           title="HEALTH"
-          :text="ph"
+          :text="attr.ph"
         ></attr-view>
         <attr-view
           name="img:icons/attack-outline.png"
           title="ATTACK"
-          :text="atk"
+          :text="attr.atk"
         ></attr-view>
         <attr-view
           name="img:icons/defense-outline.png"
           title="DEFENSE"
-          :text="def"
+          :text="attr.def"
         ></attr-view>
         <attr-view
           name="img:icons/lucky-outline.png"
           title="LUCKY"
-          :text="lck"
+          :text="attr.lck"
         ></attr-view>
       </div>
       <div class=" row  justify-start  ">
@@ -93,6 +93,8 @@ import AttrView from './AttrView.vue';
 import { sendTransaction } from '../composition/loginMetamask';
 import SDBuilder from '../composition/sd-builder';
 import { setCell, getAddress, getLockHash } from 'src/composition/userCells';
+import { getNameIsUsed, putMyCell } from '../composition/getLoginStatus';
+import { setCellData } from '../composition/getHash';
 export default defineComponent({
   components: { AttrView },
   name: 'CatDetails',
@@ -106,22 +108,10 @@ export default defineComponent({
         type: Number,
         default: 0
       },
-      win: {
-        type: Number,
-        default: 0
-      },
-      mur: {
-        type: Number,
-        default: 0
-      },
       hash: {
         type: String,
         default: '?'
-      }, // todo  根据hash 计算属性
-      email: {
-        type: String,
-        default: '?'
-      }
+      } // todo  根据hash 计算属性
     },
     mine: {
       type: Boolean,
@@ -130,41 +120,56 @@ export default defineComponent({
     create: {
       type: Boolean,
       default: false
+    },
+    cat_address: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
-    console.log('cat-details');
+    // todo 获取卡片信息
     let label = ref('Transfer');
     let address = ref('');
-    if (props.mine) {
-      address = showAddress(getAddress());
-      if (props.create) label = ref('Submit');
-    } else {
-      // todo 获取对应的地址
-      address = showAddress(getAddress());
-      label = ref('Challenge');
-    }
-    //todo 拿服务器给的数据
+    let fishes = ref('?');
+    let newCat = ref(false);
     const attr = getAttribute(props.cat.hash);
     const icon = getCatIcon(props.cat.name);
+    console.log('-----');
+    console.log(props.cat, '======', attr, props.mine);
+    if (props.mine) {
+      address = showAddress(getAddress());
+      if (props.create) {
+        label = ref('Submit');
+        newCat = ref(true);
+      }
+    } else {
+      address = showAddress(props.cat_address);
+      label = ref('Challenge');
+    }
+    console.log('-----');
+    console.log(props.cat, '======', attr, props.mine, 'label', label);
     return {
       icon,
       label,
       address,
       setCell,
+      newCat,
       loading: ref(false),
-      ...attr,
+      attr,
+      fishes,
       sendTransaction,
       SDBuilder,
       createName: ref(''),
       getCellCreateData,
-      getLockHash
+      getLockHash,
+      getNameIsUsed,
+      setCellData
     };
   },
   methods: {
     async action() {
       // todo 转账或者battle
-      if (this.create) {
+      if (this.newCat) {
         await this.createCat();
       } else if (this.mine) {
         // todo 发起转账
@@ -180,14 +185,27 @@ export default defineComponent({
     },
     async createCat() {
       this.loading = true;
-      // todo 创建自己的cat
+      const used = await getNameIsUsed(this.createName);
+      putMyCell();
+      if (used) {
+        console.log('昵称已存在');
+        this.loading = false;
+        return;
+      }
       const data = getCellCreateData(this.createName, getLockHash());
       const cellData = setCell('create', null, JSON.stringify(data));
       const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
       try {
-        const txHash = await sendTransaction(builder);
-        console.log('----------txHash', txHash);
-        // todo 卡片创建成功 刷新ui界面 上传服务器 获取账户下的卡片
+        // const txHash = await sendTransaction(builder);
+        // console.log('----------txHash', txHash);
+        // 卡片创建成功 刷新ui界面 上传服务器 获取账户下的卡片
+        await setCellData(data);
+        // 更新数据
+        // this.newCat = false;
+        // this.fishes = data.fishes;
+        // this.icon = getCatIcon(data.name);
+        // this.attr = getAttribute(data.hash);
+        // this.label = 'Transfer';
       } catch (e) {
         console.log(e);
         // todo 提示创建失败

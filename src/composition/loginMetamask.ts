@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-12 11:07:45
+ * @LastEditTime: 2021-04-12 19:48:01
  * @Description:
  */
 
@@ -12,7 +12,8 @@ import PWCore, {
   Address,
   Amount,
   AddressType,
-  Builder
+  Builder,
+  Cell
 } from '@lay2/pw-core';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
@@ -69,7 +70,6 @@ export async function initPWCore(): Promise<PWCoreData> {
     pw = await new PWCore(useConfig().ckb_test_net).init(
       new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
       new PwCollector(useConfig().socket_url)
-      // new CellCollector()
     );
   }
   const ethAddress = PWCore.provider.address.addressString;
@@ -79,12 +79,21 @@ export async function initPWCore(): Promise<PWCoreData> {
   const ckbBalance = await PWCore.defaultCollector.getBalance(
     PWCore.provider.address
   );
-  console.log(ckbBalance.toString());
-  // getLiveCell(PWCore.provider.address);
+  let myCat = {};
+  const cells = await getLiveCell(PWCore.provider.address);
+  if (cells[0]) {
+    const outputCell = new Cell(
+      new Amount('200'),
+      PWCore.provider.address.toLockScript()
+    );
+    outputCell.setHexData(cells[0].output_data);
+    myCat = outputCell.getData();
+  }
   return {
     ckbBalance,
     address,
-    ethAddress
+    ethAddress,
+    myCat
   };
 }
 

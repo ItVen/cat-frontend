@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 11:23:59
+ * @LastEditTime: 2021-04-13 01:02:21
  * @Description: 
 -->
 <template>
@@ -103,8 +103,7 @@ export default defineComponent({
         query: {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           name: this.cat.name,
-          cat: this.cat,
-          mine: this.mine
+          cat: this.cat
         }
       });
     }

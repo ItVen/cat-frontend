@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 12:16:20
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 18:14:07
+ * @LastEditTime: 2021-04-12 11:17:00
  * @Description:
  */
 import { useConfig } from './baseConfig';
@@ -45,8 +45,6 @@ export async function getLiveCell(address: Address): Promise<Cell[]> {
     ]
   };
   const res = await prcPost(params);
-  console.log(res);
-
   // todo  根据cells更新后台的数据
   // updateMyCell(res.result.objects as unknown);
   return res.result.objects;

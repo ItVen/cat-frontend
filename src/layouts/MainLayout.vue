@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 18:51:53
+ * @LastEditTime: 2021-04-12 16:29:14
  * @Description: 
 -->
 <template>
@@ -60,7 +60,7 @@
   </q-layout>
 </template>
 <script lang="ts">
-import { defineComponent, ref, computed } from '@vue/composition-api';
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import { login } from '../composition/getLoginStatus'; //
 import { showAddress } from '../composition/utils'; //
 
@@ -71,11 +71,21 @@ export default defineComponent({
   name: 'MainLayout',
   components: {},
   setup() {
+    const contactsLoading = ref(false);
     let address = ref('Connect a wallet');
+    onMounted(async () => {
+      contactsLoading.value = true;
+      const pwData = await initPWCore();
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      address.value = showAddress(pwData.ethAddress + '');
+      if (pwData.address) await login(pwData.ethAddress, pwData.address);
+      contactsLoading.value = false;
+    });
     const datas = new TestData();
     return {
       route: '/',
       login,
+      contactsLoading,
       datas,
       address,
       setCell,

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-10 12:01:26
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 17:14:01
+ * @LastEditTime: 2021-04-12 19:05:25
  * @Description: 
 -->
 <template>
@@ -30,12 +30,18 @@
 </template>
 <script>
 import { defineComponent } from '@vue/composition-api';
-
+import { showAddress } from '../composition/utils'; //
 export default defineComponent({
   name: 'AddressView',
   props: {
-    address: String,
-    account: String
+    address: {
+      type: String,
+      defluat: ''
+    },
+    account: {
+      type: String,
+      defluat: ''
+    }
   },
   setup() {
     return {};

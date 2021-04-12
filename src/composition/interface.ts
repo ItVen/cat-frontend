@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 18:14:19
+ * @LastEditTime: 2021-04-12 23:04:49
  * @Description:
  */
 
@@ -27,8 +27,7 @@ export interface OutputCell {
 }
 
 export interface Cells {
-  type: any;
-  isEmpty();
+  type: string;
   block_number: string;
   out_point: {
     index: string;
@@ -106,4 +105,5 @@ export interface PWCoreData {
   ckbBalance: Amount | null;
   address: string | undefined;
   ethAddress: string | undefined;
+  myCat?: Record<string, unknown>;
 }

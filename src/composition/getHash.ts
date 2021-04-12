@@ -2,15 +2,17 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-12 10:21:51
+ * @LastEditTime: 2021-04-13 01:49:25
  * @Description:
  */
 
 import { putMyUserData } from './apiBase';
 import { OutputCell, Cells } from './interface';
-import { Blake2bHasher, Cell } from '@lay2/pw-core';
+import PWCore, { Blake2bHasher, Cell } from '@lay2/pw-core';
 import { getLiveCell } from '../composition/rpcApi';
 import TestData from '../composition/testJson';
+import { Address } from 'cluster';
+import { date } from 'quasar';
 export function getAttribute(hash: string): Record<string, unknown> {
   if (!hash)
     return {
@@ -49,37 +51,23 @@ function getfishers(data: Record<string, unknown>): number {
 }
 
 export async function setCellData(
-  name: string
-): Promise<Record<string, unknown> | boolean> {
-  // todo 获取还活在的cell
-  const account = new TestData().login();
-  console.log(account);
-
-  const cells = await getLiveCell(account);
-  console.log(cells);
-
-  const hash = toHash(name, account.lock_hash);
-  const attr = getAttribute(hash);
-  // 计算小鱼干属性
-  const fishes = getfishers(attr);
-  const data = {
-    name,
-    fishes,
-    hash
-  };
+  data: Record<string, unknown>
+): Promise<void> {
+  // 获取还活在的cell
+  const address = PWCore.provider.address;
+  const cells = await getLiveCell(address);
+  console.log(cells, cells.length > 0);
+  console.log('-------put---');
   if (cells.length > 0) {
-    // todo 获取 Capacity Lock Type todo 没有发起交易过的cell
-    cells[0].output_data = JSON.stringify(data);
-    cells[0].name = name;
-  } else {
-    // todo 创建cell?
-    return false;
+    data = Object.assign(cells[0], {
+      name: data.name,
+      address: address.addressString
+    });
+    // 创建链上创建完成cell后 & 后台备份
+    console.log(data, '----------', data);
+    data = await putMyUserData(data);
+    console.log(data, '----------');
   }
-
-  // todo 创建链上创建完成cell后 & 后台备份
-  void putMyUserData(cells[0]);
-  // todo 获取卡属性
-  return data;
 }
 
 export function toHash(name: string, lock_hash: string): string {

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-10 15:38:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 22:53:06
+ * @LastEditTime: 2021-04-13 01:24:41
  * @Description: 
 -->
 <template>
@@ -15,7 +15,7 @@
     ></cat-details>
 
     <div
-      v-if="!create"
+      v-if="!create && cat"
       class="fit row wrap justify-center"
       style="padding-bottom: 30px;"
     >
@@ -25,7 +25,7 @@
       <br />
     </div>
     <div
-      v-if="!create"
+      v-if="!create && cat"
       class="fit row wrap justify-center"
       style="padding-bottom: 30px;"
     >
@@ -33,32 +33,52 @@
         <transfer-list @ntfs="ntfs"></transfer-list>
       </q-card>
     </div>
+    <q-inner-loading :showing="contactsLoading">
+      <q-spinner-gears size="50px" color="primary" />
+    </q-inner-loading>
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from '@vue/composition-api';
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import CatDetails from 'src/components/CatDetails.vue';
 import HistoryList from 'src/components/HistoryList.vue';
 import TransferList from 'src/components/TransferList.vue';
-
+import { getOneCat } from '../composition/get-home-data';
 export default defineComponent({
   name: 'Account',
   components: { CatDetails, HistoryList, TransferList },
   setup(props, ctx) {
-    const mine = ctx.root.$route.query.mine;
+    const contactsLoading = ref(false);
+    // 获取服务器上的cat
+    const name = ctx.root.$route.query.name;
     let cat = ctx.root.$route.query.cat;
-    let create = ref(true);
-    // todo 查询卡片的胜负记录
-    if (cat.hash) {
-      cat.win = 10;
-      cat.mur = 10;
-      create = ref(false);
+    let create = ref(false);
+    let mine = ref(false);
+    if (!cat.hash) {
+      create = ref(true);
+      mine = ref(true);
     }
+    if (name) {
+      onMounted(async () => {
+        contactsLoading.value = true;
+        const data = await getOneCat(name);
+        if (!data.hash) {
+          create = ref(true);
+          mine = ref(true);
+        } else {
+          cat.value = data;
+        }
+        console.log(cat);
+        contactsLoading.value = false;
+      });
+    }
+    // todo 查询卡片的胜负记录
     return {
       cat,
+      create,
       mine,
-      create
+      contactsLoading
     };
   },
   methods: {

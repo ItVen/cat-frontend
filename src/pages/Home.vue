@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 22:04:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 23:05:29
+ * @LastEditTime: 2021-04-12 15:28:16
  * @Description: 
 -->
 <template>
@@ -23,71 +23,41 @@
     </q-input>
     <q-card class="col-8 my-card" style="margin: 30px;">
       <cat-list
+        v-if="cat.length > 0"
         class="col-8 self-center"
         :list="cat"
         title="10 Sourly Cat"
       ></cat-list>
     </q-card>
+    <q-inner-loading :showing="contactsLoading">
+      <q-spinner-gears size="50px" color="primary" />
+    </q-inner-loading>
   </q-page>
 </template>
 <script>
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import CatList from 'src/components/CatList.vue';
 import { isLogin } from '../composition/getLoginStatus';
+import { getList } from '../composition/get-home-data';
 export default defineComponent({
   name: 'Home',
   components: { CatList },
   setup() {
     const login = isLogin();
-    const cat = [
-      {
-        name: 'zzzsasa',
-        fishes: 56,
-        hash:
-          '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-      },
-      {
-        name: 'zzzsasa',
-        fishes: 56,
-        hash:
-          '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-      },
-      {
-        name: 'zzzsasa',
-        fishes: 56,
-        hash:
-          '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-      },
-      {
-        name: 'zzzsasa',
-        fishes: 56,
-        hash:
-          '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-      },
-      {
-        name: 'zzzsasa',
-        fishes: 56,
-        hash:
-          '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-      },
-      {
-        name: 'zzzsasa',
-        fishes: 56,
-        hash:
-          '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-      },
-      {
-        name: 'zzzsasa',
-        fishes: 56,
-        hash:
-          '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-      }
-    ];
+    const contactsLoading = ref(false);
+    let cat = ref([]);
+    // 获取服务器上的cat
+    onMounted(async () => {
+      contactsLoading.value = true;
+      cat.value = await getList();
+      contactsLoading.value = false;
+    });
     return {
       filter: ref(''),
       login,
       search: ref(''),
-      cat
+      cat,
+      contactsLoading
     };
   },
   methods: {

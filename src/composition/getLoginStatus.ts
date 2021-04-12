@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 10:19:36
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-09 10:42:05
+ * @LastEditTime: 2021-04-12 19:50:22
  * @Description:
  */
 import {
@@ -10,11 +10,13 @@ import {
   createUserInfo,
   CAT_DATA,
   getStorage,
-  setStorage
+  setStorage,
+  getNameUsed
 } from './apiBase';
 import { Account, Cells } from './interface';
 import { getLiveCell } from './rpcApi';
 import { setCellData } from './getHash';
+import PWCore from '@lay2/pw-core';
 export function isLogin(): boolean {
   const token = getToken();
   if (token) return true;
@@ -26,42 +28,32 @@ type UserData = {
   address: string;
   fishes: number;
 };
-export async function login(account: Account): Promise<UserData | null> {
+export async function login(
+  ethAddress: string,
+  address: string
+): Promise<UserData | null> {
   // 后台服务器绑定地址
-  console.log(account);
-  const data = (await createUserInfo(
-    account.email,
-    account.address
-  )) as UserData | null;
+  const data = await createUserInfo({
+    ethAddress,
+    address
+  });
   // todo 查询账户下的cells
-  void getLiveCell(account);
+  // void getLiveCell(account);
   return data;
 }
 
-export async function getNameIsUsed(name: string): Promise<Cells | boolean> {
-  // todo 假数据
-  // const data = await getNameUsed(name);
-  // let used = (data.data as NameUsed).used;
-  const data = null;
-  let used = true;
-  if (!data) {
-    // todo 假数据
-    used = false;
-  }
-  console.log(used);
-  if (!used) {
-    const cell = await setCellData(name);
-    console.log(cell);
-    if (cell) {
-      // todo 假数据 保存cell
-      setStorage('cell', cell);
-      return cell;
-    }
-
-    return false;
-  } else {
-  }
-  return false;
+export async function getNameIsUsed(name: string): Promise<boolean> {
+  const data = await getNameUsed(name);
+  const used = data.data.used;
+  return used;
+}
+export function putMyCell(name: string) {
+  console.log(PWCore.provider.address.toLockScript());
+  console.log(PWCore.provider.address.toLockScript().codeHash);
+  // const cell = await setCellData(name);
+  // console.log(cell);
+  // if (cell) return cell;
+  // return used;
 }
 export function getUserInfo(): UserData | string | null {
   let data = getStorage(CAT_DATA);
