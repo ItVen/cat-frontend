@@ -47,10 +47,11 @@ export async function getNameIsUsed(name: string): Promise<boolean> {
   const used = data.data.used;
   return used;
 }
-export function putMyCell(name: string) {
+export async function putMyCell(name: string) {
   console.log(PWCore.provider.address.toLockScript());
   console.log(PWCore.provider.address.toLockScript().codeHash);
-  // const cell = await setCellData(name);
+  const;
+  const cell = await setCellData(name);
   // console.log(cell);
   // if (cell) return cell;
   // return used;
