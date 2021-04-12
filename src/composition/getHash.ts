@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 23:18:08
+ * @LastEditTime: 2021-04-12 10:21:51
  * @Description:
  */
 
@@ -86,7 +86,7 @@ export function toHash(name: string, lock_hash: string): string {
   let todoHash = name + lock_hash;
   const hasher = new Blake2bHasher();
   todoHash = hasher.hash(todoHash).serializeJson();
-  return todoHash;
+  return todoHash.substring(0, 22);
 }
 
 export function getCellCreateData(
@@ -95,11 +95,15 @@ export function getCellCreateData(
 ): Record<string, unknown> {
   const todoHash = name + lock_hash;
   const hasher = new Blake2bHasher();
-  const hash = hasher.hash(todoHash).serializeJson();
+  const hash = hasher
+    .hash(todoHash)
+    .serializeJson()
+    .substring(0, 22);
   // 获取小鱼干
   const attr = getAttribute(hash);
   // 计算小鱼干属性
   const fishes = getfishers(attr);
   const data = { name, hash, fishes };
+  console.log('原数据', data);
   return data;
 }

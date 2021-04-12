@@ -22,7 +22,7 @@
       <attr-view
         :show="false"
         title="OWNED BY"
-        :text="cat.address"
+        :text="address"
         @more="showAllNtf"
         textClass="self-center text-body2"
       ></attr-view>
@@ -118,10 +118,6 @@ export default defineComponent({
         type: String,
         default: '?'
       }, // todo  根据hash 计算属性
-      address: {
-        type: String,
-        default: '?'
-      },
       email: {
         type: String,
         default: '?'
@@ -142,16 +138,13 @@ export default defineComponent({
     let address = ref('');
     if (props.mine) {
       address = showAddress(getAddress());
-      // if (props.create) label = ref('Submit');
-      label = ref('Submit');
-      console.log(label, 'llll');
+      if (props.create) label = ref('Submit');
     } else {
+      // todo 获取对应的地址
+      address = showAddress(getAddress());
       label = ref('Challenge');
     }
-    console.log(label);
-    if (props.cat.address) {
-      address = showAddress(props.cat.address);
-    }
+    //todo 拿服务器给的数据
     const attr = getAttribute(props.cat.hash);
     const icon = getCatIcon(props.cat.name);
     return {
@@ -172,7 +165,6 @@ export default defineComponent({
     async action() {
       // todo 转账或者battle
       if (this.create) {
-        console.log('提交创建自己的cat');
         await this.createCat();
       } else if (this.mine) {
         // todo 发起转账
@@ -190,13 +182,16 @@ export default defineComponent({
       this.loading = true;
       // todo 创建自己的cat
       const data = getCellCreateData(this.createName, getLockHash());
-      // 整理cell
       const cellData = setCell('create', null, JSON.stringify(data));
-      // todo 发起交易
-      console.log(cellData);
       const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
-      const txHash = await sendTransaction(builder);
-      console.log('----------txHash', txHash);
+      try {
+        const txHash = await sendTransaction(builder);
+        console.log('----------txHash', txHash);
+        // todo 卡片创建成功 刷新ui界面 上传服务器 获取账户下的卡片
+      } catch (e) {
+        console.log(e);
+        // todo 提示创建失败
+      }
       this.loading = false;
     },
     showAllNtf() {

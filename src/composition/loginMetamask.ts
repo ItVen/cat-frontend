@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 22:35:04
+ * @LastEditTime: 2021-04-12 11:07:45
  * @Description:
  */
 
@@ -19,7 +19,7 @@ import Web3Modal from 'web3modal';
 import supported from 'src/composition/chains';
 import { ChainsModel, PWCoreData } from './interface';
 import { useConfig } from './baseConfig';
-import CellCollector from './cellCollertor';
+import { getLiveCell } from './rpcApi';
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
@@ -80,6 +80,7 @@ export async function initPWCore(): Promise<PWCoreData> {
     PWCore.provider.address
   );
   console.log(ckbBalance.toString());
+  // getLiveCell(PWCore.provider.address);
   return {
     ckbBalance,
     address,
