@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-10 15:38:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 11:53:00
+ * @LastEditTime: 2021-04-13 12:04:46
  * @Description: 
 -->
 <template>
@@ -10,9 +10,6 @@
     <cat-details
       :mine="cat.mine"
       :cat="cat"
-      :name="cat.name"
-      :hash="cat.hash"
-      :address="cat.address"
       :create="create"
       style="margin-top: 30px;  padding-bottom: 30px;"
     ></cat-details>
@@ -56,6 +53,7 @@ export default defineComponent({
     // 获取服务器上的cat
     const name = ctx.root.$route.query.name;
     let cat = ref(ctx.root.$route.query.cat);
+    console.log(cat);
     let create = ref(false);
     let mine = ref(false);
     if (cat && !cat.hash) {
@@ -75,6 +73,7 @@ export default defineComponent({
         const data = await getOneCat(name);
         cat.value = data;
         if (data.hash) create.value = false;
+        console.log(cat);
         contactsLoading.value = false;
       });
     }
