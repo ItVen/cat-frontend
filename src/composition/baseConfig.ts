@@ -14,7 +14,7 @@ interface Urls {
 }
 const urls: Record<string, Urls> = {
   test: {
-    base_url: 'http://localhost:3000',
+    base_url: 'http://47.243.90.169:3000',
     socket_url: 'https://cellapitest.ckb.pw',
     ckb_test_net: 'https://testnet.ckb.dev',
     indexer_rpc: 'https://testnet.ckb.dev/indexer',

@@ -5,8 +5,18 @@
  * @LastEditTime: 2021-04-12 11:04:57
  * @Description: cell create update delete
  */
-import PWCore, { Cell, Amount } from '@lay2/pw-core';
-import SDBuilder from './sd-builder';
+import PWCore, {
+  Cell,
+  Amount,
+  Address,
+  AddressType,
+  SUDT,
+  Builder
+} from '@lay2/pw-core';
+import { sendTransaction } from './loginMetamask';
+import { TransferBuilder } from './transfer-budiler';
+import { BatchCoffeeBuilder } from './transferBudiler';
+// import TransferBuilder from './transfer-budiler';
 
 export function setCell(
   mode: string,
@@ -46,6 +56,29 @@ export function getAddress(): string {
 }
 
 export function getLockHash(): string {
+  const hash = PWCore.provider.address.toLockScript().codeHash;
+  return hash;
+}
+
+export async function getTransferBuilder(
+  eth: string,
+  count: string
+): Promise<string> {
+  const address = new Address(eth, AddressType.ckb);
+  const amount = new Amount(count);
+  const sudt = new SUDT(
+    '0x297fb72de7f76ba0784e63dff941b01cbbb372a26c0786d2d511ae9709d8ca57'
+  );
+  console.log(eth, count, address, amount, sudt);
+  // const builder = new TransferBuilder(sudt, address, amount);
+  const builder = new BatchCoffeeBuilder(sudt, [address]);
+  console.log(builder);
+  const txHash = await sendTransaction(builder);
+  console.log(txHash);
+  return txHash;
+}
+
+export function getBattleBuilder(): string {
   const hash = PWCore.provider.address.toLockScript().codeHash;
   return hash;
 }

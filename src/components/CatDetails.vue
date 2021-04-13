@@ -82,6 +82,12 @@
     <q-inner-loading :showing="loading">
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
+    <q-dialog v-model="showDialog">
+      <bottom-sheet
+        :address="cat.address"
+        @close="showDialog = !showDialog"
+      ></bottom-sheet>
+    </q-dialog>
   </div>
 </template>
 
@@ -95,8 +101,9 @@ import SDBuilder from '../composition/sd-builder';
 import { setCell, getAddress, getLockHash } from 'src/composition/userCells';
 import { getNameIsUsed } from '../composition/getLoginStatus';
 import { setCellData } from '../composition/getHash';
+import BottomSheet from './BottomSheet.vue';
 export default defineComponent({
-  components: { AttrView },
+  components: { AttrView, BottomSheet },
   name: 'CatDetails',
   props: {
     cat: {
@@ -132,6 +139,7 @@ export default defineComponent({
   },
   setup(props) {
     // todo 获取卡片信息
+    console.log(props);
     let label = ref('Transfer');
     let address = ref('');
     let fishes = ref('?');
@@ -154,7 +162,7 @@ export default defineComponent({
     }
     fishes = ref(props.cat.fishes);
     console.log('-----');
-    console.log(attr, '======', icon);
+    console.log(attr, '======', fishes, props.mine, 'label', label);
     return {
       icon,
       label,
@@ -167,10 +175,13 @@ export default defineComponent({
       sendTransaction,
       SDBuilder,
       createName: ref(''),
+      showDialog: ref(false),
       getCellCreateData,
       getLockHash,
       getNameIsUsed,
-      setCellData
+      setCellData,
+      basic: false,
+      fixed: false
     };
   },
   methods: {
@@ -180,7 +191,8 @@ export default defineComponent({
         await this.createCat();
       } else if (this.mine) {
         // todo 发起转账
-        console.log('发起转账', this.label);
+        this.showDialog = true;
+        console.log('发起转账', this.showDialog);
       } else {
         // 开始 battle
         console.log('开始 battle');
@@ -217,6 +229,12 @@ export default defineComponent({
         // todo 提示创建失败
       }
       this.loading = false;
+    },
+    toTransfer() {
+      // todo 发起转账
+      this.loading = true;
+      console.log('todo 发起转账');
+      //const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
     },
     showAllNtf() {
       // todo 查看账户下的所有ntf

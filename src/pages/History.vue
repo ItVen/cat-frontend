@@ -20,8 +20,8 @@ export default defineComponent({
   name: 'History',
   setup() {
     const datas = new TestData();
-    list = datas.historyList();
-    return { datas, ...list };
+    const list = datas.historyList();
+    return { datas, list };
   }
 });
 </script>

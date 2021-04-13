@@ -3,7 +3,7 @@
  * @Author: Aven
  * @Date: 2021-04-12 15:05:46
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 10:52:06
+ * @LastEditTime: 2021-04-13 12:15:03
  * @Description:
  */
 import {
@@ -36,7 +36,7 @@ export async function getList(): Promise<Record<string, unknown>[]> {
 export async function getUsetList(
   address: string
 ): Promise<Record<string, unknown>[]> {
-  if (!address) address = PWCore.provider.address.toCKBAddress();
+  if (!address) address = PWCore.provider.address.addressString;
   const query = { name: address };
   let data = await getUserList(query);
   data = data.data;

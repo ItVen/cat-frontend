@@ -2,13 +2,14 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 23:13:16
+ * @LastEditTime: 2021-04-13 12:35:18
  * @Description: 
 -->
 <template>
   <q-table
     :card-container-class="cardContainerClass"
     :data="list"
+    v-show="list.length > 0"
     row-key="name"
     title="Battle Tistoty"
     :loading="loading"
@@ -51,32 +52,22 @@
   </q-table>
 </template>
 <script>
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
+import { getBattleList } from '../composition/tx-history';
 export default defineComponent({
   name: 'HistoryList',
-  setup() {
+  props: {
+    name: String
+  },
+  setup(props) {
+    const list = ref([]);
+    onMounted(() => {
+      list.value = getBattleList(props.name);
+      console.log(list);
+    });
     return {
       loading: false,
-      list: [
-        {
-          from: 'ssssss',
-          to: 'sss',
-          win: false,
-          fishes: '-3',
-          time: '2021/04/09 10:00',
-          tx_hash:
-            '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-        },
-        {
-          from: 'zzzzz',
-          to: 's',
-          win: true,
-          fishes: '3',
-          time: '2021/04/09 10:00',
-          tx_hash:
-            '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-        }
-      ]
+      list
     };
   }
 });

@@ -2,13 +2,14 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:02:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 23:12:04
+ * @LastEditTime: 2021-04-13 12:35:04
  * @Description: 
 -->
 <template>
   <q-table
     title="TransferList"
     :data="list"
+    v-show="list.length > 0"
     no-data-label="I didn't find anything for you"
   >
     <template v-slot:body="props">
@@ -38,32 +39,24 @@
   </q-table>
 </template>
 <script>
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
+import { getTransferList } from '../composition/tx-history';
 export default defineComponent({
   name: 'TranferList',
   props: {
     rowCount: Number,
-    show: Boolean
+    show: Boolean,
+    name: String
   },
-  setup() {
+  setup(props) {
+    const list = ref([]);
+    onMounted(() => {
+      list.value = getTransferList(props.name);
+      console.log(list);
+    });
     return {
       loading: false,
-      list: [
-        {
-          from: 'ssssss',
-          to: 'sss',
-          time: '2021/04/09 10:00',
-          tx_hash:
-            '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-        },
-        {
-          from: 'zzzzz',
-          to: 's',
-          time: '2021/04/09 10:00',
-          tx_hash:
-            '0xf51d1c446f3a060b9dc3abba47489901f3a0069698cc3044b594f91d182e5601'
-        }
-      ]
+      list
     };
   },
   methods: {

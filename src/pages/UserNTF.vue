@@ -1,3 +1,10 @@
+<!--
+ * @Author: Aven
+ * @Date: 2021-04-10 10:46:02
+ * @LastEditors: Aven
+ * @LastEditTime: 2021-04-13 12:06:25
+ * @Description: 
+-->
 <template>
   <q-page class="fit row wrap justify-around  items-start content-start">
     <q-card class="col-8 my-card" style="margin: 30px;">
@@ -70,7 +77,11 @@ export default defineComponent({
         path: '/account',
         query: {
           cat: {
-            hash: ''
+            name: '?',
+            hash: '',
+            fishes: '?',
+            address: '',
+            mine: true
           },
           mine: true
         }
