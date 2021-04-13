@@ -93,7 +93,7 @@ import AttrView from './AttrView.vue';
 import { sendTransaction } from '../composition/loginMetamask';
 import SDBuilder from '../composition/sd-builder';
 import { setCell, getAddress, getLockHash } from 'src/composition/userCells';
-import { getNameIsUsed, putMyCell } from '../composition/getLoginStatus';
+import { getNameIsUsed } from '../composition/getLoginStatus';
 import { setCellData } from '../composition/getHash';
 export default defineComponent({
   components: { AttrView },
@@ -111,17 +111,21 @@ export default defineComponent({
       hash: {
         type: String,
         default: '?'
-      } // todo  根据hash 计算属性
+      }, // todo  根据hash 计算属性,
+      mine: {
+        type: Boolean,
+        default: false
+      },
+      address: {
+        type: String,
+        default: '?'
+      }
     },
     mine: {
       type: Boolean,
       default: false
     },
     create: {
-      type: Boolean,
-      default: false
-    },
-    cat_address: {
       type: Boolean,
       default: false
     }
@@ -132,10 +136,12 @@ export default defineComponent({
     let address = ref('');
     let fishes = ref('?');
     let newCat = ref(false);
-    const attr = getAttribute(props.cat.hash);
-    const icon = getCatIcon(props.cat.name);
-    console.log('-----');
-    console.log(props.cat, '======', attr, props.mine);
+    let attr = getAttribute('');
+    let icon = getCatIcon('?');
+    if (props.cat) {
+      attr = getAttribute(props.cat.hash);
+      icon = getCatIcon(props.cat.name);
+    }
     if (props.mine) {
       address = showAddress(getAddress());
       if (props.create) {
@@ -143,11 +149,12 @@ export default defineComponent({
         newCat = ref(true);
       }
     } else {
-      address = showAddress(props.cat_address);
+      address = showAddress(props.cat.address);
       label = ref('Challenge');
     }
+    fishes = ref(props.cat.fishes);
     console.log('-----');
-    console.log(props.cat, '======', attr, props.mine, 'label', label);
+    console.log(attr, '======', icon);
     return {
       icon,
       label,
@@ -186,7 +193,6 @@ export default defineComponent({
     async createCat() {
       this.loading = true;
       const used = await getNameIsUsed(this.createName);
-      putMyCell();
       if (used) {
         console.log('昵称已存在');
         this.loading = false;
@@ -196,8 +202,8 @@ export default defineComponent({
       const cellData = setCell('create', null, JSON.stringify(data));
       const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
       try {
-        // const txHash = await sendTransaction(builder);
-        // console.log('----------txHash', txHash);
+        const txHash = await sendTransaction(builder);
+        console.log('----------txHash', txHash);
         // 卡片创建成功 刷新ui界面 上传服务器 获取账户下的卡片
         await setCellData(data);
         // 更新数据

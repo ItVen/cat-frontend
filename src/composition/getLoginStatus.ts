@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 10:19:36
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-12 19:50:22
+ * @LastEditTime: 2021-04-13 09:29:42
  * @Description:
  */
 import {
@@ -48,9 +48,6 @@ export async function getNameIsUsed(name: string): Promise<boolean> {
   return used;
 }
 export async function putMyCell(name: string) {
-  console.log(PWCore.provider.address.toLockScript());
-  console.log(PWCore.provider.address.toLockScript().codeHash);
-  const;
   const cell = await setCellData(name);
   // console.log(cell);
   // if (cell) return cell;

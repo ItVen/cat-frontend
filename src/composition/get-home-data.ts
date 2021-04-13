@@ -3,7 +3,7 @@
  * @Author: Aven
  * @Date: 2021-04-12 15:05:46
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 01:18:02
+ * @LastEditTime: 2021-04-13 10:52:06
  * @Description:
  */
 import {
@@ -22,9 +22,12 @@ export async function getList(): Promise<Record<string, unknown>[]> {
   const cat = [];
   const data = await getHomeList(query);
   for (const item of data.data) {
-    const dd = hexToByteArray(item.output_data)
-      .map(char => String.fromCharCode(char))
-      .join('');
+    let dd = item.output_data;
+    if (dd.startsWith('0x')) {
+      dd = hexToByteArray(item.output_data)
+        .map(char => String.fromCharCode(char))
+        .join('');
+    }
     cat.push(JSON.parse(dd));
   }
   return cat;
@@ -39,9 +42,14 @@ export async function getUsetList(
   data = data.data;
   const cat = [];
   for (const item of data.list) {
-    const dd = hexToByteArray(item.output_data)
-      .map(char => String.fromCharCode(char))
-      .join('');
+    const dd = item.output_data;
+    console.log(dd);
+    if (dd.startsWith('0x')) {
+      dd = hexToByteArray(item.output_data)
+        .map(char => String.fromCharCode(char))
+        .join('');
+    }
+
     cat.push(JSON.parse(dd));
   }
   data.address = showAddress(address);
@@ -59,10 +67,16 @@ export async function getOneCat(
     return cat;
   }
   const data = await getCatInfoByName(name);
-  cat = hexToByteArray(data.data.output_data)
-    .map(char => String.fromCharCode(char))
-    .join('');
+  cat = data.data.output_data;
+  if (cat.startsWith('0x')) {
+    cat = hexToByteArray(cat)
+      .map(char => String.fromCharCode(char))
+      .join('');
+  }
   cat = JSON.parse(cat);
-  console.log(cat);
+  cat.address = data.data.address;
+  cat.mine = false;
+  const address = PWCore.provider.address.addressString;
+  if (cat.address == address) cat.mine = true;
   return cat;
 }

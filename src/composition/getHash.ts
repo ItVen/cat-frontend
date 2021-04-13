@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 01:51:25
+ * @LastEditTime: 2021-04-13 10:05:07
  * @Description:
  */
 
@@ -59,7 +59,11 @@ export async function setCellData(
   console.log(cells, cells.length > 0);
   console.log('-------put---');
   if (cells.length > 0) {
-    data = Object.assign(cells[0], {
+    console.log(cells);
+    const cell = cells[cells.length - 1];
+    cell.output_data = JSON.stringify(data);
+    console.log(cell);
+    data = Object.assign(cell, {
       name: data.name,
       address: address.addressString
     });

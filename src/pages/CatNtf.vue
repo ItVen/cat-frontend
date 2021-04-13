@@ -2,14 +2,17 @@
  * @Author: Aven
  * @Date: 2021-04-10 15:38:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 01:24:41
+ * @LastEditTime: 2021-04-13 11:53:00
  * @Description: 
 -->
 <template>
   <q-page class="fit row wrap justify-between items-start content-start">
     <cat-details
-      :mine="mine"
+      :mine="cat.mine"
       :cat="cat"
+      :name="cat.name"
+      :hash="cat.hash"
+      :address="cat.address"
       :create="create"
       style="margin-top: 30px;  padding-bottom: 30px;"
     ></cat-details>
@@ -52,24 +55,26 @@ export default defineComponent({
     const contactsLoading = ref(false);
     // 获取服务器上的cat
     const name = ctx.root.$route.query.name;
-    let cat = ctx.root.$route.query.cat;
+    let cat = ref(ctx.root.$route.query.cat);
     let create = ref(false);
     let mine = ref(false);
-    if (!cat.hash) {
+    if (cat && !cat.hash) {
       create = ref(true);
       mine = ref(true);
+      // if (create) {
+      //   cat = {
+      //     hash: '',
+      //     name: '',
+      //     fishes: ''
+      //   };
+      // }
     }
     if (name) {
       onMounted(async () => {
         contactsLoading.value = true;
         const data = await getOneCat(name);
-        if (!data.hash) {
-          create = ref(true);
-          mine = ref(true);
-        } else {
-          cat.value = data;
-        }
-        console.log(cat);
+        cat.value = data;
+        if (data.hash) create.value = false;
         contactsLoading.value = false;
       });
     }
@@ -86,7 +91,6 @@ export default defineComponent({
       console.log(this.$route.query);
     },
     ntfs(data: { address: any; email: any }) {
-      console.log('ntfs', data);
       // todo 查看账户下的所有ntf
       console.log('查看账户下的所有ntf');
       void this.$router.push({
