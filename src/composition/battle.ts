@@ -1,38 +1,74 @@
-import { getAttribute, toHash } from './getHash';
+import { apiPost } from './apiBase';
+import { getAttribute, setData, toHash } from './getHash';
 import { NTFAttr, NTFCat } from './interface';
+import { toBattleBuilder } from './userCells';
 //输的一方要更改Hash, blake160(hash+lock_hash)
-const max_fight_count = 300;
-function getResult(
+const max_fight_count = 3000;
+async function getResult(
   winer: NTFCat,
   loser: NTFCat,
   winerAttr: NTFAttr,
-  loserAttr: NTFAttr
+  loserAttr: NTFAttr,
+  count: number,
+  start: string
 ) {
   //胜者：小鱼干数量 +（败者HP*0.1）；name 和 hash 不变
   //败者：小鱼干数量 - （胜者ATK*0.1）；name 不变，hash 变成 hash( 原hash + 胜者 lock_hash )
   //当某 NFT 的小鱼干数量 === 0 时 小鱼干 + 999
-  const winer_fishes = loserAttr.ph * 0.1;
-  winer.fishes += winer_fishes;
-
-  const loser_fishes = winerAttr.atk * 0.1;
-  loser.fishes = loser.fishes - loser_fishes;
-  if (loser.fishes === 0) {
-    loser.fishes = 999;
+  const afterWiner = {
+    name: winer.name,
+    hash: winer.hash,
+    address: winer.address,
+    fishes: winer.fishes,
+    mine: winer.mine,
+    output: winer.output
+  };
+  const afterLoser = {
+    name: winer.name,
+    hash: winer.hash,
+    address: winer.address,
+    fishes: winer.fishes,
+    mine: winer.mine,
+    output: winer.output
+  };
+  let winer_fishes = loserAttr.ph * 0.1;
+  winer_fishes = parseInt(winer_fishes.toFixed());
+  let loser_fishes = winerAttr.atk * 0.1;
+  loser_fishes = parseInt(loser_fishes.toFixed());
+  afterWiner.fishes = (parseInt(winer.fishes) + winer_fishes).toFixed();
+  afterLoser.fishes = (parseInt(loser.fishes) - loser_fishes).toFixed();
+  console.log(winer_fishes, loser_fishes, afterWiner.fishes, afterLoser.fishes);
+  if (loser.fishes == '0') {
+    loser.fishes = '999';
   }
-  if (winer.lock_hash) {
-    const loserHash = toHash(loser.hash + winer.lock_hash);
-    loser.hash = loserHash;
-  }
-  console.log(
+  const output = winer.output;
+  const loserHash = toHash(loser.hash, output.lock.codeHash);
+  afterLoser.hash = loserHash;
+  const output_data =
+    '0x' +
+    setData(loser.name, 16) +
+    setData(loserHash, 20) +
+    setData(afterLoser.fishes, 4);
+  //   //todo data 更新
+  // todo buider 提交()
+  //   await toBattleBuilder(winer, loser, winer_fishes, loser_fishes);
+  // todo  更新后台数据库信息
+  await postBattleData(
+    winer,
+    loser,
+    afterWiner,
+    afterLoser,
     winer_fishes,
     loser_fishes,
-    winer.fishes,
-    loser.fishes,
-    loser.hash
+    '11',
+    output_data,
+    count,
+    start
   );
   return { winer, loser };
 }
-export function goBattle(mine: NTFCat, user: NTFCat) {
+export async function goBattle(mine: NTFCat, user: NTFCat) {
+  const start = mine.name;
   console.log(mine.fishes, user.fishes, 'goBattle');
   //计算双方的挑战前属性值
   const mineAttr = getAttribute(mine.hash);
@@ -59,14 +95,14 @@ export function goBattle(mine: NTFCat, user: NTFCat) {
     ) {
       console.log('battle win');
       userWin = true;
-      getResult(user, mine, battleAttr, mineAttr);
+      await getResult(user, mine, battleAttr, mineAttr, n, start);
       break;
     } else if (
       hurtMine * n < 10 * battleAttr.ph &&
       hurtBattle * n >= 10 * mineAttr.ph
     ) {
       console.log('mine win');
-      getResult(mine, user, mineAttr, battleAttr);
+      await getResult(mine, user, mineAttr, battleAttr, n, start);
       break;
       //n * Hurt1 < 10 * HP2 且 n * Hurt2 >= 10 * HP1 则 <挑战者> 胜利
     } else {
@@ -74,4 +110,33 @@ export function goBattle(mine: NTFCat, user: NTFCat) {
     }
   }
   console.log('n==', n, userWin);
+}
+async function postBattleData(
+  winer: NTFCat,
+  loser: NTFCat,
+  afterWiner: NTFCat,
+  afterLoser: NTFCat,
+  winnerFishes: number,
+  loserFishes: number,
+  txHash: string,
+  output_data: string,
+  count: number,
+  start: string
+) {
+  const data = {
+    winer,
+    loser,
+    afterWiner,
+    afterLoser,
+    winnerFishes,
+    loserFishes,
+    txHash,
+    output_data,
+    count,
+    start
+  };
+  console.log(JSON.stringify(data));
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const res = await apiPost('/tx/battle', data, true);
+  console.log(res);
 }

@@ -38,14 +38,14 @@ function getCount(array: Buffer) {
   for (const item of array) {
     sum += item;
   }
-  return sum % 100;
+  return parseInt((sum % 100).toFixed());
 }
 
-function getfishers(data: Record<string, number>) {
+function getfishers(data: NTFAttr) {
   const sum = 100;
   const attr = (data.ph + data.def + data.lck + data.atk) * 0.2;
 
-  return sum - attr;
+  return (sum - attr).toFixed();
 }
 
 export async function setCellData(
@@ -95,8 +95,8 @@ export function getCellCreateData(
   // 获取小鱼干
   const attr = getAttribute(hash);
   // 计算小鱼干属性
-  // const fishes = getfishers(attr);
-  const fishes = '100';
+  const fishes = getfishers(attr);
+  // const fishes = '100';
   //todo 转hash
   const output_data =
     '0x' + setData(name, 16) + setData(hash, 20) + setData(fishes, 4);
@@ -108,7 +108,7 @@ export function getCellCreateData(
   };
   return data;
 }
-function setData(data: string | number, length: number) {
+export function setData(data: string | number, length: number) {
   data = data as string;
   data = data + '';
   console.log(data);

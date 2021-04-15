@@ -111,12 +111,12 @@ export interface PWCoreData {
 }
 
 export interface NTFCat {
-  name: number;
+  name: string;
   hash: string;
   address: string;
-  fishes: number;
+  fishes: string;
   mine: string;
-  lock_hash?: string;
+  output: Cell;
 }
 
 export interface NTFAttr {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /*
  * @Author: Aven
  * @Date: 2021-04-08 12:06:45
@@ -94,50 +95,61 @@ export async function getTransferBuilder(
   // return txHash;
 }
 
-export async function getBattleBuilder(
-  mine: NTFCat,
-  battle: NTFCat
-): Promise<string> {
+export function getBattleBuilder(mine: NTFCat, battle: NTFCat) {
   goBattle(mine, battle);
-  return '';
-  // const hash = PWCore.provider.address.toLockScript().codeHash;
-  // return hash;
-  // console.log(mine, battle);
-  // const sudt = new SourlyCatType(
-  //   '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
-  // );
-  // const address = new Address(battle.address, AddressType.ckb);
-  // console.log(address);
-  // const amount = new Amount('1');
-  // const data = ''; // todo battle的data
-  // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  // const options = { witnessArgs: Builder.WITNESS_ARGS.RawSecp256k1 };
-  // const builder = new BattleBuilder(
-  //   sudt,
-  //   address,
-  //   amount,
-  //   new CatCollector(useConfig().indexer_rpc),
-  //   options
-  // );
-  // console.log(builder);
-  // try {
-  //   const txHash = await sendTransaction(builder);
-  //   console.log(txHash);
-  // } catch (e) {
-  //   console.log(e);
-  // }
 }
-
+export async function toBattleBuilder(
+  winer: NTFCat,
+  loser: NTFCat,
+  winer_fishes: number,
+  loser_fishes: number
+) {
+  winer.fishes = (parseInt(winer.fishes) + winer_fishes).toFixed();
+  loser.fishes = (parseInt(loser.fishes) - loser_fishes).toFixed();
+  if (loser.fishes == '0') {
+    loser.fishes = '999';
+  }
+  if (winer.lock_hash) {
+    const loserHash = toHash(loser.hash + winer.lock_hash);
+    afterLoser.hash = loserHash;
+  }
+  const sudt = new SourlyCatType(
+    '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
+  );
+  const address = new Address(battle.address, AddressType.ckb);
+  console.log(address);
+  const amount = new Amount('1');
+  const data = ''; // todo battle的data
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const options = { witnessArgs: Builder.WITNESS_ARGS.RawSecp256k1 };
+  const builder = new BattleBuilder(
+    sudt,
+    address,
+    amount,
+    new CatCollector(useConfig().indexer_rpc),
+    options
+  );
+  console.log(builder);
+  try {
+    const txHash = await sendTransaction(builder);
+    console.log(txHash);
+  } catch (e) {
+    console.log(e);
+  }
+}
 export async function getBattleCell(name: string) {
   const data = { name };
   const res = await apiGet('/user/battle', data, true);
+  console.log(res);
   const resdata = (res?.data as ApiResponse).data;
   const mine = JSON.parse(resdata.mine.userdata);
   mine.address = resdata.mine.address;
   mine.mine = true;
+  mine.output = resdata.mine.output;
   const battle = JSON.parse(resdata.battle.userdata);
   battle.address = resdata.battle.address;
   battle.mine = false;
+  battle.output = resdata.battle.output;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   return { mine, battle };
 }
