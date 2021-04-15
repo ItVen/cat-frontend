@@ -54,9 +54,11 @@ export interface RpcResponse {
 }
 
 export interface ApiResponse {
+  list: any[];
+  address: string;
   code: number;
   message: string;
-  data: unknown | BindInfo | NameUsed;
+  data?: any | BindInfo | NameUsed;
 }
 
 export interface BindInfo {
@@ -106,4 +108,20 @@ export interface PWCoreData {
   address: string | undefined;
   ethAddress: string | undefined;
   myCat?: Record<string, unknown>;
+}
+
+export interface NTFCat {
+  name: number;
+  hash: string;
+  address: string;
+  fishes: number;
+  mine: string;
+  lock_hash?: string;
+}
+
+export interface NTFAttr {
+  ph: number;
+  atk: number;
+  def: number;
+  lck: number;
 }

@@ -13,8 +13,6 @@ import {
   setStorage,
   getNameUsed
 } from './apiBase';
-import { Account, Cells } from './interface';
-import { getLiveCell } from './rpcApi';
 import { setCellData } from './getHash';
 import PWCore from '@lay2/pw-core';
 export function isLogin(): boolean {
@@ -28,47 +26,34 @@ type UserData = {
   address: string;
   fishes: number;
 };
-export async function login(
-  ethAddress: string,
-  address: string
-): Promise<UserData | null> {
+export async function login(ethAddress: string, address: string) {
   // 后台服务器绑定地址
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const data = await createUserInfo({
     ethAddress,
     address
   });
   // todo 查询账户下的cells
   // void getLiveCell(account);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return data;
 }
 
 export async function getNameIsUsed(name: string): Promise<boolean> {
   const data = await getNameUsed(name);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const used = data.data.used;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return used;
 }
-export async function putMyCell(name: string) {
-  console.log(PWCore.provider.address.toLockScript());
-  console.log(PWCore.provider.address.toLockScript().codeHash);
-  const cell = await setCellData(name);
-  // console.log(cell);
-  // if (cell) return cell;
-  // return used;
-}
-export function getUserInfo(): UserData | string | null {
+
+export function getUserInfo() {
   let data = getStorage(CAT_DATA);
   const cat = getStorage('cell');
   data = Object.assign(data, { cat });
-  console.log(data);
   return data;
 }
 
-export function resetUserInfo(): void {
-  const data = getStorage(CAT_DATA);
-  console.log(data.create_cat);
-  data.create_cat = parseInt(data.create_cat) - 1;
-  setStorage(CAT_DATA, data);
-}
 export function updateMyCell(cells: unknown): void {
   console.log(cells);
 }

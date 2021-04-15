@@ -8,7 +8,7 @@
 <template>
   <q-page class="flex column">
     <span class="text-h4">Welcome to Sourly Cat </span>
-    <creat-cat v-if="create_cat > 0" @show="update"></creat-cat>
+    <creat-cat v-if="create_cat > 0"></creat-cat>
     <div v-else>
       <span class="text-subtitle1"> your cat</span>
       <div class="fit row wrap justify-between items-center content-end">
@@ -28,18 +28,12 @@ export default defineComponent({
   setup() {
     let data = getUserInfo();
     console.log(data);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return {
       create_cat: 0,
       cat: {},
       ...data
     };
-  },
-  methods: {
-    update(data) {
-      console.log('update', data);
-      this.create_cat = 0;
-      this.cat = data;
-    }
   }
 });
 </script>

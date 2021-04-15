@@ -1,6 +1,6 @@
 /dist
-/src
 /src-bex/www
+/src/pw-code
 /src-capacitor
 /src-cordova
 /.quasar

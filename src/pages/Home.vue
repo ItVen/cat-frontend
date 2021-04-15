@@ -49,6 +49,7 @@ export default defineComponent({
     // 获取服务器上的cat
     onMounted(async () => {
       contactsLoading.value = true;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       cat.value = await getList();
       contactsLoading.value = false;
     });

@@ -13,7 +13,8 @@ import PWCore, {
   Amount,
   AddressType,
   Builder,
-  Cell
+  Cell,
+  RawProvider
 } from '@lay2/pw-core';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
@@ -21,6 +22,7 @@ import supported from 'src/composition/chains';
 import { ChainsModel, PWCoreData } from './interface';
 import { useConfig } from './baseConfig';
 import { getLiveCell } from './rpcApi';
+import { CatCollector } from 'src/pw-code/catCollector';
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
@@ -65,13 +67,23 @@ function getChainData(chainId: number): ChainsModel {
 }
 
 export async function initPWCore(): Promise<PWCoreData> {
-  web3 = await haveWeb3();
-  if (!pw) {
-    pw = await new PWCore(useConfig().ckb_test_net).init(
-      new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
-      new PwCollector(useConfig().socket_url)
-    );
-  }
+  // web3 = await haveWeb3();
+  // if (!pw) {
+  //   pw = await new PWCore(useConfig().ckb_test_net).init(
+  //     new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
+  //     // new PwCollector(useConfig().socket_url)
+  //     new CatCollector(useConfig().indexer_rpc)
+  //   );
+  // }
+  pw = await new PWCore(useConfig().ckb_test_net).init(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    new RawProvider(
+      '0x96d970f8c7c6d8e67442e83ab98a13a70511ba04bc1e2447ddc073bc7426a1c3'
+    ),
+    new CatCollector(useConfig().indexer_rpc)
+  );
+  // console.log(pw);
+  // console.log(await getLiveCell(PWCore.provider.address));
   const ethAddress = PWCore.provider.address.addressString;
   // 获取ckb 地址
   const address = PWCore.provider.address.toCKBAddress();
@@ -81,11 +93,14 @@ export async function initPWCore(): Promise<PWCoreData> {
   );
   let myCat = {};
   const cells = await getLiveCell(PWCore.provider.address);
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (cells[0]) {
     const outputCell = new Cell(
       new Amount('200'),
       PWCore.provider.address.toLockScript()
     );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     outputCell.setHexData(cells[0].output_data);
     myCat = outputCell.getData();
   }

@@ -53,11 +53,11 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api';
-import { getNameIsUsed, resetUserInfo } from '../composition/getLoginStatus';
+import { getNameIsUsed } from '../composition/getLoginStatus';
 export default defineComponent({
   name: 'CreateCate',
   setup() {
-    return { name: '', getNameIsUsed, resetUserInfo, loading: false };
+    return { name: '', getNameIsUsed, loading: false };
   },
   methods: {
     async login() {
@@ -67,7 +67,6 @@ export default defineComponent({
         const data = await getNameIsUsed(this.name);
         console.log('ntf', data);
         // todo cat 置0
-        resetUserInfo();
         // todo 展示卡片
         this.$emit('show', data);
       }

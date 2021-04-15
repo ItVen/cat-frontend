@@ -52,9 +52,9 @@ export default defineComponent({
   },
   setup() {
     return {
-      to: '',
+      to: 'ckt1qyqz0njzt6xjh705nd4plqs5nhh5ls4kpksq3ur7j2',
       isEmail,
-      amount: '',
+      amount: '1',
       getTransferBuilder
     };
   },
@@ -69,7 +69,6 @@ export default defineComponent({
       if (!email) {
       }
       // todo  发起交易转账 对方的cell  我的cell
-      console.log(this.to, this.amount);
       await getTransferBuilder(this.to, this.amount);
       //  this.$emit('send');
     }

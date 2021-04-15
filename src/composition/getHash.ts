@@ -2,24 +2,22 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 10:05:07
+ * @LastEditTime: 2021-04-15 14:06:49
  * @Description:
  */
 
 import { putMyUserData } from './apiBase';
-import { OutputCell, Cells } from './interface';
-import PWCore, { Blake2bHasher, Cell } from '@lay2/pw-core';
+import PWCore, { Blake2bHasher, byteArrayToHex } from '@lay2/pw-core';
 import { getLiveCell } from '../composition/rpcApi';
-import TestData from '../composition/testJson';
-import { Address } from 'cluster';
 import { date } from 'quasar';
-export function getAttribute(hash: string): Record<string, unknown> {
+import { ApiResponse, NTFAttr } from './interface';
+export function getAttribute(hash: string): NTFAttr {
   if (!hash)
     return {
-      ph: '?',
-      atk: '?',
-      def: '?',
-      lck: '?'
+      ph: 0,
+      atk: 0,
+      def: 0,
+      lck: 0
     };
   hash = hash.replace('0x', '');
   const array = Buffer.from(hash);
@@ -35,43 +33,44 @@ export function getAttribute(hash: string): Record<string, unknown> {
   };
 }
 
-function getCount(array: Buffer): number {
+function getCount(array: Buffer) {
   let sum = 1;
   for (const item of array) {
-    sum += parseInt(item);
+    sum += item;
   }
   return sum % 100;
 }
 
-function getfishers(data: Record<string, unknown>): number {
+function getfishers(data: Record<string, number>) {
   const sum = 100;
   const attr = (data.ph + data.def + data.lck + data.atk) * 0.2;
 
-  return parseInt(sum - attr);
+  return sum - attr;
 }
 
 export async function setCellData(
-  data: Record<string, unknown>
-): Promise<void> {
+  userdata: Record<string, unknown>
+): Promise<boolean | ApiResponse> {
   // 获取还活在的cell
   const address = PWCore.provider.address;
-  const cells = await getLiveCell(address);
-  console.log(cells, cells.length > 0);
-  console.log('-------put---');
+  const cells = (await getLiveCell(address)) as unknown[];
+  console.log(cells);
+  delete userdata.output_data;
+  const newdata = JSON.stringify(userdata);
   if (cells.length > 0) {
-    console.log(cells);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const cell = cells[cells.length - 1];
-    cell.output_data = JSON.stringify(data);
-    console.log(cell);
-    data = Object.assign(cell, {
-      name: data.name,
-      address: address.addressString
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const data = Object.assign(cell, {
+      name: userdata.name,
+      address: address.addressString,
+      userdata: newdata
     });
-    // 创建链上创建完成cell后 & 后台备份
     console.log(data, '----------', data);
-    data = await putMyUserData(data);
-    console.log(data, '----------');
+    const res = await putMyUserData(data);
+    return res;
   }
+  return false;
 }
 
 export function toHash(name: string, lock_hash: string): string {
@@ -87,15 +86,43 @@ export function getCellCreateData(
 ): Record<string, unknown> {
   const todoHash = name + lock_hash;
   const hasher = new Blake2bHasher();
-  const hash = hasher
+  let hash = hasher
     .hash(todoHash)
     .serializeJson()
     .substring(0, 22);
+  hash = hash.replace('0x', '');
+  console.log(hash, hash.length);
   // 获取小鱼干
   const attr = getAttribute(hash);
   // 计算小鱼干属性
-  const fishes = getfishers(attr);
-  const data = { name, hash, fishes };
-  console.log('原数据', data);
+  // const fishes = getfishers(attr);
+  const fishes = '100';
+  //todo 转hash
+  const output_data =
+    '0x' + setData(name, 16) + setData(hash, 20) + setData(fishes, 4);
+  const data = {
+    name,
+    hash,
+    fishes,
+    output_data
+  };
+  return data;
+}
+function setData(data: string | number, length: number) {
+  data = data as string;
+  data = data + '';
+  console.log(data);
+  data = data.trim();
+  const bytes = [];
+  for (let i = 0; i < data.length; i++) {
+    if (length == 16) console.log(data.charCodeAt(i));
+    bytes.push(data.charCodeAt(i));
+  }
+  data = byteArrayToHex(bytes);
+  data = data.replace('0x', '');
+  if (data.length < length * 2) {
+    data = data + '0'.repeat(length * 2 - data.length);
+  }
+  console.log(data, data.length);
   return data;
 }

@@ -6,9 +6,7 @@
  * @Description:
  */
 import { useConfig } from './baseConfig';
-import { Cells, RpcResponse } from './interface';
-import { Account } from './interface';
-import { updateMyCell } from './getLoginStatus';
+import { RpcResponse } from './interface';
 import { Address, Cell } from '@lay2/pw-core';
 
 const prcPost = async (params: Record<string, unknown>, url?: string) =>
@@ -30,7 +28,7 @@ const post = async (params: Record<string, unknown>, url?: string) => {
 };
 
 // Returns the live cells collection by the lock or type script.
-export async function getLiveCell(address: Address): Promise<Cell[]> {
+export async function getLiveCell(address: Address) {
   const params = {
     id: 2,
     jsonrpc: '2.0',
@@ -46,8 +44,7 @@ export async function getLiveCell(address: Address): Promise<Cell[]> {
   };
   const res = await prcPost(params);
   // todo  根据cells更新后台的数据
-  // updateMyCell(res.result.objects as unknown);
-  return res.result.objects;
+  return res.result.objects as unknown;
 }
 // Returns the transactions collection by the lock or type script.
 export async function getTransaction(): Promise<RpcResponse> {

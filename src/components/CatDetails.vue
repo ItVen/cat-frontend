@@ -102,6 +102,7 @@ import { setCell, getAddress, getLockHash } from 'src/composition/userCells';
 import { getNameIsUsed } from '../composition/getLoginStatus';
 import { setCellData } from '../composition/getHash';
 import BottomSheet from './BottomSheet.vue';
+import { issuesCat } from '../composition/get-home-data';
 export default defineComponent({
   components: { AttrView, BottomSheet },
   name: 'CatDetails',
@@ -147,7 +148,9 @@ export default defineComponent({
     let attr = getAttribute('');
     let icon = getCatIcon('?');
     if (props.cat) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       attr = getAttribute(props.cat.hash);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       icon = getCatIcon(props.cat.name);
     }
     if (props.mine) {
@@ -157,9 +160,11 @@ export default defineComponent({
         newCat = ref(true);
       }
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       address = showAddress(props.cat.address);
       label = ref('Challenge');
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     fishes = ref(props.cat.fishes);
     console.log('-----');
     console.log(attr, '======', fishes, props.mine, 'label', label);
@@ -174,6 +179,7 @@ export default defineComponent({
       fishes,
       sendTransaction,
       SDBuilder,
+      issuesCat,
       createName: ref(''),
       showDialog: ref(false),
       getCellCreateData,
@@ -195,10 +201,9 @@ export default defineComponent({
         console.log('发起转账', this.showDialog);
       } else {
         // 开始 battle
-        console.log('开始 battle');
         void this.$router.push({
-          path: '/battle',
-          query: { cat: this.cat }
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          path: '/battle?name=' + this.cat.name
         });
       }
     },
@@ -210,20 +215,24 @@ export default defineComponent({
         this.loading = false;
         return;
       }
+      // todo 转到服务器创建
+
       const data = getCellCreateData(this.createName, getLockHash());
-      const cellData = setCell('create', null, JSON.stringify(data));
-      const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
+      // 失败
+      await issuesCat(data);
+      // 更新数据
+      // this.newCat = false;
+      // this.fishes = data.fishes;
+      // this.icon = getCatIcon(data.name);
+      // this.attr = getAttribute(data.hash);
+      // this.label = 'Transfer';
+      // const cellData = setCell('create', null, JSON.stringify(data));
+      // const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
       try {
-        const txHash = await sendTransaction(builder);
-        console.log('----------txHash', txHash);
+        // const txHash = await sendTransaction(builder);
+        // console.log('----------txHash', txHash);
         // 卡片创建成功 刷新ui界面 上传服务器 获取账户下的卡片
-        await setCellData(data);
-        // 更新数据
-        // this.newCat = false;
-        // this.fishes = data.fishes;
-        // this.icon = getCatIcon(data.name);
-        // this.attr = getAttribute(data.hash);
-        // this.label = 'Transfer';
+        // await setCellData(data);
       } catch (e) {
         console.log(e);
         // todo 提示创建失败
@@ -233,8 +242,6 @@ export default defineComponent({
     toTransfer() {
       // todo 发起转账
       this.loading = true;
-      console.log('todo 发起转账');
-      //const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
     },
     showAllNtf() {
       // todo 查看账户下的所有ntf

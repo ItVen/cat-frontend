@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Notify, LocalStorage } from 'quasar';
 import axios, { AxiosError } from 'axios';
@@ -15,11 +16,11 @@ export function getToken(): string | null {
 export function setStorage(key: string, val: string): void {
   LocalStorage.set(key, val);
 }
-export function getStorage(key: string): string | null {
+export function getStorage(key: string) {
   return LocalStorage.getItem(key);
 }
 
-const apiGet = async (
+export const apiGet = async (
   url: string,
   params?: Record<string, string | undefined>,
   authorization?: boolean
@@ -62,7 +63,7 @@ const get = async (
   }
   return ret;
 };
-const apiPost = async (
+export const apiPost = async (
   url: string,
   params: Record<string, unknown>,
   authorization?: boolean
@@ -169,13 +170,11 @@ const put = async (url: string, params: unknown, authorization?: boolean) => {
   }
   return ret;
 };
-export async function createUserInfo(data: Record<string, string | undefined>) {
+export async function createUserInfo(data: Record<string, string>) {
   const res = await apiPost('/user', data, false);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const token = res.token;
   setStorage(TOKEN_KEY, token);
   setStorage(CAT_DATA, res);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return res.data;
 }
 
@@ -198,10 +197,11 @@ export async function getCatInfoByName(name: string) {
     },
     true
   );
-  return res?.data as ApiResponse;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return res?.data;
 }
 
-export async function putMyUserData(cell: Record<string, unknown>) {
+export async function putMyUserData(cell: unknown) {
   const res = await apiPUT('/user', cell, true);
   return res?.data as ApiResponse;
 }

@@ -72,7 +72,7 @@ export default defineComponent({
         contactsLoading.value = true;
         const data = await getOneCat(name);
         cat.value = data;
-        if (data.hash) create.value = false;
+        if (data && data.hash) create.value = false;
         console.log(cat);
         contactsLoading.value = false;
       });

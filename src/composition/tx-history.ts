@@ -5,17 +5,10 @@
  * @LastEditTime: 2021-04-13 12:29:59
  * @Description:
  */
-import {
-  getToken,
-  createUserInfo,
-  CAT_DATA,
-  getStorage,
-  setStorage,
-  getNameUsed
-} from './apiBase';
+
 export function getBattleList(): Record<string, unknown>[] {
   // todo 接口
-  const list = [
+  const list: Record<string, unknown>[] = [
     // {
     //   from: 'ssssss',
     //   to: 'sss',
@@ -38,7 +31,7 @@ export function getBattleList(): Record<string, unknown>[] {
   return list;
 }
 export function getTransferList(): Record<string, unknown>[] {
-  const list = [
+  const list: Record<string, unknown>[] = [
     // {
     //   from: 'ssssss',
     //   to: 'sss',

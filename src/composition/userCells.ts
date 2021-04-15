@@ -10,13 +10,18 @@ import PWCore, {
   Amount,
   Address,
   AddressType,
-  SUDT,
   Builder
 } from '@lay2/pw-core';
+import { CatCollector } from 'src/pw-code/catCollector';
+import { SourlyCatType } from 'src/pw-code/SourlyCatType';
+import { apiGet } from './apiBase';
+import { useConfig } from './baseConfig';
+import { goBattle } from './battle';
+import { BattleBuilder } from './battle-builder';
+import { ApiResponse, NTFCat } from './interface';
 import { sendTransaction } from './loginMetamask';
-import { TransferBuilder } from './transfer-budiler';
-import { BatchCoffeeBuilder } from './transferBudiler';
-// import TransferBuilder from './transfer-budiler';
+import { getLiveCell } from './rpcApi';
+import { BatchCatBuilder } from './transfer-budiler';
 
 export function setCell(
   mode: string,
@@ -65,20 +70,74 @@ export async function getTransferBuilder(
   count: string
 ): Promise<string> {
   const address = new Address(eth, AddressType.ckb);
-  const amount = new Amount(count);
-  const sudt = new SUDT(
-    '0x297fb72de7f76ba0784e63dff941b01cbbb372a26c0786d2d511ae9709d8ca57'
+  const sudt = new SourlyCatType(
+    '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
   );
-  console.log(eth, count, address, amount, sudt);
-  // const builder = new TransferBuilder(sudt, address, amount);
-  const builder = new BatchCoffeeBuilder(sudt, [address]);
-  console.log(builder);
-  const txHash = await sendTransaction(builder);
-  console.log(txHash);
-  return txHash;
+  const cells = await getLiveCell(PWCore.provider.address);
+  console.log(cells);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const options = { witnessArgs: Builder.WITNESS_ARGS.RawSecp256k1 };
+  const builder = new BatchCatBuilder(
+    sudt,
+    address,
+    1000,
+    new CatCollector(useConfig().indexer_rpc),
+    options
+  );
+  try {
+    const txHash = await sendTransaction(builder);
+    console.log(txHash);
+  } catch (e) {
+    console.log(e);
+  }
+
+  // return txHash;
 }
 
-export function getBattleBuilder(): string {
-  const hash = PWCore.provider.address.toLockScript().codeHash;
-  return hash;
+export async function getBattleBuilder(
+  mine: NTFCat,
+  battle: NTFCat
+): Promise<string> {
+  goBattle(mine, battle);
+  return '';
+  // const hash = PWCore.provider.address.toLockScript().codeHash;
+  // return hash;
+  // console.log(mine, battle);
+  // const sudt = new SourlyCatType(
+  //   '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
+  // );
+  // const address = new Address(battle.address, AddressType.ckb);
+  // console.log(address);
+  // const amount = new Amount('1');
+  // const data = ''; // todo battle的data
+  // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  // const options = { witnessArgs: Builder.WITNESS_ARGS.RawSecp256k1 };
+  // const builder = new BattleBuilder(
+  //   sudt,
+  //   address,
+  //   amount,
+  //   new CatCollector(useConfig().indexer_rpc),
+  //   options
+  // );
+  // console.log(builder);
+  // try {
+  //   const txHash = await sendTransaction(builder);
+  //   console.log(txHash);
+  // } catch (e) {
+  //   console.log(e);
+  // }
+}
+
+export async function getBattleCell(name: string) {
+  const data = { name };
+  const res = await apiGet('/user/battle', data, true);
+  const resdata = (res?.data as ApiResponse).data;
+  const mine = JSON.parse(resdata.mine.userdata);
+  mine.address = resdata.mine.address;
+  mine.mine = true;
+  const battle = JSON.parse(resdata.battle.userdata);
+  battle.address = resdata.battle.address;
+  battle.mine = false;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  return { mine, battle };
 }

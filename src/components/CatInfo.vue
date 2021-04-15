@@ -85,7 +85,10 @@ export default defineComponent({
     mine: Boolean
   },
   setup(props) {
+    console.log(props.cat);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const attr = getAttribute(props.cat.hash);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const icon = getCatIcon(props.cat.name);
     return {
       icon,
