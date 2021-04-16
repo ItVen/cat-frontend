@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-10 19:46:54
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 20:56:17
+ * @LastEditTime: 2021-04-16 10:20:25
  * @Description: 
 -->
 <template>
@@ -10,7 +10,7 @@
     <div class="col-3 column content-center" v-if="battle">
       <!-- 对方的cat -->
       <span v-if="!reslut" class="text-h6" style="margin-left: 15px;"
-        >Owner:<sapn class="text-blue">{{ battle.name }} </sapn></span
+        >Owner:<span class="text-blue">{{ battle.name }} </span></span
       >
       <span v-else class="text-h5" style="margin-left: 15px;">{{
         message
@@ -47,7 +47,8 @@
 <script>
 import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import CatInfo from 'src/components/CatInfo.vue';
-import { getBattleCell, getBattleBuilder } from '../composition/userCells';
+import { goBattle } from '../composition/battle';
+import { getBattleCell } from '../composition/userCells';
 export default defineComponent({
   components: { CatInfo },
   name: 'Battle',
@@ -75,25 +76,18 @@ export default defineComponent({
     return {
       mine,
       battle,
-      getBattleBuilder,
+      goBattle,
       reslut: ref(false),
       message: ref(''),
       loading: ref(false)
     };
   },
   methods: {
-    toBattle() {
-      console.log('开始battle todo builder');
-      // todo
-      getBattleBuilder(this.mine, this.battle);
-      // todo 开始battle
-      // this.loading = true;
-      // const messages = ['You Win', 'You lose'];
-      // setTimeout(() => {
-      //   this.reslut = !this.reslut;
-      //   this.message = messages[new Date().getSeconds() % 2];
-      //   this.loading = false;
-      // }, 1000);
+    async toBattle() {
+      this.loading = true;
+      await goBattle(this.mine, this.battle);
+      this.loading = false;
+      // todo 更新界面
     }
   }
 });

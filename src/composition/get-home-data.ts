@@ -3,7 +3,7 @@
  * @Author: Aven
  * @Date: 2021-04-12 15:05:46
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-15 14:15:31
+ * @LastEditTime: 2021-04-16 11:52:44
  * @Description:
  */
 
@@ -19,8 +19,11 @@ export async function getList() {
   if (data.data as unknown[]) {
     for (const item of data.data) {
       try {
+        console.log(item);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const data = JSON.parse(item.userdata);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        cat.output_data = item.output_data;
         cat.push(data);
       } catch (e) {
         continue;
@@ -47,6 +50,8 @@ export async function getUsetList(address: string) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const data = JSON.parse(item.userdata);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      data.output_data = item.output_data;
       cat.push(data);
     } catch (e) {
       continue;
@@ -70,6 +75,7 @@ export async function getOneCat(name: string | null) {
   cat = JSON.parse(cat as string);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   cat.address = data.data.address;
+  cat.output_data = data.data.output_data;
   cat.mine = false;
   const address = PWCore.provider.address.addressString;
   if (cat.address == address) cat.mine = true;

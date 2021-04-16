@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-12 23:04:49
+ * @LastEditTime: 2021-04-16 11:48:29
  * @Description:
  */
 
@@ -117,6 +117,7 @@ export interface NTFCat {
   fishes: string;
   mine: string;
   output: Cell;
+  output_data: string;
 }
 
 export interface NTFAttr {
@@ -124,4 +125,11 @@ export interface NTFAttr {
   atk: number;
   def: number;
   lck: number;
+}
+
+export interface BattleResult {
+  winer: NTFCat;
+  loser: NTFCat;
+  state?: boolean;
+  mineWin: boolean;
 }

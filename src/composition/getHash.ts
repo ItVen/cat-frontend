@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-15 14:06:49
+ * @LastEditTime: 2021-04-16 10:29:59
  * @Description:
  */
 
@@ -111,7 +111,6 @@ export function getCellCreateData(
 export function setData(data: string | number, length: number) {
   data = data as string;
   data = data + '';
-  console.log(data);
   data = data.trim();
   const bytes = [];
   for (let i = 0; i < data.length; i++) {
@@ -123,6 +122,5 @@ export function setData(data: string | number, length: number) {
   if (data.length < length * 2) {
     data = data + '0'.repeat(length * 2 - data.length);
   }
-  console.log(data, data.length);
   return data;
 }

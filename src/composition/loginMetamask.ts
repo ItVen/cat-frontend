@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-12 19:48:01
+ * @LastEditTime: 2021-04-16 11:38:04
  * @Description:
  */
 
@@ -78,7 +78,7 @@ export async function initPWCore(): Promise<PWCoreData> {
   pw = await new PWCore(useConfig().ckb_test_net).init(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     new RawProvider(
-      '0x96d970f8c7c6d8e67442e83ab98a13a70511ba04bc1e2447ddc073bc7426a1c3'
+      '0x67548db9c888e698734e4b69d424eae6d134902c4596bacce55b5467a5137b7d'
     ),
     new CatCollector(useConfig().indexer_rpc)
   );
