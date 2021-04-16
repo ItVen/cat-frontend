@@ -1,6 +1,6 @@
 /dist
 /src-bex/www
-/src/composition/pw-code/*
+/src/composition/ckb-indexer.ts
 composition/rpcApi.ts
 /src-capacitor
 /src-cordova

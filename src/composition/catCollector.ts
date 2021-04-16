@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-14 13:40:15
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 22:34:42
+ * @LastEditTime: 2021-04-17 00:06:34
  * @Description: 重写indexerCollector的getSUDTBalance和collectSUDT方法
  */
 import {
@@ -22,9 +22,9 @@ import {
   Script,
   ScriptType,
   Terminator
-} from './helpers/ckb-indexer';
+} from './ckb-indexer';
 
-import { SourlyCatType } from './SourlyCatType';
+import { SourlyCatType } from './sourlyCatType';
 export class CatCollector extends Collector {
   private indexer: CkbIndexer;
   constructor(public apiBase: string) {
