@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 22:28:23
+ * @LastEditTime: 2021-04-16 23:44:05
  * @Description:
  */
 
@@ -89,22 +89,13 @@ function getChainData(chainId: number): ChainsModel {
 }
 
 export async function initPWCore(): Promise<PWCoreData> {
-  // web3 = await haveWeb3();
-  // if (!pw) {
-  //   pw = await new PWCore(useConfig().ckb_test_net).init(
-  //     new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
-  //     // new PwCollector(useConfig().socket_url)
-  //     new CatCollector(useConfig().indexer_rpc)
-  //   );
-  // }
-  pw = await new PWCore(useConfig().ckb_test_net).init(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    new RawProvider(
-      '0xf1e3108bf3f36cb2a3ef980b0f0c57b43b8ca10fa9374dfba69cac26c8307411'
-    ),
-    new CatCollector(useConfig().indexer_rpc)
-  );
-  console.log(pw);
+  web3 = await haveWeb3();
+  if (!pw) {
+    pw = await new PWCore(useConfig().ckb_test_net).init(
+      new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
+      new CatCollector(useConfig().indexer_rpc)
+    );
+  }
   const ethAddress = PWCore.provider.address.addressString;
   // 获取ckb 地址
   const address = PWCore.provider.address.toCKBAddress();
