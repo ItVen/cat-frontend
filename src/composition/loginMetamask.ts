@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 23:44:05
+ * @LastEditTime: 2021-04-16 23:52:12
  * @Description:
  */
 
@@ -22,9 +22,9 @@ import supported from 'src/composition/chains';
 import { ChainsModel, PWCoreData } from './interface';
 import { useConfig } from './baseConfig';
 import { getLiveCell } from './rpcApi';
-import { CatCollector } from 'src/pw-code/catCollector';
-import { SourlyCatType } from 'src/pw-code/SourlyCatType';
-import { IndexerCell } from 'src/pw-code/helpers/ckb-indexer';
+import { CatCollector } from 'src/composition/pw-code/catCollector';
+import { SourlyCatType } from 'src/composition/pw-code/SourlyCatType';
+import { IndexerCell } from 'src/composition/pw-code/helpers/ckb-indexer';
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;

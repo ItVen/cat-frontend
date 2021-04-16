@@ -14,8 +14,8 @@ import PWCore, {
   AddressType,
   Builder
 } from '@lay2/pw-core';
-import { CatCollector } from 'src/pw-code/catCollector';
-import { SourlyCatType } from 'src/pw-code/SourlyCatType';
+import { CatCollector } from 'src/composition/pw-code/catCollector';
+import { SourlyCatType } from 'src/composition/pw-code/SourlyCatType';
 import { apiGet } from './apiBase';
 import { useConfig } from './baseConfig';
 import { goBattle } from './battle';

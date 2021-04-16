@@ -3,7 +3,7 @@
  * @Author: Aven
  * @Date: 2021-04-16 02:18:43
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 18:29:37
+ * @LastEditTime: 2021-04-16 23:52:51
  * @Description:
  */
 import PWCore, {
@@ -19,8 +19,8 @@ import PWCore, {
   RawTransaction,
   Transaction
 } from '@lay2/pw-core';
-import { CatCollector } from 'src/pw-code/catCollector';
-import { SourlyCatType } from 'src/pw-code/SourlyCatType';
+import { CatCollector } from 'src/composition/pw-code/catCollector';
+import { SourlyCatType } from 'src/composition/pw-code/SourlyCatType';
 import { NTFCat } from './interface';
 
 export class BattleBuilder extends Builder {

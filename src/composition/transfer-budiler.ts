@@ -14,8 +14,8 @@ import PWCore, {
   SUDTCollector,
   Transaction
 } from '@lay2/pw-core';
-import { CatCollector } from 'src/pw-code/catCollector';
-import { SourlyCatType } from 'src/pw-code/SourlyCatType';
+import { CatCollector } from 'src/composition/pw-code/catCollector';
+import { SourlyCatType } from 'src/composition/pw-code/SourlyCatType';
 //包含这个cell所占的ckb。转的是整个cell存储空间。转账的时候，就是把A的lock换成B的lock，然后capacity这边再扣除一部分作为手续费
 export class BatchCatBuilder extends Builder {
   constructor(
