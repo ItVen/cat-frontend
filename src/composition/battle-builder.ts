@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-16 02:18:43
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 17:22:51
+ * @LastEditTime: 2021-04-16 17:26:17
  * @Description:
  */
 import PWCore, {
@@ -70,7 +70,7 @@ export class BattleBuilder extends Builder {
     const mineCellInput = mineCells[0] as Cell; // 挑战者
     const mineCelloutPut = mineCellInput.clone();
     inputCKBSum = inputCKBSum.add(mineCellInput.capacity);
-    const ckbAmount = new Amount('1', AmountUnit.ckb);
+    const ckbAmount = new Amount('1', AmountUnit.shannon);
 
     mineCelloutPut.capacity = inputCKBSum.sub(ckbAmount);
     inputCells.push(userCellInput); //被挑战者
