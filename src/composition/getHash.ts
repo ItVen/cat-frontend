@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 10:29:59
+ * @LastEditTime: 2021-04-16 16:41:09
  * @Description:
  */
 
@@ -21,10 +21,10 @@ export function getAttribute(hash: string): NTFAttr {
     };
   hash = hash.replace('0x', '');
   const array = Buffer.from(hash);
-  const ph = getCount(array.slice(0, 5));
-  const atk = getCount(array.slice(5, 10));
-  const def = getCount(array.slice(10, 15));
-  const lck = getCount(array.slice(15, 20));
+  const ph = getCount(array.slice(0, 10));
+  const atk = getCount(array.slice(10, 20));
+  const def = getCount(array.slice(20, 30));
+  const lck = getCount(array.slice(30, 40));
   return {
     ph,
     atk,
@@ -77,19 +77,17 @@ export function toHash(name: string, lock_hash: string): string {
   let todoHash = name + lock_hash;
   const hasher = new Blake2bHasher();
   todoHash = hasher.hash(todoHash).serializeJson();
-  return todoHash.substring(0, 22);
+  console.log('name', name);
+  console.log('lock_hash', lock_hash);
+  console.log('todoHash', todoHash);
+  return todoHash.substring(0, 42);
 }
 
 export function getCellCreateData(
   name: string,
   lock_hash: string
 ): Record<string, unknown> {
-  const todoHash = name + lock_hash;
-  const hasher = new Blake2bHasher();
-  let hash = hasher
-    .hash(todoHash)
-    .serializeJson()
-    .substring(0, 22);
+  let hash = toHash(name, lock_hash);
   hash = hash.replace('0x', '');
   console.log(hash, hash.length);
   // 获取小鱼干
@@ -98,8 +96,7 @@ export function getCellCreateData(
   const fishes = getfishers(attr);
   // const fishes = '100';
   //todo 转hash
-  const output_data =
-    '0x' + setData(name, 16) + setData(hash, 20) + setData(fishes, 4);
+  const output_data = '0x' + setData(name, 16) + hash + setData(fishes, 4);
   const data = {
     name,
     hash,
@@ -114,7 +111,6 @@ export function setData(data: string | number, length: number) {
   data = data.trim();
   const bytes = [];
   for (let i = 0; i < data.length; i++) {
-    if (length == 16) console.log(data.charCodeAt(i));
     bytes.push(data.charCodeAt(i));
   }
   data = byteArrayToHex(bytes);

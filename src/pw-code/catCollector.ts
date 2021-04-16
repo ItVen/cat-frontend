@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-14 13:40:15
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-14 15:42:58
+ * @LastEditTime: 2021-04-16 16:31:35
  * @Description: 重写indexerCollector的getSUDTBalance和collectSUDT方法
  */
 import {
@@ -56,6 +56,7 @@ export class CatCollector extends Collector {
     }
     let accCapacity = Amount.ZERO;
     const terminator: Terminator = (_index, cell) => {
+      console.log(cell);
       if (accCapacity.gte(options.neededAmount)) {
         return { stop: true, push: false };
       }

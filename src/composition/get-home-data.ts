@@ -19,7 +19,6 @@ export async function getList() {
   if (data.data as unknown[]) {
     for (const item of data.data) {
       try {
-        console.log(item);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const data = JSON.parse(item.userdata);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

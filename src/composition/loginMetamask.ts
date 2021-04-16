@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 11:38:04
+ * @LastEditTime: 2021-04-16 16:37:18
  * @Description:
  */
 
@@ -27,6 +27,22 @@ let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
 const chainId = 1;
+
+export async function canCreateCell(): Promise<boolean> {
+  try {
+    const cell = await new CatCollector(useConfig().indexer_rpc).collect(
+      PWCore.provider.address,
+      {
+        neededAmount: new Amount('1')
+      }
+    );
+    console.log(cell);
+    if (cell.length > 0) return false;
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 async function haveWeb3(): Promise<Web3> {
   if (web3) {
@@ -78,16 +94,16 @@ export async function initPWCore(): Promise<PWCoreData> {
   pw = await new PWCore(useConfig().ckb_test_net).init(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     new RawProvider(
-      '0x67548db9c888e698734e4b69d424eae6d134902c4596bacce55b5467a5137b7d'
+      '0xf1e3108bf3f36cb2a3ef980b0f0c57b43b8ca10fa9374dfba69cac26c8307411'
     ),
     new CatCollector(useConfig().indexer_rpc)
   );
-  // console.log(pw);
-  // console.log(await getLiveCell(PWCore.provider.address));
+  console.log(pw);
   const ethAddress = PWCore.provider.address.addressString;
   // 获取ckb 地址
   const address = PWCore.provider.address.toCKBAddress();
   // 获取账户余额
+  console.log(address);
   const ckbBalance = await PWCore.defaultCollector.getBalance(
     PWCore.provider.address
   );

@@ -1,4 +1,4 @@
-import { Address, AddressType, Amount, Builder } from '@lay2/pw-core';
+import PWCore, { Address, AddressType, Amount, Builder } from '@lay2/pw-core';
 import { CatCollector } from 'src/pw-code/catCollector';
 import { SourlyCatType } from 'src/pw-code/SourlyCatType';
 import { apiPost } from './apiBase';
@@ -47,6 +47,11 @@ function getResult(
     loser.fishes = '999';
   }
   const output = winer.output;
+  // console.log(
+  //   'hash',
+  //   toHash('test', PWCore.provider.address.toLockScript().codeHash)
+  // );
+
   const loserHash = toHash(loser.hash, output.lock.codeHash);
   afterLoser.hash = loserHash;
   const output_data =
@@ -101,6 +106,7 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
       console.log('battle win');
       userWin = true;
       await getResult(user, mine, battleAttr, mineAttr, n, start, userWin);
+      break;
     } else if (
       hurtMine * n < 10 * battleAttr.ph &&
       hurtBattle * n >= 10 * mineAttr.ph
@@ -108,6 +114,7 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
       console.log('mine win');
       await getResult(mine, user, mineAttr, battleAttr, n, start, userWin);
       //n * Hurt1 < 10 * HP2 且 n * Hurt2 >= 10 * HP1 则 <挑战者> 胜利
+      break;
     } else {
     }
   }
@@ -158,7 +165,7 @@ async function toBattleBuilder(mine: NTFCat, user: NTFCat, count: string) {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const witnessArgs = Builder.WITNESS_ARGS.RawSecp256k1;
-  witnessArgs.input_type = '0x' + setData(count, 0);
+  witnessArgs.input_type = '0x' + setData(count, 2);
   const options = {
     witnessArgs
   };
@@ -166,6 +173,7 @@ async function toBattleBuilder(mine: NTFCat, user: NTFCat, count: string) {
     sudt,
     address,
     amount,
+    1000,
     new CatCollector(useConfig().indexer_rpc),
     options,
     mine,

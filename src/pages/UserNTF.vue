@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-10 10:46:02
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 12:06:25
+ * @LastEditTime: 2021-04-16 16:38:12
  * @Description: 
 -->
 <template>
@@ -40,6 +40,7 @@ import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import AddressView from 'src/components/AddressView.vue';
 import CatList from 'src/components/CatList.vue';
 import { getUsetList } from '../composition/get-home-data';
+import { canCreateCell } from '../composition/loginMetamask';
 export default defineComponent({
   name: 'UserNTF',
   components: { CatList, AddressView },
@@ -53,11 +54,14 @@ export default defineComponent({
     onMounted(async () => {
       // 获取地址下的所有ntf
       contactsLoading.value = true;
+      // const create = await canCreateCell();
+      // console.log(create);
+      create_cat.value = 1;
       data = await getUsetList(address);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       cat.value = data.list || [];
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      create_cat.value = data.create_cat || 0;
+      // create_cat.value = data.create_cat || 0;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       mine.value = data.mine || false;
       contactsLoading.value = false;
