@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /*
  * @Author: Aven
  * @Date: 2021-04-08 12:16:20
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-12 11:17:00
+ * @LastEditTime: 2021-04-16 23:34:39
  * @Description:
  */
 import { useConfig } from './baseConfig';
@@ -44,7 +45,6 @@ export async function getLiveCell(address: Address) {
   };
   const res = await prcPost(params);
   // todo  根据cells更新后台的数据
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return res.result.objects;
 }
 // Returns the transactions collection by the lock or type script.

@@ -126,7 +126,7 @@ export class CkbIndexer {
 export function IndexerCellToCell(cell: IndexerCell): Cell {
   return new Cell(
     new Amount(cell.output.capacity, AmountUnit.shannon),
-    PwScript.fromRPC(cell.output.lock),
+    PwScript.fromRPC(cell.output.lock) as PwScript,
     PwScript.fromRPC(cell.output.type),
     OutPoint.fromRPC(cell.out_point),
     cell.output_data

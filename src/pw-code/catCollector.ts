@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-14 13:40:15
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 16:31:35
+ * @LastEditTime: 2021-04-16 22:34:42
  * @Description: 重写indexerCollector的getSUDTBalance和collectSUDT方法
  */
 import {
@@ -56,10 +56,12 @@ export class CatCollector extends Collector {
     }
     let accCapacity = Amount.ZERO;
     const terminator: Terminator = (_index, cell) => {
-      console.log(cell);
-      if (accCapacity.gte(options.neededAmount)) {
-        return { stop: true, push: false };
+      if (options.neededAmount) {
+        if (accCapacity.gte(options.neededAmount)) {
+          return { stop: true, push: false };
+        }
       }
+
       if (cell.output_data.length / 2 - 1 > 0 || cell.output.type !== null) {
         return { stop: false, push: false };
       } else {
@@ -115,8 +117,10 @@ export class CatCollector extends Collector {
     let accCapacity = Amount.ZERO;
     console.log(accCapacity, 'accCapacity');
     const terminator: Terminator = (_index, cell) => {
-      if (accCapacity.gte(options.neededAmount)) {
-        return { stop: true, push: false };
+      if (options.neededAmount) {
+        if (accCapacity.gte(options.neededAmount)) {
+          return { stop: true, push: false };
+        }
       }
       accCapacity = accCapacity.add(Amount.fromUInt128LE(cell.output_data));
       return { stop: false, push: true };

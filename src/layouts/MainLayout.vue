@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 17:51:19
+ * @LastEditTime: 2021-04-16 22:26:44
  * @Description: 
 -->
 <template>
@@ -84,12 +84,12 @@ export default defineComponent({
   },
   methods: {
     async loginMetamask() {
-      // this.ckb = await initPWCore();
-      // console.log(this.ckb);
-      toHash(
-        'name',
-        '0x96d970f8c7c6d8e67442e83ab98a13a70511ba04bc1e2447ddc073bc7426a1c3'
-      );
+      this.ckb = await initPWCore();
+      // // console.log(this.ckb);
+      // toHash(
+      //   'name',
+      //   '0x96d970f8c7c6d8e67442e83ab98a13a70511ba04bc1e2447ddc073bc7426a1c3'
+      // );
     }
   }
 });

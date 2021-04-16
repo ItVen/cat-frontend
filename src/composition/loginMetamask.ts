@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 17:42:51
+ * @LastEditTime: 2021-04-16 22:28:23
  * @Description:
  */
 
@@ -24,6 +24,7 @@ import { useConfig } from './baseConfig';
 import { getLiveCell } from './rpcApi';
 import { CatCollector } from 'src/pw-code/catCollector';
 import { SourlyCatType } from 'src/pw-code/SourlyCatType';
+import { IndexerCell } from 'src/pw-code/helpers/ckb-indexer';
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
@@ -113,15 +114,15 @@ export async function initPWCore(): Promise<PWCoreData> {
     PWCore.provider.address
   );
   let myCat = {};
-  const cells = await getLiveCell(PWCore.provider.address);
+  const cells = ((await getLiveCell(
+    PWCore.provider.address
+  )) as unknown) as IndexerCell[];
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (cells[0]) {
     const outputCell = new Cell(
       new Amount('200'),
       PWCore.provider.address.toLockScript()
     );
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     outputCell.setHexData(cells[0].output_data);
     myCat = outputCell.getData();
   }

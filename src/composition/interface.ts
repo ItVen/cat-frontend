@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 18:28:11
+ * @LastEditTime: 2021-04-16 23:34:22
  * @Description:
  */
 
@@ -50,7 +50,9 @@ export interface Cells {
 export interface RpcResponse {
   id: number;
   jsonrpc: string;
-  result: IndexerCollector[];
+  result: {
+    objects: IndexerCollector[];
+  };
 }
 
 export interface ApiResponse {
@@ -58,7 +60,15 @@ export interface ApiResponse {
   address: string;
   code: number;
   message: string;
-  data?: NameUsed | BindInfo | BattleCells | BattleCell | BattleUsed | unknown;
+  data?:
+    | HomeCell
+    | UserList
+    | NameUsed
+    | BindInfo
+    | BattleCells
+    | BattleCell
+    | BattleUsed
+    | unknown;
 }
 
 export interface BindInfo {
@@ -79,12 +89,20 @@ export interface MyCell {
 
 export interface Cat {
   name: string;
-  fishes: number;
-  hash: number;
-  atk: number;
-  def: number;
-  lck: number;
-  ph: number;
+  fishes: string;
+  output_data: string;
+  userdata: string;
+  hash: string;
+  atk?: number;
+  def?: number;
+  lck?: number;
+  ph?: number;
+}
+export interface UserList {
+  address: string;
+  create_cat: number;
+  mine: boolean;
+  list: Cat[];
 }
 
 export interface ChainsModel {
@@ -137,6 +155,10 @@ export interface BattleCell {
   address: string;
   output: string;
   output_data: string;
+  userdata: string;
+}
+
+export interface HomeCell {
   userdata: string;
 }
 

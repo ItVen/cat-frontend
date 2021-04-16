@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 17:38:31
+ * @LastEditTime: 2021-04-16 23:16:17
  * @Description:
  */
 
@@ -21,16 +21,15 @@ export function getAttribute(hash: string): NTFAttr {
     };
 
   hash = hash.replace('0x', '');
-  const hashBuffer = new Uint8Array(
-    hash.match(/[\da-f]{2}/gi).map(function(h) {
-      return parseInt(h, 16);
-    })
-  );
+  const array = hash.match(/[\da-f]{2}/gi)?.map(function(h) {
+    return parseInt(h, 16);
+  }) as number[];
+  const hashBuffer = new Uint8Array(array);
+
   const ph = (hashBuffer[4] % 100) + 1;
   const atk = (hashBuffer[9] % 100) + 1;
   const def = (hashBuffer[14] % 100) + 1;
   const lck = (hashBuffer[19] % 100) + 1;
-  console.log(ph, atk, def, lck);
   return {
     ph,
     atk,
@@ -49,6 +48,7 @@ function getCount(array: Buffer) {
 
 function getfishers(data: NTFAttr) {
   const sum = 100;
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   const attr = (data.ph + data.def + data.lck + data.atk) * 0.2;
 
   return (sum - attr).toFixed();

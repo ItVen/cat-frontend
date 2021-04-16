@@ -3,7 +3,7 @@
  * @Author: Aven
  * @Date: 2021-04-12 15:05:46
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 18:22:09
+ * @LastEditTime: 2021-04-16 23:30:01
  * @Description:
  */
 
@@ -11,26 +11,20 @@ import { getHomeList, getCatInfoByName, getUserList, apiPost } from './apiBase';
 import { showAddress, hexToByteArray } from './utils';
 import PWCore from '@lay2/pw-core';
 import { setCellData } from './getHash';
-import { BattleCell, NTFCat } from './interface';
+import { BattleCell, Cat, HomeCell, NTFCat, UserList } from './interface';
 
 export async function getList() {
   const query = {};
   const cat = [];
-  const data = await getHomeList(query);
-  console.log(data);
-  for (const item of data.data) {
+  const data = (await (await getHomeList(query)).data) as HomeCell[];
+  for (const item of data) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const data = JSON.parse(item.userdata);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      cat.output_data = item.output_data;
+      const data = JSON.parse(item.userdata) as Cat;
       cat.push(data);
     } catch (e) {
       continue;
     }
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return cat;
 }
 export async function issuesCat(data: Record<string, string>) {
@@ -42,14 +36,11 @@ export async function issuesCat(data: Record<string, string>) {
 export async function getUsetList(address: string) {
   if (!address) address = PWCore.provider.address.addressString;
   const query = { name: address };
-  let data = await getUserList(query);
-  data = data.data;
+  const data = (await (await getUserList(query)).data) as UserList;
   const cat = [];
   for (const item of data.list) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const data = JSON.parse(item.userdata);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const data = JSON.parse(item.userdata) as Cat;
       data.output_data = item.output_data;
       cat.push(data);
     } catch (e) {
@@ -62,9 +53,7 @@ export async function getUsetList(address: string) {
   return data;
 }
 
-export async function getOneCat(name: string | null): Promise<NTFCat> {
-  // eslint-disable-next-line prefer-const
-
+export async function getOneCat(name: string | null) {
   if (!name) {
     // 查询自己账户下的详情或者 创建小猫
     return {
