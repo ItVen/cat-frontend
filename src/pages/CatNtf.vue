@@ -70,7 +70,7 @@ export default defineComponent({
     if (name) {
       onMounted(async () => {
         contactsLoading.value = true;
-        const data = await getOneCat(name);
+        const data = await getOneCat(name as string);
         cat.value = data;
         if (data && data.hash) create.value = false;
         console.log(cat);

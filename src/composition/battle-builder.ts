@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /*
  * @Author: Aven
  * @Date: 2021-04-16 02:18:43
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 17:26:17
+ * @LastEditTime: 2021-04-16 18:29:37
  * @Description:
  */
 import PWCore, {
@@ -23,8 +24,8 @@ import { SourlyCatType } from 'src/pw-code/SourlyCatType';
 import { NTFCat } from './interface';
 
 export class BattleBuilder extends Builder {
-  receiverInputCell: Cell;
-  receiverOutputCell: Cell;
+  receiverInputCell!: Cell;
+  receiverOutputCell!: Cell;
 
   constructor(
     private sudt: SourlyCatType,
@@ -33,8 +34,8 @@ export class BattleBuilder extends Builder {
     feeRate?: number,
     collector?: CatCollector,
     protected options: BuilderOption = {},
-    private mines: NTFCat,
-    private user: NTFCat
+    private mines?: NTFCat,
+    private user?: NTFCat
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     super(feeRate, collector, options.witnessArgs);
@@ -43,41 +44,45 @@ export class BattleBuilder extends Builder {
   // 挑战者的都在第二位 input[] output[]
   async build(): Promise<Transaction> {
     const inputCells = [];
-    const outputCells = [];
+    let outputCells = [];
     let inputCKBSum = Amount.ZERO;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const userCells = await this.collector.collectSUDT(
-      this.sudt,
-      this.address[1],
-      {
-        neededAmount: new Amount('1', AmountUnit.shannon)
-      }
-    );
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const mineCells = await this.collector.collectSUDT(
+    const userCells = await (this.collector as CatCollector).collectSUDT(
       this.sudt,
       this.address[0],
       {
         neededAmount: new Amount('1', AmountUnit.shannon)
       }
     );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const mineCells = await (this.collector as CatCollector).collectSUDT(
+      this.sudt,
+      PWCore.provider.address,
+      {
+        neededAmount: new Amount('10', AmountUnit.shannon)
+      }
+    );
+    console.log(mineCells, 'mine');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!userCells || userCells.length === 0) {
       throw new Error('The userCells has no sudt cell');
     }
-    const userCellInput = userCells[0] as Cell; //被挑战者
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const userCellInput = userCells[0]; //被挑战者
     const userCelloutPut = userCellInput.clone();
-    const mineCellInput = mineCells[0] as Cell; // 挑战者
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const mineCellInput = mineCells[0]; // 挑战者
     const mineCelloutPut = mineCellInput.clone();
+    mineCelloutPut.lock = PWCore.provider.address.toLockScript();
     inputCKBSum = inputCKBSum.add(mineCellInput.capacity);
-    const ckbAmount = new Amount('1', AmountUnit.shannon);
+    const ckbAmount = new Amount('10', AmountUnit.shannon);
 
     mineCelloutPut.capacity = inputCKBSum.sub(ckbAmount);
     inputCells.push(userCellInput); //被挑战者
     inputCells.push(mineCellInput); // 挑战者
 
-    outputCells.push(userCelloutPut);
-    outputCells.push(mineCelloutPut);
+    // outputCells.push();
+    outputCells = [userCelloutPut, mineCelloutPut];
     // todo
     this.rectifyTx(inputCells, outputCells);
     mineCelloutPut.capacity = mineCelloutPut.capacity.sub(this.fee);

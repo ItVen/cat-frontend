@@ -1,15 +1,21 @@
-import PWCore, { Address, AddressType, Amount, Builder } from '@lay2/pw-core';
+import PWCore, {
+  Address,
+  AddressType,
+  Amount,
+  Builder,
+  Cell
+} from '@lay2/pw-core';
 import { CatCollector } from 'src/pw-code/catCollector';
 import { SourlyCatType } from 'src/pw-code/SourlyCatType';
 import { apiPost } from './apiBase';
 import { useConfig } from './baseConfig';
 import { BattleBuilder } from './battle-builder';
 import { getAttribute, setData, toHash } from './getHash';
-import { BattleResult, NTFAttr, NTFCat } from './interface';
+import { BattleResult, BattleUsed, NTFAttr, NTFCat } from './interface';
 import { sendTransaction } from './loginMetamask';
 //输的一方要更改Hash, blake160(hash+lock_hash)
 const max_fight_count = 3000;
-function getResult(
+async function getResult(
   winer: NTFCat,
   loser: NTFCat,
   winerAttr: NTFAttr,
@@ -46,12 +52,7 @@ function getResult(
   if (loser.fishes == '0') {
     loser.fishes = '999';
   }
-  const output = winer.output;
-  // console.log(
-  //   'hash',
-  //   toHash('test', PWCore.provider.address.toLockScript().codeHash)
-  // );
-
+  const output = winer.output as Cell;
   const loserHash = toHash(loser.hash, output.lock.codeHash);
   afterLoser.hash = loserHash;
   const output_data =
@@ -63,22 +64,22 @@ function getResult(
   // todo buider 提交()
 
   // todo  更新后台数据库信息
-  // const state = await postBattleData(
-  //   winer,
-  //   loser,
-  //   afterWiner,
-  //   afterLoser,
-  //   winer_fishes,
-  //   loser_fishes,
-  //   '01',
-  //   output_data,
-  //   count,
-  //   start
-  // );
-  // if (state) {
-  //   winer = afterWiner;
-  //   loser = afterLoser;
-  // }
+  const state = await postBattleData(
+    winer,
+    loser,
+    afterWiner,
+    afterLoser,
+    winer_fishes,
+    loser_fishes,
+    '01',
+    output_data,
+    count,
+    start
+  );
+  if (state) {
+    winer = afterWiner;
+    loser = afterLoser;
+  }
   return { winer, loser, mineWin, state: false };
 }
 export async function goBattle(mine: NTFCat, user: NTFCat) {
@@ -144,22 +145,18 @@ async function postBattleData(
     count,
     start
   };
-  // console.log(JSON.stringify(data));
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const res = await apiPost('/tx/battle', data, true);
-  console.log(res);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  return res.state as boolean;
+  return (res as BattleUsed).state;
 }
 
 async function toBattleBuilder(mine: NTFCat, user: NTFCat, count: string) {
   const sudt = new SourlyCatType(
     '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
   );
-  const addressMine = new Address(mine.address, AddressType.ckb);
+  // const addressMine = new Address(mine.address, AddressType.ckb);
   const addressUser = new Address(user.address, AddressType.ckb);
   // 挑战者 被挑战者
-  const address = [addressMine, addressUser];
+  const address = [addressUser];
   const amount = new Amount('1');
   // todo witnessArgs
 

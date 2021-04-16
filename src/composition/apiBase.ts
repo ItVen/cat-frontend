@@ -3,7 +3,7 @@
 import { Notify, LocalStorage } from 'quasar';
 import axios, { AxiosError } from 'axios';
 import { useConfig } from './baseConfig';
-import { Cells } from './interface';
+import { BindInfo, Cells } from './interface';
 import { ApiResponse } from './interface';
 
 import TestData from '../composition/testJson';
@@ -171,11 +171,11 @@ const put = async (url: string, params: unknown, authorization?: boolean) => {
   return ret;
 };
 export async function createUserInfo(data: Record<string, string>) {
-  const res = await apiPost('/user', data, false);
+  const res = (await apiPost('/user', data, false)) as BindInfo;
   const token = res.token;
   setStorage(TOKEN_KEY, token);
-  setStorage(CAT_DATA, res);
-  return res.data;
+  setStorage(CAT_DATA, res as any);
+  return res;
 }
 
 export async function getNameUsed(name: string) {
@@ -198,7 +198,7 @@ export async function getCatInfoByName(name: string) {
     true
   );
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return res?.data;
+  return res?.data as ApiResponse;
 }
 
 export async function putMyUserData(cell: unknown) {
@@ -239,7 +239,7 @@ export async function postMyTxData(
     },
     true
   );
-  return res.data;
+  return (res as ApiResponse).data;
 }
 
 export async function getHomeList(data: Record<string, string | undefined>) {

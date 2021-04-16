@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-12 16:29:14
+ * @LastEditTime: 2021-04-16 17:51:19
  * @Description: 
 -->
 <template>
@@ -43,14 +43,7 @@
           :label="address"
           @click="loginMetamask"
         />
-        <q-btn
-          flat
-          round
-          dense
-          icon="gamepad"
-          class="text-black"
-          @click="test"
-        />
+        <q-btn flat round dense icon="gamepad" class="text-black" />
         <q-btn flat round dense icon="more" class="text-black" />
       </q-toolbar>
     </q-header>
@@ -64,9 +57,9 @@ import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import { login } from '../composition/getLoginStatus'; //
 import { showAddress } from '../composition/utils'; //
 
-import TestData from '../composition/testJson';
 import { initPWCore } from 'src/composition/loginMetamask';
-import { setCell } from 'src/composition/userCells';
+import { PWCoreData } from 'src/composition/interface';
+import { toHash } from 'src/composition/getHash';
 export default defineComponent({
   name: 'MainLayout',
   components: {},
@@ -76,45 +69,27 @@ export default defineComponent({
     onMounted(async () => {
       contactsLoading.value = true;
       const pwData = await initPWCore();
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      address.value = showAddress(pwData.ethAddress + '');
+      address.value = showAddress(pwData.ethAddress);
       if (pwData.address) await login(pwData.ethAddress, pwData.address);
       contactsLoading.value = false;
     });
-    const datas = new TestData();
     return {
       route: '/',
       login,
       contactsLoading,
-      datas,
       address,
-      setCell,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      showAddress
+      showAddress,
+      toHash
     };
   },
   methods: {
     async loginMetamask() {
-      console.log('lolo', this.address);
-      this.ckb = await initPWCore();
-      console.log(this.ckb);
-      this.address = showAddress(this.ckb.ethAddress);
-      console.log(this.ckb);
-      // // todo unipass 交互
-      // // window.location.href = 'https://unipass-demo.vercel.app/#/';
-      // const user = this.datas.login();
-      // await getLiveCell(user);
-      // // todo 服务器交互
-      // await login(user);
-    },
-    test() {
-      console.log('test');
-      const data = {
-        name: 'name',
-        fishes: 60,
-        hash: 'sssss'
-      };
-      console.log(setCell('create', null, JSON.stringify(data)));
+      // this.ckb = await initPWCore();
+      // console.log(this.ckb);
+      toHash(
+        'name',
+        '0x96d970f8c7c6d8e67442e83ab98a13a70511ba04bc1e2447ddc073bc7426a1c3'
+      );
     }
   }
 });

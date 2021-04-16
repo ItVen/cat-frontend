@@ -2,11 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 11:48:29
+ * @LastEditTime: 2021-04-16 18:28:11
  * @Description:
  */
 
-import { Amount, Cell } from '@lay2/pw-core';
+import { Amount, Cell, IndexerCollector } from '@lay2/pw-core';
 export interface Account {
   email: string;
   address: string;
@@ -50,7 +50,7 @@ export interface Cells {
 export interface RpcResponse {
   id: number;
   jsonrpc: string;
-  result: unknown;
+  result: IndexerCollector[];
 }
 
 export interface ApiResponse {
@@ -58,7 +58,7 @@ export interface ApiResponse {
   address: string;
   code: number;
   message: string;
-  data?: any | BindInfo | NameUsed;
+  data?: NameUsed | BindInfo | BattleCells | BattleCell | BattleUsed | unknown;
 }
 
 export interface BindInfo {
@@ -104,9 +104,9 @@ export interface ChainsModel {
   };
 }
 export interface PWCoreData {
-  ckbBalance: Amount | null;
-  address: string | undefined;
-  ethAddress: string | undefined;
+  ckbBalance: Amount;
+  address: string;
+  ethAddress: string;
   myCat?: Record<string, unknown>;
 }
 
@@ -115,9 +115,9 @@ export interface NTFCat {
   hash: string;
   address: string;
   fishes: string;
-  mine: string;
-  output: Cell;
-  output_data: string;
+  mine: boolean;
+  output?: Cell;
+  output_data?: string;
 }
 
 export interface NTFAttr {
@@ -132,4 +132,22 @@ export interface BattleResult {
   loser: NTFCat;
   state?: boolean;
   mineWin: boolean;
+}
+export interface BattleCell {
+  address: string;
+  output: string;
+  output_data: string;
+  userdata: string;
+}
+
+export interface BattleCells {
+  mine: BattleCell;
+  battle: BattleCell;
+}
+
+export interface NameUsed {
+  used: boolean;
+}
+export interface BattleUsed {
+  state: boolean;
 }

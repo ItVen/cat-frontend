@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 10:19:36
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 12:24:57
+ * @LastEditTime: 2021-04-16 18:12:58
  * @Description:
  */
 import {
@@ -15,6 +15,7 @@ import {
 } from './apiBase';
 import { setCellData } from './getHash';
 import PWCore from '@lay2/pw-core';
+import { NameUsed } from './interface';
 export function isLogin(): boolean {
   const token = getToken();
   if (token) return true;
@@ -41,9 +42,7 @@ export async function login(ethAddress: string, address: string) {
 
 export async function getNameIsUsed(name: string): Promise<boolean> {
   const data = await getNameUsed(name);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const used = data.data.used;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  const used = (data.data as NameUsed).used;
   return used;
 }
 

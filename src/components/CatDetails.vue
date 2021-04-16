@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 <template>
   <div class="fit row  justify-center ">
     <q-card
@@ -98,7 +99,7 @@ import { getCatIcon, showAddress } from '../composition/utils';
 import AttrView from './AttrView.vue';
 import { sendTransaction } from '../composition/loginMetamask';
 import SDBuilder from '../composition/sd-builder';
-import { setCell, getAddress, getLockHash } from 'src/composition/userCells';
+import { getAddress, getLockHash } from 'src/composition/userCells';
 import { getNameIsUsed } from '../composition/getLoginStatus';
 import { setCellData } from '../composition/getHash';
 import BottomSheet from './BottomSheet.vue';
@@ -140,7 +141,6 @@ export default defineComponent({
   },
   setup(props) {
     // todo 获取卡片信息
-    console.log(props);
     let label = ref('Transfer');
     let address = ref('');
     let fishes = ref('?');
@@ -164,15 +164,10 @@ export default defineComponent({
       address = showAddress(props.cat.address);
       label = ref('Challenge');
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    fishes = ref(props.cat.fishes);
-    console.log('-----');
-    console.log(attr, '======', fishes, props.mine, 'label', label);
     return {
       icon,
       label,
       address,
-      setCell,
       newCat,
       loading: ref(false),
       attr,
@@ -220,23 +215,6 @@ export default defineComponent({
       const data = getCellCreateData(this.createName, getLockHash());
       // 失败
       await issuesCat(data);
-      // 更新数据
-      // this.newCat = false;
-      // this.fishes = data.fishes;
-      // this.icon = getCatIcon(data.name);
-      // this.attr = getAttribute(data.hash);
-      // this.label = 'Transfer';
-      // const cellData = setCell('create', null, JSON.stringify(data));
-      // const builder = new SDBuilder(cellData.inputCell, cellData.outputCell);
-      try {
-        // const txHash = await sendTransaction(builder);
-        // console.log('----------txHash', txHash);
-        // 卡片创建成功 刷新ui界面 上传服务器 获取账户下的卡片
-        // await setCellData(data);
-      } catch (e) {
-        console.log(e);
-        // todo 提示创建失败
-      }
       this.loading = false;
     },
     toTransfer() {

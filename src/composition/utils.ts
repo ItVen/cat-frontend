@@ -35,7 +35,6 @@ export function showEmail(context: string): string {
   let text = splitText[0].substr(0, 4);
   if (splitText[1]) {
     text = text + '...@' + splitText[1];
-    console.log(tesx);
 
     return text;
   }

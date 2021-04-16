@@ -1,6 +1,7 @@
 /dist
 /src-bex/www
-/src/pw-code
+/src/pw-code/*
+composition/rpcApi.ts
 /src-capacitor
 /src-cordova
 /.quasar

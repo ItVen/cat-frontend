@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-05 18:23:47
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-08 21:46:22
+ * @LastEditTime: 2021-04-16 18:25:50
  * @Description: 
 -->
 <template>
@@ -45,6 +45,7 @@ export default defineComponent({
     let login = false;
     if (data) {
       login = true;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       contexst = data.email;
     }
     return {

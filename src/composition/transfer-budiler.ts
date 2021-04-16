@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import PWCore, {
   Address,
   Amount,
@@ -33,25 +35,31 @@ export class BatchCatBuilder extends Builder {
 
     const totalSendAmount = new Amount('10', AmountUnit.ckb);
 
-    const receiverSUDTCells = await this.collector.collectSUDT(
+    const receiverSUDTCells = await (this
+      .collector as CatCollector).collectSUDT(
       this.sudt,
       PWCore.provider.address,
       {
         neededAmount: totalSendAmount
       }
     );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!receiverSUDTCells || receiverSUDTCells.length < 1) {
       throw new Error('No live sudt cell to transfer');
     }
     let inputSum = Amount.ZERO;
     console.log(inputSum);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const cell = receiverSUDTCells[0];
     inputCells.push(cell);
     console.log('inputCells', inputCells);
     inputSum = inputSum.add(new Amount('10', AmountUnit.ckb));
     console.log('inputSum', inputSum);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const receiverOutputCell = cell.clone();
     console.log('receiverOutputCell', receiverOutputCell);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     receiverOutputCell.lock = this.address.toLockScript();
     outputCells.push(receiverOutputCell);
     console.log('outputCells', outputCells);

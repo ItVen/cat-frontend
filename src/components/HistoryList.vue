@@ -7,7 +7,6 @@
 -->
 <template>
   <q-table
-    :card-container-class="cardContainerClass"
     :data="list"
     v-show="list.length > 0"
     row-key="name"

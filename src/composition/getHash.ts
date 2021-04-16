@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 16:41:09
+ * @LastEditTime: 2021-04-16 17:38:31
  * @Description:
  */
 
@@ -19,12 +19,18 @@ export function getAttribute(hash: string): NTFAttr {
       def: 0,
       lck: 0
     };
+
   hash = hash.replace('0x', '');
-  const array = Buffer.from(hash);
-  const ph = getCount(array.slice(0, 10));
-  const atk = getCount(array.slice(10, 20));
-  const def = getCount(array.slice(20, 30));
-  const lck = getCount(array.slice(30, 40));
+  const hashBuffer = new Uint8Array(
+    hash.match(/[\da-f]{2}/gi).map(function(h) {
+      return parseInt(h, 16);
+    })
+  );
+  const ph = (hashBuffer[4] % 100) + 1;
+  const atk = (hashBuffer[9] % 100) + 1;
+  const def = (hashBuffer[14] % 100) + 1;
+  const lck = (hashBuffer[19] % 100) + 1;
+  console.log(ph, atk, def, lck);
   return {
     ph,
     atk,
@@ -77,9 +83,7 @@ export function toHash(name: string, lock_hash: string): string {
   let todoHash = name + lock_hash;
   const hasher = new Blake2bHasher();
   todoHash = hasher.hash(todoHash).serializeJson();
-  console.log('name', name);
-  console.log('lock_hash', lock_hash);
-  console.log('todoHash', todoHash);
+  getAttribute(todoHash);
   return todoHash.substring(0, 42);
 }
 

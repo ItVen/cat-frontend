@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 16:37:18
+ * @LastEditTime: 2021-04-16 17:42:51
  * @Description:
  */
 
@@ -23,14 +23,19 @@ import { ChainsModel, PWCoreData } from './interface';
 import { useConfig } from './baseConfig';
 import { getLiveCell } from './rpcApi';
 import { CatCollector } from 'src/pw-code/catCollector';
+import { SourlyCatType } from 'src/pw-code/SourlyCatType';
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
 const chainId = 1;
 
 export async function canCreateCell(): Promise<boolean> {
+  const sudt = new SourlyCatType(
+    '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
+  );
   try {
-    const cell = await new CatCollector(useConfig().indexer_rpc).collect(
+    const cell = await new CatCollector(useConfig().indexer_rpc).collectSUDT(
+      sudt,
       PWCore.provider.address,
       {
         neededAmount: new Amount('1')

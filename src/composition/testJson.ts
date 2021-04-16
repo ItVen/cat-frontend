@@ -19,23 +19,6 @@ export default class TestData {
     };
     return user;
   }
-  bind(): ApiResponse {
-    const data = {
-      success: true,
-      code: 200,
-      message: '请求绑定我的账户成功',
-      data: {
-        id: 3,
-        email: 'test1234@gamil.com',
-        create_cat: 1,
-        address: 'ckt1qyqz0njzt6xjh705nd4plqs5nhh5ls4kpksq3ur7j2',
-        fishes: 0,
-        token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJzc3NzIiwiaWF0IjoxNjE3ODg0ODQ4LCJleHAiOjE2MTc5NzEyNDh9.fq85-llXIAAdEojwvcsFePNKplA5sU8Mzl--OzOpn88'
-      }
-    };
-    return data;
-  }
 
   fishesList(): Record<string, unknown> {
     const data = {

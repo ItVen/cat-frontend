@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-10 10:46:02
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 16:38:12
+ * @LastEditTime: 2021-04-16 17:43:29
  * @Description: 
 -->
 <template>
@@ -54,9 +54,9 @@ export default defineComponent({
     onMounted(async () => {
       // 获取地址下的所有ntf
       contactsLoading.value = true;
-      // const create = await canCreateCell();
-      // console.log(create);
-      create_cat.value = 1;
+      const create = await canCreateCell();
+      console.log(create);
+      if (create) create_cat.value = 1;
       data = await getUsetList(address);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       cat.value = data.list || [];

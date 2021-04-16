@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /*
  * @Author: Aven
  * @Date: 2021-04-08 12:06:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 11:53:53
+ * @LastEditTime: 2021-04-16 18:22:27
  * @Description: cell create update delete
  */
 import PWCore, {
@@ -19,7 +20,7 @@ import { apiGet } from './apiBase';
 import { useConfig } from './baseConfig';
 import { goBattle } from './battle';
 import { BattleBuilder } from './battle-builder';
-import { ApiResponse, NTFCat } from './interface';
+import { ApiResponse, BattleCell, BattleCells, NTFCat } from './interface';
 import { sendTransaction } from './loginMetamask';
 import { getLiveCell } from './rpcApi';
 import { BatchCatBuilder } from './transfer-budiler';
@@ -38,7 +39,7 @@ export function getLockHash(): string {
 
 export async function getTransferBuilder(
   eth: string,
-  count: string
+  count?: string
 ): Promise<string> {
   const address = new Address(eth, AddressType.ckb);
   const sudt = new SourlyCatType(
@@ -55,30 +56,31 @@ export async function getTransferBuilder(
     new CatCollector(useConfig().indexer_rpc),
     options
   );
+  let txHash = '0x';
   try {
-    const txHash = await sendTransaction(builder);
-    console.log(txHash);
+    txHash = await sendTransaction(builder);
   } catch (e) {
     console.log(e);
   }
+  console.log(txHash);
 
-  // return txHash;
+  return txHash;
 }
 
 export async function getBattleCell(name: string) {
   const data = { name };
   const res = await apiGet('/user/battle', data, true);
-  console.log(res);
-  const resdata = (res?.data as ApiResponse).data;
-  const mine = JSON.parse(resdata.mine.userdata);
+  const resdata = (res?.data as ApiResponse).data as BattleCells;
+  console.log(resdata);
+  const mine = JSON.parse(resdata.mine.userdata) as NTFCat;
   mine.address = resdata.mine.address;
   mine.mine = true;
-  mine.output = resdata.mine.output;
+  mine.output = (resdata.mine.output as unknown) as Cell;
   mine.output_data = resdata.mine.output_data;
-  const battle = JSON.parse(resdata.battle.userdata);
+  const battle = JSON.parse(resdata.battle.userdata) as NTFCat;
   battle.address = resdata.battle.address;
   battle.mine = false;
-  battle.output = resdata.battle.output;
+  battle.output = (resdata.battle.output as unknown) as Cell;
   battle.output_data = resdata.battle.output_data;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   return { mine, battle };
