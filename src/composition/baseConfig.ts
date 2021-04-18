@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 15:10:42
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-15 09:35:48
+ * @LastEditTime: 2021-04-19 00:57:46
  * @Description:
  */
 interface Urls {
@@ -14,7 +14,8 @@ interface Urls {
 }
 const urls: Record<string, Urls> = {
   test: {
-    base_url: 'http://127.0.0.1:3000',
+    base_url: 'http://47.243.90.169:3000',
+    // base_url: 'http://127.0.0.1:3000',
     socket_url: 'https://cellapitest.ckb.pw',
     ckb_test_net: 'https://testnet.ckb.dev',
     indexer_rpc: 'https://testnet.ckb.dev/indexer',
