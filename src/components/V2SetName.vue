@@ -10,7 +10,7 @@
     class="full-width column wrap justify-start items-center content-center"
     style="height:50%;padding:50px 40px 40px;40px"
   >
-    <span class="center-start text-white text-body1">
+    <span class="text-center text-white text-body1">
       Seem you don't have a Sourly Cat yet, adopt one for free
     </span>
     <div class="row full-width justify-around" style="margin-top:20px">

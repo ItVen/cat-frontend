@@ -12,12 +12,13 @@
       contain
       width="100%"
       src="/icons/v2/bg1.png"
+      style="border-radius: 30px;"
     />
     <div
       class="absolute-center full-width row  justify-center "
       style="padding-top: 100px; width:180px;"
     >
-      <v-2-cat-info class="col-8" :cat="cat"></v-2-cat-info>
+      <v-2-cat-info class="col-11" :cat="cat"></v-2-cat-info>
     </div>
     <div class="fit column wrap justify-start items-center content-center home">
       <q-img
@@ -30,7 +31,7 @@
         class="text-white text-subtitle2 z-top full-width row  justify-center items-center "
         style="padding-left: 50px; padding-right:50px;"
       >
-        <span>
+        <span class="text-center">
           Free to get your Sourly Cat NTF,start your first game based on
           blockchain</span
         >
@@ -40,8 +41,9 @@
         style="padding-bottom: 50px;"
       >
         <q-btn
+          dense
           color="primary"
-          class="center-self"
+          class="center-self col-6"
           label="Start Game"
           no-caps
           @click="start"
@@ -72,7 +74,7 @@ export default defineComponent({
   setup() {
     // todo islogin
     const cat = {
-      name: 'ssssss',
+      name: 'testaaa',
       fishes: 60,
       hash: '0x36a491bcf8ff9e94e49f2bd99969ed51ceb256a8cfbe1ed0583da0c6edb15cd8'
     };

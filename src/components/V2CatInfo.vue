@@ -6,9 +6,14 @@
  * @Description: 
 -->
 <template>
-  <div class="clo-9 self-center">
+  <div class=" wrap justify-center items-center content-center">
     <span>{{ title }}</span>
-    <q-card class="my-card" flat bordered>
+    <q-card
+      class="my-card self-center"
+      flat
+      bordered
+      style="border-radius: 10px;"
+    >
       <q-card-section horizontal>
         <q-card-section class="fit column  justify-center items-center ">
           <q-img class="my-icon" :src="icon" :ratio="1" />
@@ -23,6 +28,7 @@
               class="self-center"
               name="img:icons/fishes.png"
               size="30px"
+              style="margin-right: 3px;"
             />
             <span class="self-center">{{ cat.fishes }} </span>
           </div>
@@ -35,6 +41,7 @@
                 class="self-center"
                 name="img:icons/v2/health.png"
                 size="20px"
+                style="margin-right: 3px;"
               />
               <span class="self-center">{{ ph }} </span>
             </div>
@@ -43,11 +50,16 @@
                 class="self-center"
                 name="img:icons/v2/attack.png"
                 size="20px"
+                style="margin-right: 3px;"
               />
               <span class="self-center">{{ atk }} </span>
             </div>
             <div class="row  justify-center items-center content-center">
-              <q-icon name="img:icons/v2/defense.png" size="20px" />
+              <q-icon
+                name="img:icons/v2/defense.png"
+                size="20px"
+                style="margin-right: 3px;"
+              />
               <span class="self-center">{{ def }} </span>
             </div>
             <div class="row  justify-center items-center content-center">
@@ -55,6 +67,7 @@
                 class="self-center"
                 name="img:icons/v2/lucky.png"
                 size="20px"
+                style="margin-right: 3px;"
               />
               <span class="self-center">{{ lck }} </span>
             </div>
@@ -108,7 +121,7 @@ export default defineComponent({
 //
 <style lang="scss" scoped>
 .my-card {
-  max-width: 100%;
+  max-width: 1024px;
   background: #79b7c5; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,

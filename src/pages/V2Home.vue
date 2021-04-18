@@ -12,6 +12,7 @@
       contain
       width="100% "
       src="/icons/v2/bg1.png"
+      style="border-radius: 30px;"
     />
     <div
       class="bg center-self full column wrap justify-start items-center content-center"
@@ -22,15 +23,31 @@
         style="padding-top: 100px; width:180px;"
       />
       <div class="absolute-center full-width row  justify-center ">
-        <v-2-cat-info class="col-9" v-if="cat" :cat="cat"></v-2-cat-info>
+        <v-2-cat-info class="col-11" v-if="cat" :cat="cat"></v-2-cat-info>
       </div>
+
       <div
         class="absolute-bottom full-width row   justify-around  "
         style="padding-bottom: 100px;"
       >
-        <q-btn color="primary" label="Transfer" no-caps @click="transfer">
+        <q-btn
+          dense
+          class="col-4"
+          color="primary"
+          label="Transfer"
+          no-caps
+          @click="transfer"
+        >
         </q-btn>
-        <q-btn color="primary" label="Share" no-caps @click="share"> </q-btn>
+        <q-btn
+          dense
+          class="col-4"
+          color="primary"
+          label="Share"
+          no-caps
+          @click="share"
+        >
+        </q-btn>
       </div>
     </div>
     <q-dialog v-model="show" position="bottom">

@@ -12,26 +12,38 @@
       contain
       width="100% "
       src="/icons/v2/bg2.png"
+      style="border-radius: 30px;"
     />
     <div
       class="bg center-self full column wrap justify-start items-center content-center"
     >
-      <q-img contain width="80% " src="/icons/v2/battle-logo-white.png" />
+      <q-img
+        contain
+        width="60% "
+        src="/icons/v2/battle-logo-white.png"
+        style="margin:30px"
+      />
 
       <div
         class="fullscreen column wrap  justify-evenly items-center content-center
       "
       >
-        <div height="50%">
+        <div>
           <v-2-cat-info-little
-            class="col-5"
             title="Opponent Cat"
-            :cat="battleCat"
+            :win="win"
+            :show="show"
+            :cat="mineCat"
           >
           </v-2-cat-info-little>
         </div>
         <div height="50%">
-          <v-2-cat-info-little class="col-5" title="Your Cat" :cat="mineCat">
+          <v-2-cat-info-little
+            title="Your Cat"
+            :win="win"
+            :show="show"
+            :cat="mineCat"
+          >
           </v-2-cat-info-little>
         </div>
       </div>
@@ -46,10 +58,12 @@
       <div
         v-show="!login"
         class="absolute-bottom full-width row  justify-around  z-top"
-        style="margin:30px"
+        style="margin:20px"
       >
         <q-btn
+          dense
           v-if="!start"
+          class="col-6"
           color="primary"
           label="Start Battle"
           no-caps
@@ -57,7 +71,9 @@
         >
         </q-btn>
         <q-btn
+          dense
           v-if="start"
+          class="col-4"
           color="primary"
           label="Go Home"
           no-caps
@@ -65,7 +81,9 @@
         >
         </q-btn>
         <q-btn
+          dense
           v-if="start"
+          class="col-4"
           color="primary"
           label="Battle Again"
           no-caps
@@ -94,6 +112,8 @@ export default defineComponent({
     let login = ref(false);
     let mineCat = ref(false);
     let battleCat = ref(false);
+    let win = ref(false);
+    let show = ref(false);
     onMounted(async () => {
       loading.value = true;
       const data = await getBattleCell();
@@ -111,6 +131,8 @@ export default defineComponent({
       loading: ref(false),
       getBattleCell,
       mineCat,
+      win,
+      show,
       battleCat,
       goBattle
     };
@@ -122,9 +144,12 @@ export default defineComponent({
       await goBattle(this.mineCat, this.battleCat);
       this.loading = false;
       this.start = !this.start;
+      this.show = true;
+      this.win = true;
     },
     goHome() {
       console.log('goHome');
+
       void this.$router.push({ path: '/home' });
     }
   }
