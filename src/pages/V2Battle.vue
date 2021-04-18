@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 00:26:39
+ * @LastEditTime: 2021-04-19 00:49:30
  * @Description: 
 -->
 <template>
@@ -17,13 +17,23 @@
       class="bg center-self full column wrap justify-start items-center content-center"
     >
       <q-img contain width="80% " src="/icons/v2/battle-logo-white.png" />
-      <div height="60%">
-        <v-2-cat-info-little
-          class="col-5"
-          title="Opponent Cat"
-          :cat="battleCat"
-        >
-        </v-2-cat-info-little>
+
+      <div
+        class="fullscreen column wrap  justify-evenly items-center content-center
+      "
+      >
+        <div height="50%">
+          <v-2-cat-info-little
+            class="col-5"
+            title="Opponent Cat"
+            :cat="battleCat"
+          >
+          </v-2-cat-info-little>
+        </div>
+        <div height="50%">
+          <v-2-cat-info-little class="col-5" title="Your Cat" :cat="mineCat">
+          </v-2-cat-info-little>
+        </div>
       </div>
       <q-img
         class="absolute-center"
@@ -31,21 +41,12 @@
         width="60% "
         src="/icons/v2/slogan.png"
       />
-      <div height="60%">
-        <v-2-cat-info-little
-          class="col-5"
-          v-show="!login && mineCat"
-          title="Your Cat"
-          :cat="mineCat"
-        >
-        </v-2-cat-info-little>
-      </div>
 
       <v-2-set-name v-show="login"></v-2-set-name>
       <div
         v-show="!login"
-        class="absolute-bottom full-width row  justify-around  "
-        style="margin:50px"
+        class="absolute-bottom full-width row  justify-around  z-top"
+        style="margin:30px"
       >
         <q-btn
           v-if="!start"
@@ -73,7 +74,7 @@
         </q-btn>
       </div>
     </div>
-    <q-inner-loading :showing="loading">
+    <q-inner-loading :showing="loading" class="z-top">
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
   </q-page>
