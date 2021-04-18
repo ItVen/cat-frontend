@@ -4,7 +4,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 12:06:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 18:22:27
+ * @LastEditTime: 2021-04-18 23:15:47
  * @Description: cell create update delete
  */
 import PWCore, {
@@ -40,7 +40,7 @@ export function getLockHash(): string {
 export async function getTransferBuilder(
   eth: string,
   count?: string
-): Promise<string> {
+): Promise<string | boolean> {
   const address = new Address(eth, AddressType.ckb);
   const sudt = new SourlyCatType(
     '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
@@ -59,29 +59,35 @@ export async function getTransferBuilder(
   let txHash = '0x';
   try {
     txHash = await sendTransaction(builder);
+    console.log('txHash--', txHash);
   } catch (e) {
-    console.log(e);
+    console.log('e--', e);
+    return false;
   }
-  console.log(txHash);
-
+  if (txHash.endsWith('0x')) return false;
+  // todo 更新转账交易 from to tx
   return txHash;
 }
 
-export async function getBattleCell(name: string) {
+export async function getBattleCell(name?: string) {
   const data = { name };
   const res = await apiGet('/user/battle', data, true);
+  const success = (res?.data as ApiResponse).success;
   const resdata = (res?.data as ApiResponse).data as BattleCells;
-  console.log(resdata);
-  const mine = JSON.parse(resdata.mine.userdata) as NTFCat;
-  mine.address = resdata.mine.address;
-  mine.mine = true;
-  mine.output = (resdata.mine.output as unknown) as Cell;
-  mine.output_data = resdata.mine.output_data;
   const battle = JSON.parse(resdata.battle.userdata) as NTFCat;
   battle.address = resdata.battle.address;
   battle.mine = false;
   battle.output = (resdata.battle.output as unknown) as Cell;
   battle.output_data = resdata.battle.output_data;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  return { mine, battle };
+  if (success) {
+    const mine = JSON.parse(resdata.mine.userdata) as NTFCat;
+    mine.address = resdata.mine.address;
+    mine.mine = true;
+    mine.output = (resdata.mine.output as unknown) as Cell;
+    mine.output_data = resdata.mine.output_data;
+    return { mine, battle };
+  } else {
+    const mine = undefined;
+    return { mine, battle };
+  }
 }

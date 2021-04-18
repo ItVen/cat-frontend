@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-14 13:40:15
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-17 00:06:34
+ * @LastEditTime: 2021-04-18 23:21:34
  * @Description: 重写indexerCollector的getSUDTBalance和collectSUDT方法
  */
 import {
@@ -114,8 +114,9 @@ export class CatCollector extends Collector {
         script: sudt.toTypeScript().serializeJson() as Script
       }
     };
+    console.log('-----console.log(searchKey);');
+    console.log(searchKey);
     let accCapacity = Amount.ZERO;
-    console.log(accCapacity, 'accCapacity');
     const terminator: Terminator = (_index, cell) => {
       if (options.neededAmount) {
         if (accCapacity.gte(options.neededAmount)) {
@@ -126,7 +127,6 @@ export class CatCollector extends Collector {
       return { stop: false, push: true };
     };
     const cells = await this.indexer.getCells(searchKey, terminator);
-    console.log(cells);
     return cells.map(cell => IndexerCellToCell(cell));
   }
 }

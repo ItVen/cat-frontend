@@ -101,7 +101,6 @@ import { sendTransaction } from '../composition/loginMetamask';
 import SDBuilder from '../composition/sd-builder';
 import { getAddress, getLockHash } from 'src/composition/userCells';
 import { getNameIsUsed } from '../composition/getLoginStatus';
-import { setCellData } from '../composition/getHash';
 import BottomSheet from './BottomSheet.vue';
 import { issuesCat } from '../composition/get-home-data';
 export default defineComponent({
@@ -180,7 +179,6 @@ export default defineComponent({
       getCellCreateData,
       getLockHash,
       getNameIsUsed,
-      setCellData,
       basic: false,
       fixed: false
     };

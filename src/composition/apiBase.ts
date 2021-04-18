@@ -197,7 +197,6 @@ export async function getCatInfoByName(name: string) {
     },
     true
   );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return res?.data as ApiResponse;
 }
 

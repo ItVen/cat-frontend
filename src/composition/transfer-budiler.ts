@@ -11,7 +11,6 @@ import PWCore, {
   DepType,
   OutPoint,
   RawTransaction,
-  SUDTCollector,
   Transaction
 } from '@lay2/pw-core';
 import { CatCollector } from 'src/composition/catCollector';
@@ -114,7 +113,7 @@ export class BatchCatBuilder extends Builder {
   }
   private rectifyTx(inputCells: Cell[], outputCells: Cell[]) {
     const outPoint = new OutPoint(
-      '0x297fb72de7f76ba0784e63dff941b01cbbb372a26c0786d2d511ae9709d8ca57',
+      '0x3c6fbb3bbda63274635df9304a7cc55913a5454aafecb34bbefe3f17209d5f63',
       '0x0'
     );
     const catCelldep = new CellDep(DepType.code, outPoint);
@@ -123,10 +122,9 @@ export class BatchCatBuilder extends Builder {
       new RawTransaction(inputCells, outputCells, sudtCellDeps),
       [this.witnessArgs]
     );
-    // console.log(this.witnessArgs.lock, this.witnessArgs.lock.length);
     this.fee = Builder.calcFee(tx, this.feeRate);
     console.log('-------------', this.fee, this.feeRate);
-    // console.log(JSON.stringify(tx));
+    console.log(JSON.stringify(tx));
     console.log('---------------');
     return tx;
   }

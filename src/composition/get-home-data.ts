@@ -3,15 +3,16 @@
  * @Author: Aven
  * @Date: 2021-04-12 15:05:46
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 23:30:01
+ * @LastEditTime: 2021-04-18 22:38:55
  * @Description:
  */
 
 import { getHomeList, getCatInfoByName, getUserList, apiPost } from './apiBase';
 import { showAddress, hexToByteArray } from './utils';
 import PWCore from '@lay2/pw-core';
-import { setCellData } from './getHash';
 import { BattleCell, Cat, HomeCell, NTFCat, UserList } from './interface';
+import { initPWCore, setCellData } from './loginMetamask';
+import { setCellData2 } from './getHash';
 
 export async function getList() {
   const query = {};
@@ -28,9 +29,10 @@ export async function getList() {
   return cat;
 }
 export async function issuesCat(data: Record<string, string>) {
+  console.log('/user/issues');
   const res = await apiPost('/user/issues', data, true);
   console.log(res);
-  await setCellData(data);
+  await setCellData2(data);
 }
 
 export async function getUsetList(address: string) {
@@ -72,5 +74,18 @@ export async function getOneCat(name: string | null) {
   cat.mine = false;
   const address = PWCore.provider.address.addressString;
   if (cat.address == address) cat.mine = true;
+  return cat;
+}
+
+export async function getMineCat() {
+  const data = await apiPost('/user/mine', {}, true);
+  const cat = JSON.parse((data as BattleCell).userdata) as NTFCat;
+  try {
+    cat.address = PWCore.provider.address.addressString;
+  } catch (e) {
+    await initPWCore();
+    cat.address = PWCore.provider.address.addressString;
+  }
+  cat.output_data = (data as BattleCell).output_data;
   return cat;
 }

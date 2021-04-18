@@ -2,26 +2,27 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 11:21:00
+ * @LastEditTime: 2021-04-18 13:31:08
  * @Description: 
 -->
 <template>
-  <div class="q-pa-md row items-start self-center" @click="more">
-    <q-card class="my-card" flat bordered>
+  <div class="column">
+    <span class="center-start text-white text-subtitle2">{{ title }}</span>
+    <q-card class="my-card self-center">
       <q-card-section horizontal>
         <q-card-section class="fit column  justify-center items-center ">
-          <q-img class="my-icon" :src="icon" :ratio="1" />
-          <div class="text-h5 text-weight-bold q-mt-sm q-mb-xs">
+          <q-img class="my-icon col-2" :src="icon" :ratio="1" />
+          <div class="text-body1 text-weight-bold q-mt-sm q-mb-xs">
             {{ cat.name }}
           </div>
           <div
-            class="text-h6 text-weight-regular fit row  justify-center items-center content-center"
+            class="text-body2 text-weight-regular fit row  justify-center items-center content-center"
           >
             <br />
             <q-icon
               class="self-center"
               name="img:icons/fishes.png"
-              size="30px"
+              size="15px"
             />
             <span class="self-center">{{ cat.fishes }} </span>
           </div>
@@ -33,7 +34,7 @@
               <q-icon
                 class="self-center"
                 name="img:icons/health-outline.png"
-                size="20px"
+                size="15px"
               />
               <span class="self-center">{{ ph }} </span>
             </div>
@@ -41,19 +42,19 @@
               <q-icon
                 class="self-center"
                 name="img:icons/attack-outline.png"
-                size="20px"
+                size="15px"
               />
               <span class="self-center">{{ atk }} </span>
             </div>
             <div class="row  justify-center items-center content-center">
-              <q-icon name="img:icons/defense-outline.png" size="20px" />
+              <q-icon name="img:icons/defense-outline.png" size="15px" />
               <span class="self-center">{{ def }} </span>
             </div>
             <div class="row  justify-center items-center content-center">
               <q-icon
                 class="self-center"
                 name="img:icons/lucky-outline.png"
-                size="20px"
+                size="15px"
               />
               <span class="self-center">{{ lck }} </span>
             </div>
@@ -82,7 +83,8 @@ export default defineComponent({
       },
       hash: String // todo  根据hash 计算属性
     },
-    mine: Boolean
+    mine: Boolean,
+    title: String
   },
   setup(props) {
     console.log(props.cat);
@@ -114,9 +116,10 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .my-card {
-  width: 250px;
+  width: 200px;
+  height: 250px;
   .my-icon {
-    width: 90%;
+    width: 70%;
   }
 }
 span {

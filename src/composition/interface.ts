@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 23:34:22
+ * @LastEditTime: 2021-04-18 17:04:36
  * @Description:
  */
 
@@ -60,6 +60,7 @@ export interface ApiResponse {
   address: string;
   code: number;
   message: string;
+  success: boolean;
   data?:
     | HomeCell
     | UserList
@@ -125,7 +126,7 @@ export interface PWCoreData {
   ckbBalance: Amount;
   address: string;
   ethAddress: string;
-  myCat?: Record<string, unknown>;
+  myCat?: Record<string, string> | undefined;
 }
 
 export interface NTFCat {

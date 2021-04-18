@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 14:59:50
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-10 19:48:38
+ * @LastEditTime: 2021-04-18 20:17:25
  * @Description:
  */
 import { RouteConfig } from 'vue-router';
@@ -14,11 +14,16 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: '/',
-        component: () => import('src/pages/Home.vue')
+        component: () => import('src/pages/Start.vue')
+        // component: () => import('src/pages/Home.vue')
       },
       {
         path: '/battle',
-        component: () => import('src/pages/Battle.vue')
+        component: () => import('src/pages/V2Battle.vue')
+      },
+      {
+        path: '/home',
+        component: () => import('src/pages/V2Home.vue')
       },
       {
         path: '/nfts',

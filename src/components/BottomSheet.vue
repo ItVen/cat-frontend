@@ -1,3 +1,10 @@
+<!--
+ * @Author: Aven
+ * @Date: 2021-04-16 02:18:43
+ * @LastEditors: Aven
+ * @LastEditTime: 2021-04-18 22:31:14
+ * @Description: 
+-->
 <template>
   <q-card class="mbottom col-10">
     <q-form @reset="onCancel" @submit="onSend">
@@ -8,19 +15,7 @@
         <span>from:</span>
         <span style="width:200px">{{ address }}</span>
       </div>
-      <br />
 
-      <div class="fit row  justify-center items-center content-center">
-        <span>amount:</span>
-        <q-input
-          outlined
-          flat
-          round
-          dense
-          v-model="amount"
-          placeholder="transfer amount"
-        />
-      </div>
       <br />
       <div class="fit row  justify-center items-center content-center">
         <span>to:</span>
@@ -39,10 +34,13 @@
         <q-btn no-caps label="Send" type="submit" color="primary" />
       </div>
     </q-form>
+    <q-inner-loading :showing="loading">
+      <q-spinner-gears size="50px" color="primary" />
+    </q-inner-loading>
   </q-card>
 </template>
 <script>
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import { isEmail } from '../composition/utils';
 import { getTransferBuilder } from '../composition/userCells';
 export default defineComponent({
@@ -52,9 +50,9 @@ export default defineComponent({
   },
   setup() {
     return {
-      to: 'ckt1qyqz0njzt6xjh705nd4plqs5nhh5ls4kpksq3ur7j2',
+      to: '',
       isEmail,
-      amount: '1',
+      loading: ref(false),
       getTransferBuilder
     };
   },
@@ -62,15 +60,26 @@ export default defineComponent({
     onCancel() {
       this.$emit('close');
     },
-
     async onSend() {
-      // todo 验证unipass上是否有邮箱注册
+      this.loading = true;
       const email = isEmail(this.to);
       if (!email) {
+        // todo
       }
       // todo  发起交易转账 对方的cell  我的cell
-      await getTransferBuilder(this.to, this.amount);
-      //  this.$emit('send');
+      try {
+        const tx = await getTransferBuilder(this.to);
+        this.loading = false;
+        console.log(tx);
+        if (!tx) {
+          // 转账失败
+        } else {
+          // 转账完成 去那里？
+          this.$emit('close');
+        }
+      } catch (e) {
+        this.loading = false;
+      }
     }
   }
 });
@@ -82,5 +91,7 @@ export default defineComponent({
   background: white;
   margin: 0;
   border-radius: 10px;
+  border: 2px solid $primary;
+  border-radius: 30px;
 }
 </style>

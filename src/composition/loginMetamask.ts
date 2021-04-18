@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-17 00:06:57
+ * @LastEditTime: 2021-04-18 20:34:38
  * @Description:
  */
 
@@ -14,22 +14,25 @@ import PWCore, {
   AddressType,
   Builder,
   Cell,
-  RawProvider
+  AmountUnit
 } from '@lay2/pw-core';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import supported from 'src/composition/chains';
-import { ChainsModel, PWCoreData } from './interface';
+import { ApiResponse, ChainsModel, PWCoreData } from './interface';
 import { useConfig } from './baseConfig';
 import { getLiveCell } from './rpcApi';
 import { CatCollector } from 'src/composition/catCollector';
 import { SourlyCatType } from 'src/composition/sourlyCatType';
-import { IndexerCell } from 'src/composition/ckb-indexer';
+import { putMyUserData } from './apiBase';
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
 const chainId = 1;
-
+const sudt = new SourlyCatType(
+  '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
+);
+const collector = new CatCollector(useConfig().indexer_rpc);
 export async function canCreateCell(): Promise<boolean> {
   const sudt = new SourlyCatType(
     '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
@@ -90,32 +93,38 @@ function getChainData(chainId: number): ChainsModel {
 
 export async function initPWCore(): Promise<PWCoreData> {
   web3 = await haveWeb3();
+
   if (!pw) {
-    pw = await new PWCore(useConfig().ckb_test_net).init(
-      new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
-      new CatCollector(useConfig().indexer_rpc)
-    );
+    try {
+      pw = await new PWCore(useConfig().ckb_test_net).init(
+        new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
+        collector
+      );
+    } catch (e) {
+      console.log(e);
+    }
   }
   const ethAddress = PWCore.provider.address.addressString;
   // 获取ckb 地址
   const address = PWCore.provider.address.toCKBAddress();
   // 获取账户余额
-  console.log(address);
   const ckbBalance = await PWCore.defaultCollector.getBalance(
     PWCore.provider.address
   );
-  let myCat = {};
-  const cells = ((await getLiveCell(
-    PWCore.provider.address
-  )) as unknown) as IndexerCell[];
-
-  if (cells[0]) {
-    const outputCell = new Cell(
-      new Amount('200'),
-      PWCore.provider.address.toLockScript()
-    );
-    outputCell.setHexData(cells[0].output_data);
-    myCat = outputCell.getData();
+  const userCells = await collector.collectSUDT(sudt, PWCore.provider.address, {
+    neededAmount: new Amount('1', AmountUnit.shannon)
+  });
+  // todo login
+  let myCat = undefined;
+  if (userCells.length > 0) {
+    // todo 更新到后台cell数据
+    const cell = userCells[0];
+    const data = cell.getData();
+    myCat = {
+      cat: '1',
+      data,
+      hexData: cell.getHexData()
+    };
   }
   return {
     ckbBalance,
@@ -151,4 +160,28 @@ export async function sendTransaction(builder: Builder): Promise<string> {
   console.log(builder);
   const txHash = await pw.sendTransaction(builder);
   return txHash;
+}
+export async function setCellData(
+  userdata?: Record<string, unknown>
+): Promise<boolean | ApiResponse> {
+  // 获取还活在的cell
+  const address = PWCore.provider.address;
+  const userCells = await collector.collectSUDT(sudt, PWCore.provider.address, {
+    neededAmount: new Amount('1', AmountUnit.shannon)
+  });
+  console.log('setCellData----------', userCells.length);
+  if (userCells.length > 0) {
+    const cell = userCells[0];
+    console.log(userdata);
+    console.log(cell.getData());
+    console.log(cell.getHexData());
+    // const data = Object.assign(cell, {
+    //   name: userdata.name,
+    //   address: address,
+    //   userdata: newdata
+    // });
+    // const res = await putMyUserData(data);
+    // return res;
+  }
+  return false;
 }

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 23:16:17
+ * @LastEditTime: 2021-04-18 22:45:24
  * @Description:
  */
 
@@ -11,6 +11,7 @@ import PWCore, { Blake2bHasher, byteArrayToHex } from '@lay2/pw-core';
 import { getLiveCell } from '../composition/rpcApi';
 import { date } from 'quasar';
 import { ApiResponse, NTFAttr } from './interface';
+import { initPWCore } from './loginMetamask';
 export function getAttribute(hash: string): NTFAttr {
   if (!hash)
     return {
@@ -54,25 +55,22 @@ function getfishers(data: NTFAttr) {
   return (sum - attr).toFixed();
 }
 
-export async function setCellData(
+export async function setCellData2(
   userdata: Record<string, unknown>
 ): Promise<boolean | ApiResponse> {
   // 获取还活在的cell
   const address = PWCore.provider.address;
   const cells = (await getLiveCell(address)) as unknown[];
-  console.log(cells);
   delete userdata.output_data;
   const newdata = JSON.stringify(userdata);
   if (cells.length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const cell = cells[cells.length - 1];
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const data = Object.assign(cell, {
       name: userdata.name,
       address: address.addressString,
       userdata: newdata
     });
-    console.log(data, '----------', data);
+    console.log(JSON.stringify(data));
     const res = await putMyUserData(data);
     return res;
   }
@@ -87,10 +85,17 @@ export function toHash(name: string, lock_hash: string): string {
   return todoHash.substring(0, 42);
 }
 
-export function getCellCreateData(
+export async function getCellCreateData(
   name: string,
-  lock_hash: string
-): Record<string, unknown> {
+  lock_hash?: string
+): Promise<Record<string, unknown>> {
+  try {
+    lock_hash = PWCore.provider.address.toLockScript().codeHash;
+  } catch (e) {
+    console.log(e);
+    await initPWCore();
+    lock_hash = PWCore.provider.address.toLockScript().codeHash;
+  }
   let hash = toHash(name, lock_hash);
   hash = hash.replace('0x', '');
   console.log(hash, hash.length);

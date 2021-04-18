@@ -2,11 +2,12 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 11:21:00
+ * @LastEditTime: 2021-04-18 14:04:24
  * @Description: 
 -->
 <template>
-  <div class="q-pa-md row items-start self-center" @click="more">
+  <div class="clo-9 self-center">
+    <span>{{ title }}</span>
     <q-card class="my-card" flat bordered>
       <q-card-section horizontal>
         <q-card-section class="fit column  justify-center items-center ">
@@ -82,7 +83,8 @@ export default defineComponent({
       },
       hash: String // todo  根据hash 计算属性
     },
-    mine: Boolean
+    mine: Boolean,
+    title: String
   },
   setup(props) {
     console.log(props.cat);
@@ -99,27 +101,19 @@ export default defineComponent({
     send() {
       // todo unipass 交互
       window.location.href = 'https://unipass-demo.vercel.app/#/';
-    },
-    more() {
-      void this.$router.push({
-        path: '/account',
-        query: {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          name: this.cat.name
-        }
-      });
     }
   }
 });
 </script>
+//
 <style lang="scss" scoped>
-.my-card {
-  width: 250px;
-  .my-icon {
-    width: 90%;
-  }
-}
-span {
-  margin-left: 3px;
-}
+// .my-card {
+//   .my-icon {
+//     width: 90%;
+//   }
+// }
+// span {
+//   margin-left: 3px;
+// }
+//
 </style>
