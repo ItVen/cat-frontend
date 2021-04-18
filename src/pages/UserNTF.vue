@@ -2,17 +2,17 @@
  * @Author: Aven
  * @Date: 2021-04-10 10:46:02
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 17:43:29
+ * @LastEditTime: 2021-04-19 00:05:02
  * @Description: 
 -->
 <template>
   <q-page class="fit row wrap justify-around  items-start content-start">
     <q-card class="col-8 my-card" style="margin: 30px;">
-      <address-view
+      <!-- <address-view
         :account="data.address"
         :address="data.address"
         style="margin-top: 10px;"
-      ></address-view>
+      ></address-view> -->
     </q-card>
     <q-card class="col-8 my-card" style="margin: 30px;">
       <q-btn
@@ -43,7 +43,7 @@ import { getUsetList } from '../composition/get-home-data';
 import { canCreateCell } from '../composition/loginMetamask';
 export default defineComponent({
   name: 'UserNTF',
-  components: { CatList, AddressView },
+  components: { CatList },
   setup(props, ctx) {
     let address = ctx.root.$route.query.address;
     let data = ref({});

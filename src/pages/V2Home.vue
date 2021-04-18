@@ -2,11 +2,17 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 23:14:06
+ * @LastEditTime: 2021-04-19 00:30:38
  * @Description: 
 -->
 <template>
   <q-page class="fullscreen bg-black">
+    <q-img
+      class="absolute-center"
+      contain
+      width="100% "
+      src="/icons/v2/bg1.png"
+    />
     <div
       class="bg center-self full column wrap justify-start items-center content-center"
     >
@@ -15,8 +21,13 @@
         src="/icons/v2/logo-white.png"
         style="padding-top: 100px; width:180px;"
       />
-      <v-2-cat-info v-if="cat" :cat="cat"></v-2-cat-info>
-      <div>
+      <div class="absolute-center full-width row  justify-center ">
+        <v-2-cat-info class="col-9" v-if="cat" :cat="cat"></v-2-cat-info>
+      </div>
+      <div
+        class="absolute-bottom full-width row   justify-around  "
+        style="padding-bottom: 100px;"
+      >
         <q-btn color="primary" label="Transfer" no-caps @click="transfer">
         </q-btn>
         <q-btn color="primary" label="Share" no-caps @click="share"> </q-btn>
@@ -77,6 +88,6 @@ export default defineComponent({
   width: 100%;
   border-radius: 30px;
   background-image: url('../../public/icons/v2/bg1.png');
-  background-size: contain;
+  background-size: cover;
 }
 </style>

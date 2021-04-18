@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 14:04:24
+ * @LastEditTime: 2021-04-18 23:56:59
  * @Description: 
 -->
 <template>
@@ -33,7 +33,7 @@
             <div class="row  justify-center items-center content-center">
               <q-icon
                 class="self-center"
-                name="img:icons/health-outline.png"
+                name="img:icons/v2/health.png"
                 size="20px"
               />
               <span class="self-center">{{ ph }} </span>
@@ -41,19 +41,19 @@
             <div class="row  justify-center items-center content-center">
               <q-icon
                 class="self-center"
-                name="img:icons/attack-outline.png"
+                name="img:icons/v2/attack.png"
                 size="20px"
               />
               <span class="self-center">{{ atk }} </span>
             </div>
             <div class="row  justify-center items-center content-center">
-              <q-icon name="img:icons/defense-outline.png" size="20px" />
+              <q-icon name="img:icons/v2/defense.png" size="20px" />
               <span class="self-center">{{ def }} </span>
             </div>
             <div class="row  justify-center items-center content-center">
               <q-icon
                 class="self-center"
-                name="img:icons/lucky-outline.png"
+                name="img:icons/v2/lucky.png"
                 size="20px"
               />
               <span class="self-center">{{ lck }} </span>
@@ -107,13 +107,21 @@ export default defineComponent({
 </script>
 //
 <style lang="scss" scoped>
-// .my-card {
-//   .my-icon {
-//     width: 90%;
-//   }
-// }
-// span {
-//   margin-left: 3px;
-// }
-//
+.my-card {
+  max-width: 100%;
+  background: #79b7c5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #9484e0,
+    #79b7c5
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #9484e0,
+    #79b7c5
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  .my-icon {
+    width: 70%;
+  }
+}
 </style>

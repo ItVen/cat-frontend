@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-16 02:18:43
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 22:31:14
+ * @LastEditTime: 2021-04-19 00:04:40
  * @Description: 
 -->
 <template>
@@ -43,12 +43,13 @@
 import { defineComponent, ref } from '@vue/composition-api';
 import { isEmail } from '../composition/utils';
 import { getTransferBuilder } from '../composition/userCells';
+import AddressView from 'src/components/AddressView.vue';
 export default defineComponent({
   name: 'BottomSheet',
   props: {
     address: String
   },
-  setup() {
+  setup(props) {
     return {
       to: '',
       isEmail,

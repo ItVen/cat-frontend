@@ -2,29 +2,45 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 21:53:02
+ * @LastEditTime: 2021-04-19 00:26:39
  * @Description: 
 -->
 <template>
   <q-page class="fullscreen bg-black column">
+    <q-img
+      class="absolute-center"
+      contain
+      width="100% "
+      src="/icons/v2/bg2.png"
+    />
     <div
       class="bg center-self full column wrap justify-start items-center content-center"
     >
       <q-img contain width="80% " src="/icons/v2/battle-logo-white.png" />
-      <v-2-cat-info-little title="Opponent Cat" :cat="battleCat">
-      </v-2-cat-info-little>
+      <div height="60%">
+        <v-2-cat-info-little
+          class="col-5"
+          title="Opponent Cat"
+          :cat="battleCat"
+        >
+        </v-2-cat-info-little>
+      </div>
       <q-img
         class="absolute-center"
         contain
         width="60% "
         src="/icons/v2/slogan.png"
       />
-      <v-2-cat-info-little
-        v-show="!login && mineCat"
-        title="Your Cat"
-        :cat="mineCat"
-      >
-      </v-2-cat-info-little>
+      <div height="60%">
+        <v-2-cat-info-little
+          class="col-5"
+          v-show="!login && mineCat"
+          title="Your Cat"
+          :cat="mineCat"
+        >
+        </v-2-cat-info-little>
+      </div>
+
       <v-2-set-name v-show="login"></v-2-set-name>
       <div
         v-show="!login"
@@ -119,6 +135,6 @@ export default defineComponent({
   width: 100%;
   border-radius: 30px;
   background-image: url('../../public/icons/v2/bg2.png');
-  background-size: contain;
+  background-size: cover;
 }
 </style>

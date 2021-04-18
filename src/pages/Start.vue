@@ -2,32 +2,38 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 17:13:47
+ * @LastEditTime: 2021-04-19 00:22:06
  * @Description: 
 -->
 <template>
   <q-page class="fullscreen bg-black ">
+    <q-img
+      class="absolute-center"
+      contain
+      width="100%"
+      src="/icons/v2/bg1.png"
+    />
+    <div
+      class="absolute-center full-width row  justify-center "
+      style="padding-top: 100px; width:180px;"
+    >
+      <v-2-cat-info class="col-8" :cat="cat"></v-2-cat-info>
+    </div>
     <div class="fit column wrap justify-start items-center content-center home">
       <q-img
+        z-top
         contain
         src="/icons/v2/logo-white.png"
         style="padding-top: 100px; width:180px;"
       />
       <div
-        class="center-self content-center"
-        style="padding-left: 30px;padding-right: 30px;"
+        class="text-white text-subtitle2 z-top full-width row  justify-center items-center "
+        style="padding-left: 50px; padding-right:50px;"
       >
-        <!-- todo 文字换行 -->
-        <span class="center-self text-white text-subtitle1"
-          >Free to get your Sourly Cat NTF,start your first game based on
+        <span>
+          Free to get your Sourly Cat NTF,start your first game based on
           blockchain</span
         >
-      </div>
-      <div
-        class="full-width row wrap justify-center items-center content-end"
-        style="padding-top: 30px;"
-      >
-        <v-2-cat-info class="col-9 bg-black" :cat="cat"></v-2-cat-info>
       </div>
       <div
         class="fixed-bottom center-self  full-width row wrap justify-center  "
@@ -108,6 +114,6 @@ export default defineComponent({
   width: 100%;
   border-radius: 30px;
   background-image: url('../../public/icons/v2/bg1.png');
-  background-size: contain;
+  background-size: cover;
 }
 </style>

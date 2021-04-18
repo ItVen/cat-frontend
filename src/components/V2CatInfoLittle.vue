@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 13:31:08
+ * @LastEditTime: 2021-04-19 00:25:44
  * @Description: 
 -->
 <template>
@@ -116,8 +116,20 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .my-card {
-  width: 200px;
-  height: 250px;
+  width: 100%;
+  height: 100%;
+  background: #79b7c5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #9484e0,
+    #79b7c5
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #9484e0,
+    #79b7c5
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   .my-icon {
     width: 70%;
   }
