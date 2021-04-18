@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-18 11:51:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 15:44:23
+ * @LastEditTime: 2021-04-19 01:11:52
  * @Description: 
 -->
 <template>
@@ -10,7 +10,7 @@
     <span>MetaMask</span>
     <q-btn
       no-caps
-      label="Send"
+      label="Login"
       type="submit"
       color="primary"
       @click="$emit('login')"
