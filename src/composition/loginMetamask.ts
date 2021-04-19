@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 20:34:38
+ * @LastEditTime: 2021-04-19 11:45:27
  * @Description:
  */
 
@@ -25,6 +25,7 @@ import { getLiveCell } from './rpcApi';
 import { CatCollector } from 'src/composition/catCollector';
 import { SourlyCatType } from 'src/composition/sourlyCatType';
 import { putMyUserData } from './apiBase';
+import { Notify } from 'quasar';
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
@@ -54,6 +55,7 @@ export async function canCreateCell(): Promise<boolean> {
 }
 
 async function haveWeb3(): Promise<Web3> {
+  console.log('haveWeb3');
   if (web3) {
     console.log(web3.currentProvider);
     return web3;
@@ -64,7 +66,14 @@ async function haveWeb3(): Promise<Web3> {
     cacheProvider: true,
     providerOptions
   });
-  web3 = new Web3(await web3Modal.connect());
+  try {
+    console.log(web3Modal.cachedProvider);
+
+    web3 = new Web3(await web3Modal.connect());
+  } catch (e) {
+    throw new Error('No Web3');
+  }
+
   return web3;
 }
 function getNetwork(): string {
@@ -101,7 +110,13 @@ export async function initPWCore(): Promise<PWCoreData> {
         collector
       );
     } catch (e) {
-      console.log(e);
+      // todo 弹窗警告
+      Notify.create({
+        message: 'not find MataMask',
+        position: 'top',
+        timeout: 2000,
+        color: 'negative'
+      });
     }
   }
   const ethAddress = PWCore.provider.address.addressString;

@@ -2,13 +2,13 @@
  * @Author: Aven
  * @Date: 2021-04-18 00:23:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 21:45:58
+ * @LastEditTime: 2021-04-19 12:01:07
  * @Description: 
 -->
 <template>
   <div
     class="full-width column wrap justify-start items-center content-center"
-    style="height:50%;padding:50px 40px 40px;40px"
+    style="padding:50px 40px 40px;40px"
   >
     <span class="text-center text-white text-body1">
       Seem you don't have a Sourly Cat yet, adopt one for free
@@ -27,14 +27,16 @@
       </q-input>
       <q-btn class="text-white" round dense flat icon="send" @click="send" />
     </div>
-    <q-btn
-      style="margin-top:20px"
-      no-caps
-      label="Adopt"
-      class="text-grey"
-      color="primary"
-      @click="send"
-    ></q-btn>
+    <div class="full-width row justify-center" style="padding-top:10px">
+      <q-btn
+        no-caps
+        label="Adopt"
+        class="text-grey col-6"
+        color="primary"
+        @click="send"
+      ></q-btn>
+    </div>
+
     <q-inner-loading :showing="loading">
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
@@ -72,7 +74,8 @@ export default defineComponent({
       // todo 更新卡片信息
       if (data) {
         await issuesCat(data);
-        void this.$router.push({ path: '/battle' });
+        location.reload();
+        // void this.$router.push({ path: '/battle' });
       }
       // 失败
       this.loading = false;

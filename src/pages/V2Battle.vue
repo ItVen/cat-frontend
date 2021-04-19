@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 10:48:20
+ * @LastEditTime: 2021-04-19 11:55:26
  * @Description: 
 -->
 <template>
@@ -37,13 +37,10 @@
           >
           </v-2-cat-info-little>
         </div>
-        <div height="50%">
-          <v-2-cat-info-little
-            title="Your Cat"
-            :win="win"
-            :show="show"
-            :cat="mineCat"
-          >
+
+        <v-2-set-name v-if="login" height="50%"></v-2-set-name>
+        <div height="50%" v-else>
+          <v-2-cat-info-little title="Your Cat" :win="win" :cat="mineCat">
           </v-2-cat-info-little>
         </div>
       </div>
@@ -54,7 +51,6 @@
         src="/icons/v2/slogan.png"
       />
 
-      <v-2-set-name v-show="login"></v-2-set-name>
       <div
         v-show="!login"
         class="absolute-bottom full-width row  justify-around  z-top"

@@ -174,7 +174,6 @@ export async function createUserInfo(data: Record<string, string>) {
   const res = (await apiPost('/user', data, false)) as BindInfo;
   const token = res.token;
   setStorage(TOKEN_KEY, token);
-  setStorage(CAT_DATA, res as any);
   return res;
 }
 
