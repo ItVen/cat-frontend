@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 19:30:10
+ * @LastEditTime: 2021-04-19 19:35:13
  * @Description: 
 -->
 <template>
@@ -88,7 +88,7 @@
           color="primary"
           label="Battle Again"
           no-caps
-          @click="battle"
+          @click="battleAgain"
         >
         </q-btn>
       </div>
@@ -153,6 +153,12 @@ export default defineComponent({
       this.start = true;
       this.show = true;
       this.win = true;
+    },
+    battleAgain() {
+      console.log('battle');
+      this.show = false;
+      this.win = false;
+      this.start = false;
     },
     goHome() {
       console.log('goHome');
