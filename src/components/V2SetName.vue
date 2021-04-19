@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-18 00:23:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 12:01:07
+ * @LastEditTime: 2021-04-19 16:15:18
  * @Description: 
 -->
 <template>
@@ -19,18 +19,29 @@
         round
         flat
         square
+        ref="input"
+        filled
         outlined
-        class="q-ml-md bg-white col-9 text-black"
+        class="q-ml-md col-10 text-black"
         v-model="name"
         placeholder="Name your sourly cat"
+        :rules="[val => verify(val) || 'Please use 0-9 a-z maximum 16 byte']"
       >
+        <template v-if="name" v-slot:append>
+          <q-icon
+            name="cancel"
+            @click.stop="name = null"
+            class="cursor-pointer"
+          />
+        </template>
       </q-input>
-      <q-btn class="text-white" round dense flat icon="send" @click="send" />
+      <!-- <q-btn class="text-white" round dense flat icon="send" @click="send" /> -->
     </div>
     <div class="full-width row justify-center" style="padding-top:10px">
       <q-btn
         no-caps
         label="Adopt"
+        :disable="disable"
         class="text-grey col-6"
         color="primary"
         @click="send"
@@ -47,6 +58,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 import { getNameIsUsed } from 'src/composition/getLoginStatus';
 import { getCellCreateData } from 'src/composition/getHash';
 import { issuesCat } from 'src/composition/get-home-data';
+import { verifyName } from 'src/composition/utils';
 
 export default defineComponent({
   name: 'V2SetName',
@@ -56,7 +68,9 @@ export default defineComponent({
       getCellCreateData,
       issuesCat,
       name: '',
-      loading: ref(false)
+      loading: ref(false),
+      disable: ref(true),
+      verifyName
     };
   },
   methods: {
@@ -65,7 +79,6 @@ export default defineComponent({
       this.loading = true;
       const used = await getNameIsUsed(this.name);
       if (used) {
-        console.log('昵称已存在');
         this.loading = false;
         return;
       }
@@ -79,6 +92,12 @@ export default defineComponent({
       }
       // 失败
       this.loading = false;
+    },
+    verify(name) {
+      const verify = verifyName(name);
+      this.disable = !verify;
+      console.log(verify, this.disable);
+      return verify;
     }
   }
 });

@@ -2,10 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-06 10:19:36
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 16:31:34
+ * @LastEditTime: 2021-04-19 16:09:41
  * @Description:
  */
 
+import { Notify } from 'quasar';
 import {
   getToken,
   createUserInfo,
@@ -32,7 +33,16 @@ export async function login(ethAddress: string, address: string) {
 
 export async function getNameIsUsed(name: string): Promise<boolean> {
   const data = await getNameUsed(name);
+  console.log(data);
   const used = (data.data as NameUsed).used;
+  if (used) {
+    Notify.create({
+      message: 'name is Used',
+      position: 'bottom',
+      timeout: 2000,
+      color: 'negative'
+    });
+  }
   return used;
 }
 

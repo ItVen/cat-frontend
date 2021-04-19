@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-07 15:31:25
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-13 00:46:19
+ * @LastEditTime: 2021-04-19 15:58:53
  * @Description:
  */
 export function isEmail(email: string): boolean {
@@ -39,6 +39,16 @@ export function showEmail(context: string): string {
     return text;
   }
   return context;
+}
+
+/**
+ * 只允许输入英文和数字，然后限制在16bytes内
+ * */
+
+export function verifyName(name: string): boolean {
+  const regexp = new RegExp(/^[a-zA-Z0-9]{2,16}$/);
+  const data = regexp.test(name);
+  return data;
 }
 export function hexToByteArray(h: string) {
   if (!/^(0x)?([0-9a-fA-F][0-9a-fA-F])*$/.test(h)) {
