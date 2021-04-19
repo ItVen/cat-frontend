@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 14:14:57
+ * @LastEditTime: 2021-04-19 14:20:33
  * @Description: 
 -->
 <template>
@@ -30,7 +30,7 @@
       <div
         class="text-white text-body1 z-top full-width row  justify-center items-center "
       >
-        <span class="text-center  z-top " @click="account"
+        <span class="text-center  z-top "
           >Free to get your Sourly Cat NTF, <br />start your first game based on
           blockchain</span
         >
@@ -89,9 +89,6 @@ export default defineComponent({
     };
   },
   methods: {
-    account() {
-      getAccount();
-    },
     start() {
       const login = isLogin();
       if (login) {
