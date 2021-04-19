@@ -2,11 +2,11 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 11:13:37
+ * @LastEditTime: 2021-04-19 14:14:57
  * @Description: 
 -->
 <template>
-  <q-page class="fullscreen orientation-portrait">
+  <q-page class="fullscreen">
     <div class="home"></div>
     <q-img
       class="absolute-center "
@@ -30,7 +30,7 @@
       <div
         class="text-white text-body1 z-top full-width row  justify-center items-center "
       >
-        <span class="text-center  z-top "
+        <span class="text-center  z-top " @click="account"
           >Free to get your Sourly Cat NTF, <br />start your first game based on
           blockchain</span
         >
@@ -53,7 +53,7 @@
     <q-dialog v-model="toLogin">
       <sign-unipass @login="tologin"></sign-unipass>
     </q-dialog>
-    <q-inner-loading :showing="loading" z-top>
+    <q-inner-loading :showing="loading" class="z-top">
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
   </q-page>
@@ -64,7 +64,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 import SignUnipass from 'src/components/SignUnipass.vue';
 import V2CatInfo from 'src/components/V2CatInfo.vue';
 import { isLogin } from 'src/composition/getLoginStatus';
-import { initPWCore } from 'src/composition/loginMetamask';
+import { initPWCore, getAccount } from 'src/composition/loginMetamask';
 import { login } from '../composition/getLoginStatus'; //
 export default defineComponent({
   components: { V2CatInfo, SignUnipass },
@@ -84,10 +84,14 @@ export default defineComponent({
       login,
       initPWCore,
       url: 'https://placeimg.com/500/300/nature',
-      logo: '/public/icons/v2/logo-white.png'
+      logo: '/public/icons/v2/logo-white.png',
+      getAccount
     };
   },
   methods: {
+    account() {
+      getAccount();
+    },
     start() {
       const login = isLogin();
       if (login) {
@@ -98,9 +102,8 @@ export default defineComponent({
     },
     async tologin() {
       this.loading = true;
-      const pw = await initPWCore();
+      const pw = await initPWCore(true);
       if (pw.address) {
-        await login(pw.ethAddress, pw.address);
         void this.$router.push({ path: '/battle' });
       }
       this.loading = false;

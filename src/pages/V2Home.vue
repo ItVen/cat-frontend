@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 11:29:01
+ * @LastEditTime: 2021-04-19 12:12:58
  * @Description: 
 -->
 <template>
@@ -112,7 +112,6 @@ export default defineComponent({
 .bg {
   height: 100%;
   width: 100%;
-  border-radius: 30px;
   background-image: url('../../public/icons/v2/bg1.png');
   background-size: cover;
 }

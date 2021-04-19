@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /*
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 11:45:27
+ * @LastEditTime: 2021-04-19 14:18:29
  * @Description:
  */
 
@@ -26,6 +27,8 @@ import { CatCollector } from 'src/composition/catCollector';
 import { SourlyCatType } from 'src/composition/sourlyCatType';
 import { putMyUserData } from './apiBase';
 import { Notify } from 'quasar';
+import { login } from './getLoginStatus';
+
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
 let pw: PWCore | undefined = undefined;
@@ -33,6 +36,14 @@ const chainId = 1;
 const sudt = new SourlyCatType(
   '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
 );
+console.log(window.ethereum);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const ethereum: any = window.ethereum;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+ethereum.on('accountsChanged', async function(accounts: any[]) {
+  await initPWCore(true);
+  window.location.reload();
+});
 const collector = new CatCollector(useConfig().indexer_rpc);
 export async function canCreateCell(): Promise<boolean> {
   const sudt = new SourlyCatType(
@@ -53,27 +64,38 @@ export async function canCreateCell(): Promise<boolean> {
     return false;
   }
 }
+export async function getAccount() {
+  try {
+    const ethAddress = PWCore.provider.address.addressString;
+    console.log(ethAddress);
+  } catch (e) {
+    await initPWCore();
+    const ethAddress = PWCore.provider.address.addressString;
+    console.log(ethAddress);
+  }
+}
 
 async function haveWeb3(): Promise<Web3> {
-  console.log('haveWeb3');
+  console.log('haveWeb3', window.ethereum, window.web3);
   if (web3) {
     console.log(web3.currentProvider);
     return web3;
   }
-  const providerOptions = {};
-  web3Modal = new Web3Modal({
-    network: getNetwork(),
-    cacheProvider: true,
-    providerOptions
-  });
-  try {
-    console.log(web3Modal.cachedProvider);
-
+  if (
+    typeof window.ethereum !== 'undefined' ||
+    typeof window.web3 !== 'undefined'
+  ) {
+    // Web3 browser user detected. You can now use the provider.
+    const providerOptions = {};
+    web3Modal = new Web3Modal({
+      network: getNetwork(),
+      cacheProvider: true,
+      providerOptions
+    });
     web3 = new Web3(await web3Modal.connect());
-  } catch (e) {
+  } else {
     throw new Error('No Web3');
   }
-
   return web3;
 }
 function getNetwork(): string {
@@ -100,24 +122,23 @@ function getChainData(chainId: number): ChainsModel {
   return chainData;
 }
 
-export async function initPWCore(): Promise<PWCoreData> {
-  web3 = await haveWeb3();
-
+export async function initPWCore(tologin?: boolean): Promise<PWCoreData> {
+  try {
+    web3 = await haveWeb3();
+  } catch (e) {
+    // todo 弹窗警告
+    Notify.create({
+      message: 'not find MataMask',
+      position: 'bottom',
+      timeout: 2000,
+      color: 'negative'
+    });
+  }
   if (!pw) {
-    try {
-      pw = await new PWCore(useConfig().ckb_test_net).init(
-        new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
-        collector
-      );
-    } catch (e) {
-      // todo 弹窗警告
-      Notify.create({
-        message: 'not find MataMask',
-        position: 'top',
-        timeout: 2000,
-        color: 'negative'
-      });
-    }
+    pw = await new PWCore(useConfig().ckb_test_net).init(
+      new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
+      collector
+    );
   }
   const ethAddress = PWCore.provider.address.addressString;
   // 获取ckb 地址
@@ -141,6 +162,8 @@ export async function initPWCore(): Promise<PWCoreData> {
       hexData: cell.getHexData()
     };
   }
+  // todo 更新token
+  if (tologin && address) await login(ethAddress, address);
   return {
     ckbBalance,
     address,
