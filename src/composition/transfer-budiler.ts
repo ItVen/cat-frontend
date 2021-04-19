@@ -42,6 +42,7 @@ export class BatchCatBuilder extends Builder {
         neededAmount: totalSendAmount
       }
     );
+    console.log(receiverSUDTCells);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!receiverSUDTCells || receiverSUDTCells.length < 1) {
       throw new Error('No live sudt cell to transfer');

@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 17:31:30
+ * @LastEditTime: 2021-04-19 19:30:10
  * @Description: 
 -->
 <template>
@@ -20,8 +20,8 @@
       class="bg center-self full column wrap justify-start items-center content-center"
     >
       <div
-        class="fullscreen column wrap  justify-evenly items-center content-center
-      "
+        class="fixed-top  column wrap  justify-evenly items-center content-center"
+        style="height:50%"
       >
         <div>
           <v-2-cat-info-little
@@ -35,7 +35,11 @@
         </div>
 
         <v-2-set-name v-if="login" height="50%"></v-2-set-name>
-        <div height="50%" v-else>
+        <div
+          class="fixed-bottom  column wrap  justify-evenly items-center content-center"
+          style="height:50%"
+          v-else
+        >
           <v-2-cat-info-little
             v-show="mineCat.attr"
             title="Your Cat"

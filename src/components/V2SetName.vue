@@ -2,13 +2,13 @@
  * @Author: Aven
  * @Date: 2021-04-18 00:23:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 16:15:18
+ * @LastEditTime: 2021-04-19 18:42:16
  * @Description: 
 -->
 <template>
   <div
-    class="full-width column wrap justify-start items-center content-center"
-    style="padding:50px 40px 40px;40px"
+    class="fixed-bottom full-width column wrap justify-start items-center content-center"
+    style="padding:50px 40px 40px;40px; height:50%"
   >
     <span class="text-center text-white text-body1">
       Seem you don't have a Sourly Cat yet, adopt one for free
@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref, onMounted, watch } from '@vue/composition-api';
 import { getNameIsUsed } from 'src/composition/getLoginStatus';
 import { getCellCreateData } from 'src/composition/getHash';
 import { issuesCat } from 'src/composition/get-home-data';

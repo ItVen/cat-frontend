@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 17:30:54
+ * @LastEditTime: 2021-04-19 18:37:42
  * @Description: 
 -->
 <template>
@@ -40,7 +40,7 @@
           class="center-self col-6"
           label="Start Game"
           no-caps
-          @click="start"
+          @click="tologin"
         >
         </q-btn>
       </div>
