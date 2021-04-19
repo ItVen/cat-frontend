@@ -4,7 +4,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 12:06:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 17:12:21
+ * @LastEditTime: 2021-04-19 22:37:41
  * @Description: cell create update delete
  */
 import PWCore, {
@@ -79,6 +79,7 @@ export async function getBattleCell(name?: string) {
   battle.address = resdata.battle.address;
   battle.mine = false;
   battle.attr = getAttribute(battle.hash);
+  battle.battle = getAttribute('');
   battle.output = (resdata.battle.output as unknown) as Cell;
   battle.output_data = resdata.battle.output_data;
   if (success) {
@@ -86,6 +87,7 @@ export async function getBattleCell(name?: string) {
     mine.address = resdata.mine.address;
     mine.mine = true;
     mine.attr = getAttribute(mine.hash);
+    mine.battle = getAttribute('');
     mine.output = (resdata.mine.output as unknown) as Cell;
     mine.output_data = resdata.mine.output_data;
     return { mine, battle };

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import PWCore, {
   Address,
   AddressType,
@@ -36,12 +37,12 @@ async function getResult(
     output: winer.output
   };
   const afterLoser: NTFCat = {
-    name: winer.name,
-    hash: winer.hash,
-    address: winer.address,
-    fishes: winer.fishes,
-    mine: winer.mine,
-    output: winer.output
+    name: loser.name,
+    hash: loser.hash,
+    address: loser.address,
+    fishes: loser.fishes,
+    mine: loser.mine,
+    output: loser.output
   };
   let winer_fishes = loserAttr.ph * 0.1;
   winer_fishes = parseInt(winer_fishes.toFixed());
@@ -53,7 +54,10 @@ async function getResult(
     loser.fishes = '999';
   }
   const output = winer.output as Cell;
-  const loserHash = toHash(loser.hash, output.lock.codeHash);
+  const lock = JSON.stringify(output.lock);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const lockData = JSON.parse(lock).code_hash;
+  const loserHash = toHash(loser.hash, lockData);
   afterLoser.hash = loserHash;
   const output_data =
     '0x' +
@@ -61,7 +65,6 @@ async function getResult(
     setData(loserHash, 20) +
     setData(afterLoser.fishes, 4);
   //   //todo data 更新
-  // todo buider 提交()
 
   // todo  更新后台数据库信息
   const state = await postBattleData(
@@ -71,16 +74,12 @@ async function getResult(
     afterLoser,
     winer_fishes,
     loser_fishes,
-    '01',
+    loserHash,
     output_data,
     count,
     start
   );
-  if (state) {
-    winer = afterWiner;
-    loser = afterLoser;
-  }
-  return { winer, loser, mineWin, state: false };
+  return { winer, loser, afterWiner, afterLoser, mineWin, state };
 }
 export async function goBattle(mine: NTFCat, user: NTFCat) {
   const start = mine.name;
@@ -97,6 +96,7 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
     (1 - mineAttr.def / (mineAttr.def - mineAttr.lck * 2 + 250));
   let userWin = false;
   let n = 0;
+  let result;
   for (n = 0; n < max_fight_count; n++) {
     // 传入任意 n 值，满足下列两个条件之一，则可以确认战斗结果
     //n * Hurt1 >= 10 * HP2 且 (n-1) * Hurt2 < 10 * HP1 则 <被挑战者> 胜利
@@ -106,20 +106,53 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
     ) {
       console.log('battle win');
       userWin = true;
-      await getResult(user, mine, battleAttr, mineAttr, n, start, userWin);
+      result = await getResult(
+        user,
+        mine,
+        battleAttr,
+        mineAttr,
+        n,
+        start,
+        userWin
+      );
       break;
     } else if (
       hurtMine * n < 10 * battleAttr.ph &&
       hurtBattle * n >= 10 * mineAttr.ph
     ) {
       console.log('mine win');
-      await getResult(mine, user, mineAttr, battleAttr, n, start, userWin);
+      result = await getResult(
+        mine,
+        user,
+        mineAttr,
+        battleAttr,
+        n,
+        start,
+        userWin
+      );
       //n * Hurt1 < 10 * HP2 且 n * Hurt2 >= 10 * HP1 则 <挑战者> 胜利
       break;
     } else {
     }
   }
-  await toBattleBuilder(mine, user, n.toString());
+  let cat = setBattleRuest(
+    result?.winer as NTFCat,
+    result?.afterWiner as NTFCat
+  );
+  let mineCat = mine;
+  let battleCat = user;
+  userWin ? (cat.mine = false) : (cat.mine = true);
+  userWin ? (battleCat = cat) : (mineCat = cat);
+  console.log(cat, userWin);
+  cat = setBattleRuest(result?.loser as NTFCat, result?.afterLoser as NTFCat);
+  userWin ? (cat.mine = true) : (cat.mine = false);
+  userWin ? (mineCat = cat) : (battleCat = cat);
+  console.log(mineCat, battleCat);
+  // await toBattleBuilder(mine, user, n.toString());
+  return {
+    battleCat,
+    mineCat
+  };
 }
 async function postBattleData(
   winer: NTFCat,
@@ -183,4 +216,29 @@ async function toBattleBuilder(mine: NTFCat, user: NTFCat, count: string) {
   } catch (e) {
     console.log(e);
   }
+}
+function setBattleRuest(befor: NTFCat, after: NTFCat): NTFCat {
+  const fishes = parseInt(after.fishes) - parseInt(befor.fishes);
+  const battle = getAttribute('');
+  const attr = getAttribute(after.hash);
+  if (fishes < 0) {
+    const beforAttr = getAttribute(befor.hash);
+    battle.atk = attr.atk - beforAttr.atk;
+    battle.lck = attr.lck - beforAttr.lck;
+    battle.def = attr.def - beforAttr.def;
+    battle.ph = attr.ph - beforAttr.ph;
+  }
+  battle.fishes = fishes;
+  console.log('name', after.name);
+  const cat = {
+    battle,
+    attr,
+    name: after.name,
+    address: after.address,
+    hash: after.hash,
+    fishes: after.fishes,
+    mine: false,
+    output: after.output
+  };
+  return cat;
 }

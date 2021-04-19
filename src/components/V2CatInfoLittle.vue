@@ -2,25 +2,25 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 17:20:16
+ * @LastEditTime: 2021-04-20 00:32:44
  * @Description: 
 -->
 <template>
   <div>
-    <div v-show="show">
+    <div class="absolute-top" style="padding: 30px; padding-right: 90px;">
       <q-img
-        v-if="win"
-        class="float-right vertical-top z-top"
+        v-show="cat.battle.fishes > 0"
+        class="float-right z-top"
         contain
         src="/icons/v2/win.png"
-        width="40%"
+        width="80px"
       />
       <q-img
-        v-else
-        class="float-right vertical-top z-top"
+        v-show="cat.battle.fishes < 0"
+        class="float-right z-top"
         contain
         src="/icons/v2/lose.png"
-        width="40%"
+        width="80px"
       />
     </div>
 
@@ -46,7 +46,11 @@
                 name="img:icons/v2/fish-left.png"
                 size="15px"
               />
-              <span class="self-center">{{ cat.fishes }} </span>
+              <v-2-attr
+                class="self-center"
+                :count="cat.fishes"
+                :state="cat.battle.fishes"
+              ></v-2-attr>
             </div>
 
             <div
@@ -59,7 +63,11 @@
                   size="15px"
                   style="margin-right: 3px;"
                 />
-                <span class="self-center">{{ cat.attr.ph }} </span>
+                <v-2-attr
+                  class="self-center"
+                  :count="cat.attr.ph"
+                  :state="cat.battle.ph"
+                ></v-2-attr>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon
@@ -68,11 +76,19 @@
                   size="15px"
                   style="margin-right: 3px;"
                 />
-                <span class="self-center">{{ cat.attr.atk }} </span>
+                <v-2-attr
+                  class="self-center"
+                  :count="cat.attr.atk"
+                  :state="cat.battle.atk"
+                ></v-2-attr>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon name="img:icons/v2/defense.png" size="15px" />
-                <span class="self-center">{{ cat.attr.def }} </span>
+                <v-2-attr
+                  class="self-center"
+                  :count="cat.attr.def"
+                  :state="cat.battle.def"
+                ></v-2-attr>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon
@@ -81,7 +97,11 @@
                   size="15px"
                   style="margin-right: 3px;"
                 />
-                <span class="self-center">{{ cat.attr.lck }} </span>
+                <v-2-attr
+                  class="self-center"
+                  :count="cat.attr.lck"
+                  :state="cat.battle.lck"
+                ></v-2-attr>
               </div>
             </div>
           </q-card-section>
@@ -94,7 +114,9 @@
 <script>
 import { defineComponent } from '@vue/composition-api';
 import { getCatIcon } from '../composition/utils';
+import V2Attr from './V2Attr.vue';
 export default defineComponent({
+  components: { V2Attr },
   name: 'CatInfo',
   props: {
     cat: {
@@ -106,6 +128,7 @@ export default defineComponent({
         type: Number,
         default: 0
       },
+      battle: Object,
       hash: String // todo  根据hash 计算属性
     },
     win: Boolean,

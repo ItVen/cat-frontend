@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 19:35:13
+ * @LastEditTime: 2021-04-20 00:14:36
  * @Description: 
 -->
 <template>
@@ -105,6 +105,7 @@ import V2CatInfoLittle from 'src/components/V2CatInfoLittle.vue';
 import V2SetName from 'src/components/V2SetName.vue';
 import { getBattleCell } from '../composition/userCells';
 import { goBattle } from '../composition/battle';
+import { getAttribute } from 'src/composition/getHash';
 export default defineComponent({
   components: { V2SetName, V2CatInfoLittle },
   name: 'Start',
@@ -118,7 +119,6 @@ export default defineComponent({
     onMounted(async () => {
       loading.value = true;
       const data = await getBattleCell();
-      console.log(data);
       battleCat.value = data.battle;
       if (!data.mine) {
         login.value = true;
@@ -136,6 +136,7 @@ export default defineComponent({
       win,
       show,
       battleCat,
+      getAttribute,
       goBattle
     };
   },
@@ -148,21 +149,23 @@ export default defineComponent({
       this.start = false;
       console.log(this.mineCat);
       console.log(this.battleCat);
-      await goBattle(this.mineCat, this.battleCat);
+      const data = await goBattle(this.mineCat, this.battleCat);
+      this.mineCat = data.mineCat;
+      this.battleCat = data.battleCat;
+      console.log(data);
       this.loading = false;
       this.start = true;
       this.show = true;
       this.win = true;
     },
     battleAgain() {
-      console.log('battle');
       this.show = false;
+      this.mineCat.battle = getAttribute('');
+      this.battleCat.battle = getAttribute('');
       this.win = false;
       this.start = false;
     },
     goHome() {
-      console.log('goHome');
-
       void this.$router.push({ path: '/home' });
     }
   }
