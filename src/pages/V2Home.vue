@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 11:20:12
+ * @LastEditTime: 2021-04-19 11:29:01
  * @Description: 
 -->
 <template>
@@ -37,7 +37,7 @@
 
       <div
         class="absolute-bottom full-width row   justify-around  "
-        style="padding-bottom: 100px;"
+        style="padding-bottom: 100px; padding-top: 120px; width:180px; height:30px"
       >
         <q-btn
           dense
