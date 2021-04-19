@@ -3,7 +3,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 14:18:29
+ * @LastEditTime: 2021-04-19 14:42:12
  * @Description:
  */
 
@@ -39,11 +39,21 @@ const sudt = new SourlyCatType(
 console.log(window.ethereum);
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const ethereum: any = window.ethereum;
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-ethereum.on('accountsChanged', async function(accounts: any[]) {
-  await initPWCore(true);
-  window.location.reload();
-});
+try {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  ethereum.on('accountsChanged', async function(accounts: any[]) {
+    await initPWCore(true);
+    window.location.reload();
+  });
+} catch (e) {
+  Notify.create({
+    message: 'not find MataMask',
+    position: 'bottom',
+    timeout: 2000,
+    color: 'negative'
+  });
+}
+
 const collector = new CatCollector(useConfig().indexer_rpc);
 export async function canCreateCell(): Promise<boolean> {
   const sudt = new SourlyCatType(
