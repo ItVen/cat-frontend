@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 17:30:41
+ * @LastEditTime: 2021-04-19 17:36:38
  * @Description: 
 -->
 <template>
@@ -24,12 +24,11 @@
       <div class="full-width row  justify-center ">
         <v-2-cat-info
           title="My Sourly Cat"
-          class="col-11"
+          class="col-10"
           v-if="cat"
           :cat="cat"
         ></v-2-cat-info>
       </div>
-
       <div
         class="absolute-bottom full-width row   justify-around  "
         style="padding-bottom: 100px; padding-top: 120px; width:180px; height:30px"
@@ -73,7 +72,7 @@ export default defineComponent({
   components: { V2CatInfo, BottomSheet },
   name: 'V2Home',
   setup() {
-    const cat = ref({});
+    const cat = ref(false);
     let loading = ref(false);
     let address = ref('');
     onMounted(async () => {

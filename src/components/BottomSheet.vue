@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-16 02:18:43
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 00:04:40
+ * @LastEditTime: 2021-04-19 17:37:21
  * @Description: 
 -->
 <template>
@@ -13,7 +13,7 @@
       </div>
       <div class="fit row  justify-center items-center content-center">
         <span>from:</span>
-        <span style="width:200px">{{ address }}</span>
+        <span style="width:200px" class="ellipsis">{{ address }}</span>
       </div>
 
       <br />
@@ -43,13 +43,12 @@
 import { defineComponent, ref } from '@vue/composition-api';
 import { isEmail } from '../composition/utils';
 import { getTransferBuilder } from '../composition/userCells';
-import AddressView from 'src/components/AddressView.vue';
 export default defineComponent({
   name: 'BottomSheet',
   props: {
     address: String
   },
-  setup(props) {
+  setup() {
     return {
       to: '',
       isEmail,
