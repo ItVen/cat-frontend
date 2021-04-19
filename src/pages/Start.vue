@@ -2,44 +2,43 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 00:22:06
+ * @LastEditTime: 2021-04-19 11:13:37
  * @Description: 
 -->
 <template>
-  <q-page class="fullscreen bg-black ">
+  <q-page class="fullscreen orientation-portrait">
+    <div class="home"></div>
     <q-img
-      class="absolute-center"
+      class="absolute-center "
       contain
-      width="100%"
+      height="100%"
       src="/icons/v2/bg1.png"
-      style="border-radius: 30px;"
     />
-    <div
-      class="absolute-center full-width row  justify-center "
-      style="padding-top: 100px; width:180px;"
-    >
-      <v-2-cat-info class="col-11" :cat="cat"></v-2-cat-info>
-    </div>
-    <div class="fit column wrap justify-start items-center content-center home">
+    <div class="fixed-top full-width row  justify-center">
       <q-img
         z-top
         contain
         src="/icons/v2/logo-white.png"
-        style="padding-top: 100px; width:180px;"
+        style="padding-top: 120px; width:180px; height:30px"
       />
+    </div>
+
+    <div
+      class="full-width column   justify-evenly items-center content-center fullscreen"
+      style="padding-top: 60px; "
+    >
       <div
-        class="text-white text-subtitle2 z-top full-width row  justify-center items-center "
-        style="padding-left: 50px; padding-right:50px;"
+        class="text-white text-body1 z-top full-width row  justify-center items-center "
       >
-        <span class="text-center">
-          Free to get your Sourly Cat NTF,start your first game based on
+        <span class="text-center  z-top "
+          >Free to get your Sourly Cat NTF, <br />start your first game based on
           blockchain</span
         >
       </div>
-      <div
-        class="fixed-bottom center-self  full-width row wrap justify-center  "
-        style="padding-bottom: 50px;"
-      >
+      <div class="full-width row justify-center">
+        <v-2-cat-info class="col-10" :cat="cat"></v-2-cat-info>
+      </div>
+      <div class="full-width row justify-center">
         <q-btn
           dense
           color="primary"
@@ -47,7 +46,6 @@
           label="Start Game"
           no-caps
           @click="start"
-          style="height:50%"
         >
         </q-btn>
       </div>
@@ -114,7 +112,6 @@ export default defineComponent({
 .home {
   height: 100%;
   width: 100%;
-  border-radius: 30px;
   background-image: url('../../public/icons/v2/bg1.png');
   background-size: cover;
 }

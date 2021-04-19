@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 23:34:40
+ * @LastEditTime: 2021-04-19 10:04:40
  * @Description: 
 -->
 <template>
@@ -39,7 +39,7 @@
               <br />
               <q-icon
                 class="self-center"
-                name="img:icons/fishes.png"
+                name="img:icons/v2/fish-left.png"
                 size="15px"
               />
               <span class="self-center">{{ cat.fishes }} </span>
@@ -51,7 +51,7 @@
               <div class="row  justify-center items-center content-center">
                 <q-icon
                   class="self-center"
-                  name="img:icons/health-outline.png"
+                  name="img:icons/v2/health.png"
                   size="15px"
                   style="margin-right: 3px;"
                 />
@@ -60,20 +60,20 @@
               <div class="row  justify-center items-center content-center">
                 <q-icon
                   class="self-center"
-                  name="img:icons/attack-outline.png"
+                  name="img:icons/v2/attack.png"
                   size="15px"
                   style="margin-right: 3px;"
                 />
                 <span class="self-center">{{ atk }} </span>
               </div>
               <div class="row  justify-center items-center content-center">
-                <q-icon name="img:icons/defense-outline.png" size="15px" />
+                <q-icon name="img:icons/v2/defense.png" size="15px" />
                 <span class="self-center">{{ def }} </span>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon
                   class="self-center"
-                  name="img:icons/lucky-outline.png"
+                  name="img:icons/v2/lucky.png"
                   size="15px"
                   style="margin-right: 3px;"
                 />

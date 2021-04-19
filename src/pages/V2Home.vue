@@ -2,28 +2,37 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 00:30:38
+ * @LastEditTime: 2021-04-19 11:20:12
  * @Description: 
 -->
 <template>
   <q-page class="fullscreen bg-black">
+    <div class="bg"></div>
     <q-img
       class="absolute-center"
       contain
       width="100% "
       src="/icons/v2/bg1.png"
-      style="border-radius: 30px;"
     />
-    <div
-      class="bg center-self full column wrap justify-start items-center content-center"
-    >
+    <div class="fixed-top full-width row  justify-center">
       <q-img
+        z-top
         contain
         src="/icons/v2/logo-white.png"
-        style="padding-top: 100px; width:180px;"
+        style="padding-top: 120px; width:180px; height:30px"
       />
-      <div class="absolute-center full-width row  justify-center ">
-        <v-2-cat-info class="col-11" v-if="cat" :cat="cat"></v-2-cat-info>
+    </div>
+
+    <div
+      class="center-self fullscreen column wrap justify-center items-start content-center "
+    >
+      <div class="full-width row  justify-center ">
+        <v-2-cat-info
+          title="My Sourly Cat"
+          class="col-11"
+          v-if="cat"
+          :cat="cat"
+        ></v-2-cat-info>
       </div>
 
       <div

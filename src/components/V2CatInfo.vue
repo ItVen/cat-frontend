@@ -2,17 +2,22 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 23:56:59
+ * @LastEditTime: 2021-04-19 11:23:14
  * @Description: 
 -->
 <template>
   <div class=" wrap justify-center items-center content-center">
-    <span>{{ title }}</span>
+    <span
+      class="text-white text-body1"
+      style="margin-bottom:10px; margin-left:10px"
+      >{{ title }}</span
+    >
+    <br />
     <q-card
       class="my-card self-center"
       flat
       bordered
-      style="border-radius: 10px;"
+      style="border-radius: 10px; margin-top:10px;"
     >
       <q-card-section horizontal>
         <q-card-section class="fit column  justify-center items-center ">
@@ -26,9 +31,9 @@
             <br />
             <q-icon
               class="self-center"
-              name="img:icons/fishes.png"
-              size="30px"
-              style="margin-right: 3px;"
+              name="img:icons/v2/fish-left.png"
+              size="20px"
+              style="margin-right: 10px;"
             />
             <span class="self-center">{{ cat.fishes }} </span>
           </div>

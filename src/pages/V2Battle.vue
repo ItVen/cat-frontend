@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 00:49:30
+ * @LastEditTime: 2021-04-19 10:48:20
  * @Description: 
 -->
 <template>
@@ -12,18 +12,18 @@
       contain
       width="100% "
       src="/icons/v2/bg2.png"
-      style="border-radius: 30px;"
     />
-    <div
-      class="bg center-self full column wrap justify-start items-center content-center"
-    >
+    <div class="fixed-top full-width row  justify-center  z-top">
       <q-img
         contain
-        width="60% "
+        width="250px "
         src="/icons/v2/battle-logo-white.png"
         style="margin:30px"
       />
-
+    </div>
+    <div
+      class="bg center-self full column wrap justify-start items-center content-center"
+    >
       <div
         class="fullscreen column wrap  justify-evenly items-center content-center
       "
@@ -33,7 +33,7 @@
             title="Opponent Cat"
             :win="win"
             :show="show"
-            :cat="mineCat"
+            :cat="battleCat"
           >
           </v-2-cat-info-little>
         </div>
@@ -50,7 +50,7 @@
       <q-img
         class="absolute-center"
         contain
-        width="60% "
+        width="200px"
         src="/icons/v2/slogan.png"
       />
 
