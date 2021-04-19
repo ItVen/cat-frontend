@@ -2,17 +2,12 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 17:17:44
+ * @LastEditTime: 2021-04-19 17:29:13
  * @Description: 
 -->
 <template>
   <q-page class="fullscreen bg-black column">
-    <q-img
-      class="absolute-center"
-      contain
-      width="100% "
-      src="/icons/v2/bg2.png"
-    />
+    <img class="absolute-center img" src="/icons/v2/bg2.png" />
     <div class="fixed-top full-width row  justify-center ">
       <q-img
         contain
@@ -164,10 +159,9 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.bg {
-  height: 100%;
+.img {
   width: 100%;
-  background-image: url('../../public/icons/v2/bg2.png');
-  background-size: cover;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

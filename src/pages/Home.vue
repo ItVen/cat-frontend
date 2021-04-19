@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 22:04:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-12 15:28:16
+ * @LastEditTime: 2021-04-19 17:26:33
  * @Description: 
 -->
 <template>
@@ -69,3 +69,10 @@ export default defineComponent({
   }
 });
 </script>
+<style lang="scss" scoped>
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
