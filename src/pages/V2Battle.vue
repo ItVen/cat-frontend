@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 12:13:25
+ * @LastEditTime: 2021-04-19 14:30:22
  * @Description: 
 -->
 <template>
@@ -13,7 +13,7 @@
       width="100% "
       src="/icons/v2/bg2.png"
     />
-    <div class="fixed-top full-width row  justify-center  z-top">
+    <div class="fixed-top full-width row  justify-center ">
       <q-img
         contain
         width="250px "
@@ -137,9 +137,14 @@ export default defineComponent({
     async battle() {
       console.log('battle');
       this.loading = true;
+      this.show = false;
+      this.win = false;
+      this.start = false;
+      console.log(this.mineCat);
+      console.log(this.battleCat);
       await goBattle(this.mineCat, this.battleCat);
       this.loading = false;
-      this.start = !this.start;
+      this.start = true;
       this.show = true;
       this.win = true;
     },
