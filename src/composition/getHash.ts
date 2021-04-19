@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 22:45:24
+ * @LastEditTime: 2021-04-19 16:54:33
  * @Description:
  */
 
@@ -13,6 +13,7 @@ import { date } from 'quasar';
 import { ApiResponse, NTFAttr } from './interface';
 import { initPWCore } from './loginMetamask';
 export function getAttribute(hash: string): NTFAttr {
+  console.log(hash);
   if (!hash)
     return {
       ph: 0,
@@ -102,8 +103,8 @@ export async function getCellCreateData(
   // 获取小鱼干
   const attr = getAttribute(hash);
   // 计算小鱼干属性
-  const fishes = getfishers(attr);
-  // const fishes = '100';
+  // const fishes = getfishers(attr);
+  const fishes = '100';
   //todo 转hash
   const output_data = '0x' + setData(name, 16) + hash + setData(fishes, 4);
   const data = {

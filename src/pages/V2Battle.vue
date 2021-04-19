@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 14:30:22
+ * @LastEditTime: 2021-04-19 17:17:44
  * @Description: 
 -->
 <template>
@@ -34,13 +34,19 @@
             :win="win"
             :show="show"
             :cat="battleCat"
+            v-show="battleCat.attr"
           >
           </v-2-cat-info-little>
         </div>
 
         <v-2-set-name v-if="login" height="50%"></v-2-set-name>
         <div height="50%" v-else>
-          <v-2-cat-info-little title="Your Cat" :win="win" :cat="mineCat">
+          <v-2-cat-info-little
+            v-show="mineCat.attr"
+            title="Your Cat"
+            :win="win"
+            :cat="mineCat"
+          >
           </v-2-cat-info-little>
         </div>
       </div>
@@ -113,6 +119,7 @@ export default defineComponent({
     onMounted(async () => {
       loading.value = true;
       const data = await getBattleCell();
+      console.log(data);
       battleCat.value = data.battle;
       if (!data.mine) {
         login.value = true;

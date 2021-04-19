@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 17:04:36
+ * @LastEditTime: 2021-04-19 17:11:44
  * @Description:
  */
 
@@ -132,6 +132,7 @@ export interface PWCoreData {
 export interface NTFCat {
   name: string;
   hash: string;
+  attr?: NTFAttr;
   address: string;
   fishes: string;
   mine: boolean;

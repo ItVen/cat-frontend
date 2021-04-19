@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 10:04:40
+ * @LastEditTime: 2021-04-19 17:20:16
  * @Description: 
 -->
 <template>
@@ -29,7 +29,11 @@
       <q-card class="my-card self-center" style="border-radius: 10px;">
         <q-card-section horizontal>
           <q-card-section class="fit column  justify-center items-center ">
-            <q-img class="my-icon col-2" :src="icon" :ratio="1" />
+            <q-img
+              class="my-icon col-2"
+              :src="getCatIcon(cat.name)"
+              :ratio="1"
+            />
             <div class="text-body1 text-weight-bold q-mt-sm q-mb-xs">
               {{ cat.name }}
             </div>
@@ -55,7 +59,7 @@
                   size="15px"
                   style="margin-right: 3px;"
                 />
-                <span class="self-center">{{ ph }} </span>
+                <span class="self-center">{{ cat.attr.ph }} </span>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon
@@ -64,11 +68,11 @@
                   size="15px"
                   style="margin-right: 3px;"
                 />
-                <span class="self-center">{{ atk }} </span>
+                <span class="self-center">{{ cat.attr.atk }} </span>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon name="img:icons/v2/defense.png" size="15px" />
-                <span class="self-center">{{ def }} </span>
+                <span class="self-center">{{ cat.attr.def }} </span>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon
@@ -77,7 +81,7 @@
                   size="15px"
                   style="margin-right: 3px;"
                 />
-                <span class="self-center">{{ lck }} </span>
+                <span class="self-center">{{ cat.attr.lck }} </span>
               </div>
             </div>
           </q-card-section>
@@ -89,7 +93,6 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api';
-import { getAttribute } from '../composition/getHash';
 import { getCatIcon } from '../composition/utils';
 export default defineComponent({
   name: 'CatInfo',
@@ -109,15 +112,9 @@ export default defineComponent({
     show: Boolean,
     title: String
   },
-  setup(props) {
-    console.log(props.cat);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const attr = getAttribute(props.cat.hash);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const icon = getCatIcon(props.cat.name);
+  setup() {
     return {
-      icon,
-      ...attr
+      getCatIcon
     };
   },
   methods: {

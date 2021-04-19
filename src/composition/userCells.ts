@@ -4,7 +4,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 12:06:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-18 23:15:47
+ * @LastEditTime: 2021-04-19 17:12:21
  * @Description: cell create update delete
  */
 import PWCore, {
@@ -20,6 +20,7 @@ import { apiGet } from './apiBase';
 import { useConfig } from './baseConfig';
 import { goBattle } from './battle';
 import { BattleBuilder } from './battle-builder';
+import { getAttribute } from './getHash';
 import { ApiResponse, BattleCell, BattleCells, NTFCat } from './interface';
 import { sendTransaction } from './loginMetamask';
 import { getLiveCell } from './rpcApi';
@@ -77,12 +78,14 @@ export async function getBattleCell(name?: string) {
   const battle = JSON.parse(resdata.battle.userdata) as NTFCat;
   battle.address = resdata.battle.address;
   battle.mine = false;
+  battle.attr = getAttribute(battle.hash);
   battle.output = (resdata.battle.output as unknown) as Cell;
   battle.output_data = resdata.battle.output_data;
   if (success) {
     const mine = JSON.parse(resdata.mine.userdata) as NTFCat;
     mine.address = resdata.mine.address;
     mine.mine = true;
+    mine.attr = getAttribute(mine.hash);
     mine.output = (resdata.mine.output as unknown) as Cell;
     mine.output_data = resdata.mine.output_data;
     return { mine, battle };
