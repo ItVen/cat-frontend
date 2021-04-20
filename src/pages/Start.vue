@@ -31,7 +31,7 @@
         >
       </div>
       <div class="full-width row justify-center">
-        <v-2-cat-info class="col-10" :cat="cat"></v-2-cat-info>
+        <v-2-cat-info v-show="cat" class="col-10" :cat="cat"></v-2-cat-info>
       </div>
       <div class="full-width row justify-center">
         <q-btn
@@ -55,27 +55,34 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import SignUnipass from 'src/components/SignUnipass.vue';
 import V2CatInfo from 'src/components/V2CatInfo.vue';
 import { isLogin } from 'src/composition/getLoginStatus';
 import { initPWCore, getAccount } from 'src/composition/loginMetamask';
 import { login } from '../composition/getLoginStatus'; //
+import { getOneCat } from '../composition/get-home-data';
 export default defineComponent({
   components: { V2CatInfo, SignUnipass },
   name: 'Start',
-  setup() {
+  setup(props, ctx) {
     // todo islogin
-    const cat = {
-      name: 'testaaa',
-      fishes: 60,
-      hash: '0x36a491bcf8ff9e94e49f2bd99969ed51ceb256a8cfbe1ed0583da0c6edb15cd8'
-    };
+    let name = ctx.root.$route.query.name;
+    const cat = ref(false);
+    const loading = ref(false);
+    onMounted(async () => {
+      loading.value = true;
+      const data = await getOneCat(name);
+      console.log(data);
+      cat.value = data;
+      loading.value = false;
+    });
     return {
       cat,
       toLogin: ref(false),
-      loading: ref(false),
       isLogin,
+      loading,
+      name,
       login,
       initPWCore,
       url: 'https://placeimg.com/500/300/nature',
@@ -96,7 +103,12 @@ export default defineComponent({
       this.loading = true;
       const pw = await initPWCore(true);
       if (pw.address) {
-        void this.$router.push({ path: '/battle' });
+        void this.$router.push({
+          path: '/battle',
+          query: {
+            name: this.name
+          }
+        });
       }
       this.loading = false;
     }

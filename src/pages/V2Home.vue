@@ -78,16 +78,14 @@ export default defineComponent({
     const cat = ref(false);
     let loading = ref(false);
     let address = ref('');
-    let share = ref('https://cat-frontend-kk2hib8ry-sourlycat.vercel.app/#/');
+    let share = ref('https://cat-frontend-git-v2-sourlycat.vercel.app/#/');
     onMounted(async () => {
       loading.value = true;
       const data = await getMineCat();
       cat.value = data;
       address.value = data.address;
       share.value =
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        // 'https://cat-frontend-kk2hib8ry-sourlycat.vercel.app/#/battle/'
-        'http://localhost:8080/#/battle?name=' + data.name;
+        'https://cat-frontend-git-v2-sourlycat.vercel.app/#/?name=' + data.name;
       loading.value = false;
     });
     return {

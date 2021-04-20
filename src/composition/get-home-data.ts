@@ -12,7 +12,7 @@ import { showAddress, hexToByteArray } from './utils';
 import PWCore from '@lay2/pw-core';
 import { BattleCell, Cat, HomeCell, NTFCat, UserList } from './interface';
 import { initPWCore, setCellData } from './loginMetamask';
-import { setCellData2 } from './getHash';
+import { getAttribute, setCellData2 } from './getHash';
 
 export async function getList() {
   const query = {};
@@ -57,23 +57,15 @@ export async function getUsetList(address: string) {
 
 export async function getOneCat(name: string | null) {
   if (!name) {
-    // 查询自己账户下的详情或者 创建小猫
-    return {
-      name: '',
-      hash: '',
-      address: '',
-      fishes: '',
-      mine: true,
-      output_data: ''
-    };
+    name = 'wewe';
   }
-  const data = await getCatInfoByName(name);
-  const cat = JSON.parse((data.data as BattleCell).userdata) as NTFCat;
-  cat.address = (data.data as BattleCell).address;
-  cat.output_data = (data.data as BattleCell).output_data;
-  cat.mine = false;
-  const address = PWCore.provider.address.addressString;
-  if (cat.address == address) cat.mine = true;
+  const data = (await (await getCatInfoByName(name)).data) as BattleCell;
+  const cat = JSON.parse(data.userdata) as NTFCat;
+  console.log(data);
+  cat.address = data.address;
+  cat.attr = getAttribute(cat.hash);
+  cat.output_data = data.output_data;
+  console.log(cat);
   return cat;
 }
 
@@ -86,6 +78,7 @@ export async function getMineCat() {
     await initPWCore();
     cat.address = PWCore.provider.address.addressString;
   }
+  cat.attr = getAttribute(cat.hash);
   cat.output_data = (data as BattleCell).output_data;
   return cat;
 }
