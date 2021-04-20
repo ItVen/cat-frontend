@@ -42,16 +42,18 @@
 <script>
 import { defineComponent, ref } from '@vue/composition-api';
 import { isEmail } from '../composition/utils';
-import { getTransferBuilder } from '../composition/userCells';
+import { pushTransfer, getTransferBuilder } from '../composition/transfer';
 export default defineComponent({
   name: 'BottomSheet',
   props: {
-    address: String
+    address: String,
+    catName: String
   },
   setup() {
     return {
-      to: 'ckt1qyqrgtcp7wpu0h784rxu05px56s9wq80kdus8spf5w',
+      to: '',
       isEmail,
+      pushTransfer,
       loading: ref(false),
       getTransferBuilder
     };
@@ -69,14 +71,17 @@ export default defineComponent({
       // todo  发起交易转账 对方的cell  我的cell
       try {
         const tx = await getTransferBuilder(this.to);
+        console.log(tx, '-------tx');
         this.loading = false;
-        console.log(tx);
         if (!tx) {
           // 转账失败
         } else {
           // 转账完成 去那里？提交服务器 tx from  to
-
+          await pushTransfer(tx, this.to, this.catName);
           this.$emit('close');
+          void this.$router.push({
+            path: '/'
+          });
         }
       } catch (e) {
         this.loading = false;

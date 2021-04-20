@@ -40,7 +40,7 @@
           class="center-self col-6"
           label="Start Game"
           no-caps
-          @click="tologin"
+          @click="start"
         >
         </q-btn>
       </div>
@@ -66,14 +66,12 @@ export default defineComponent({
   components: { V2CatInfo, SignUnipass },
   name: 'Start',
   setup(props, ctx) {
-    // todo islogin
     let name = ctx.root.$route.query.name;
     const cat = ref(false);
     const loading = ref(false);
     onMounted(async () => {
       loading.value = true;
       const data = await getOneCat(name);
-      console.log(data);
       cat.value = data;
       loading.value = false;
     });
@@ -91,18 +89,10 @@ export default defineComponent({
     };
   },
   methods: {
-    start() {
-      const login = isLogin();
-      if (login) {
-        void this.$router.push({ path: '/battle' });
-      } else {
-        this.toLogin = true;
-      }
-    },
-    async tologin() {
+    async start() {
       this.loading = true;
       const pw = await initPWCore(true);
-      if (pw.address) {
+      if (pw) {
         void this.$router.push({
           path: '/battle',
           query: {

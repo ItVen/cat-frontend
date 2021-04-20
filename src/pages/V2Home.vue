@@ -57,7 +57,11 @@
       </div>
     </div>
     <q-dialog v-model="show" position="bottom">
-      <bottom-sheet :address="address" @close="show = !show"></bottom-sheet>
+      <bottom-sheet
+        :catName="cat && cat.name"
+        :address="address"
+        @close="show = !show"
+      ></bottom-sheet>
     </q-dialog>
     <q-inner-loading :showing="loading">
       <q-spinner-gears size="50px" color="primary" />
@@ -69,22 +73,31 @@
 import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import BottomSheet from 'src/components/BottomSheet.vue';
 import V2CatInfo from 'src/components/V2CatInfo.vue';
-import { getMineCat } from 'src/composition/get-home-data';
+import { ShowLiveCat } from 'src/composition/loginMetamask';
 
 export default defineComponent({
   components: { V2CatInfo, BottomSheet },
   name: 'V2Home',
-  setup() {
+  setup(props, ctx) {
     const cat = ref(false);
     let loading = ref(false);
     let address = ref('');
     let share = ref('https://cat-frontend-git-v2-sourlycat.vercel.app/#/');
     onMounted(async () => {
       loading.value = true;
-      const data = await getMineCat();
-      cat.value = data;
-      address.value = data.address;
+      const data = await ShowLiveCat();
+      if (!data) {
+        void ctx.root.$router.push({
+          path: '/'
+        });
+      }
+      if (data) {
+        cat.value = data;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        address.value = data.address;
+      }
       share.value =
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         'https://cat-frontend-git-v2-sourlycat.vercel.app/#/?name=' + data.name;
       loading.value = false;
     });

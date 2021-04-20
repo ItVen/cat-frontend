@@ -65,12 +65,12 @@ const get = async (
 };
 export const apiPost = async (
   url: string,
-  params: Record<string, unknown>,
+  params: Record<string, unknown> | unknown,
   authorization?: boolean
 ) => post(useConfig().base_url + url, params, authorization);
 const post = async (
   url: string,
-  params: Record<string, unknown>,
+  params: Record<string, unknown> | unknown,
   authorization?: boolean
 ) => {
   let config = undefined;
@@ -170,7 +170,7 @@ const put = async (url: string, params: unknown, authorization?: boolean) => {
   }
   return ret;
 };
-export async function createUserInfo(data: Record<string, string>) {
+export async function createUserInfo(data: Record<string, string | number>) {
   const res = (await apiPost('/user', data, false)) as BindInfo;
   const token = res.token;
   setStorage(TOKEN_KEY, token);
@@ -221,22 +221,8 @@ export async function patchTxStatusData(
   return res?.data as ApiResponse;
 }
 
-export async function postMyTxData(
-  from: string,
-  to: string,
-  name: string,
-  txHash: string
-) {
-  const res = await apiPost(
-    '/tx',
-    {
-      from,
-      to,
-      name,
-      txHash
-    },
-    true
-  );
+export async function postMyTxData(data: unknown) {
+  const res = await apiPost('/tx', data, true);
   return (res as ApiResponse).data;
 }
 

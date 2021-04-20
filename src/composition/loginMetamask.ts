@@ -21,7 +21,7 @@ import PWCore, {
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import supported from 'src/composition/chains';
-import { ApiResponse, ChainsModel, PWCoreData } from './interface';
+import { ApiResponse, ChainsModel, NTFCat, PWCoreData } from './interface';
 import { useConfig } from './baseConfig';
 import { getLiveCell } from './rpcApi';
 import { CatCollector } from 'src/composition/catCollector';
@@ -30,6 +30,7 @@ import { putMyUserData } from './apiBase';
 import { Notify } from 'quasar';
 import { login } from './getLoginStatus';
 import { RPC, transformers } from 'ckb-js-toolkit';
+import { getHashData } from './utils';
 
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
@@ -134,7 +135,7 @@ function getChainData(chainId: number): ChainsModel {
   return chainData;
 }
 
-export async function initPWCore(tologin?: boolean): Promise<PWCoreData> {
+export async function initPWCore(tologin?: boolean) {
   try {
     web3 = await haveWeb3();
   } catch (e) {
@@ -152,36 +153,41 @@ export async function initPWCore(tologin?: boolean): Promise<PWCoreData> {
       collector
     );
   }
-  const ethAddress = PWCore.provider.address.addressString;
-  // 获取ckb 地址
-  const address = PWCore.provider.address.toCKBAddress();
-  // 获取账户余额
-  const ckbBalance = await PWCore.defaultCollector.getBalance(
-    PWCore.provider.address
-  );
-  const userCells = await collector.collectSUDT(sudt, PWCore.provider.address, {
+  if (true) {
+    const ethAddress = PWCore.provider.address.addressString;
+    // 获取ckb 地址
+    const address = PWCore.provider.address.toCKBAddress();
+
+    const liveCells = await collector.collectSUDT(
+      sudt,
+      PWCore.provider.address,
+      {
+        neededAmount: new Amount('1', AmountUnit.shannon)
+      }
+    );
+    console.log(liveCells);
+    // todo 更新token
+    if (address) void login(ethAddress, address, liveCells.length);
+    return true;
+  }
+}
+export async function ShowLiveCat(): Promise<NTFCat | unknown> {
+  await getPw();
+  const liveCells = await collector.collectSUDT(sudt, PWCore.provider.address, {
     neededAmount: new Amount('1', AmountUnit.shannon)
   });
-  // todo login
-  let myCat = undefined;
-  if (userCells.length > 0) {
-    // todo 更新到后台cell数据
-    const cell = userCells[0];
-    const data = cell.getData();
-    myCat = {
-      cat: '1',
-      data,
-      hexData: cell.getHexData()
-    };
+  console.log(liveCells);
+  let cat;
+  for (const item of liveCells) {
+    cat = getHashData(
+      item.getHexData(),
+      true,
+      PWCore.provider.address.toCKBAddress()
+    ) as NTFCat;
+    if (cat.hash) break;
   }
-  // todo 更新token
-  if (tologin && address) await login(ethAddress, address);
-  return {
-    ckbBalance,
-    address,
-    ethAddress,
-    myCat
-  };
+  if (liveCells.length > 0) return cat as NTFCat;
+  return undefined;
 }
 
 export async function getPw(): Promise<PWCore> {
@@ -215,18 +221,17 @@ export async function send(address: string, amount: string): Promise<string> {
 
 export async function sendTransaction(builder: Builder): Promise<string> {
   const pw = await getPw();
-  console.log(builder);
-  const CKB_URL = 'https://testnet.ckb.dev';
-  const rpc = new RPC(CKB_URL);
-  const tx = await builder.build();
-  const signer = new DefaultSigner(PWCore.provider);
-  const data = transformers.TransformTransaction(await signer.sign(tx));
-  console.log(JSON.stringify(data));
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const txHash = (await rpc.send_transaction(data)) as string;
-
-  //
-  // const txHash = await pw.sendTransaction(builder);
+  // console.log(builder);
+  // const CKB_URL = 'https://testnet.ckb.dev';
+  // const rpc = new RPC(CKB_URL);
+  // const tx = await builder.build();
+  // const signer = new DefaultSigner(PWCore.provider);
+  // const data = transformers.TransformTransaction(await signer.sign(tx));
+  // console.log(JSON.stringify(data));
+  // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  // const txHash = (await rpc.send_transaction(data)) as string;
+  const txHash = await pw.sendTransaction(builder);
+  console.log('txHash--------', txHash);
   return txHash;
 }
 export async function setCellData(

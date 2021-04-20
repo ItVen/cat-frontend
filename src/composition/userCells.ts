@@ -7,24 +7,11 @@
  * @LastEditTime: 2021-04-19 22:37:41
  * @Description: cell create update delete
  */
-import PWCore, {
-  Cell,
-  Amount,
-  Address,
-  AddressType,
-  Builder
-} from '@lay2/pw-core';
-import { CatCollector } from 'src/composition/catCollector';
-import { SourlyCatType } from 'src/composition/sourlyCatType';
+import PWCore, { Cell } from '@lay2/pw-core';
 import { apiGet } from './apiBase';
-import { useConfig } from './baseConfig';
-import { goBattle } from './battle';
-import { BattleBuilder } from './battle-builder';
 import { getAttribute } from './getHash';
-import { ApiResponse, BattleCell, BattleCells, NTFCat } from './interface';
-import { sendTransaction } from './loginMetamask';
-import { getLiveCell } from './rpcApi';
-import { BatchCatBuilder } from './transfer-budiler';
+import { ApiResponse, BattleCells, NTFCat } from './interface';
+import { ShowLiveCat } from './loginMetamask';
 
 export function getAddress(): string {
   console.log(PWCore.provider.address.toLockScript());
@@ -37,40 +24,9 @@ export function getLockHash(): string {
   const hash = PWCore.provider.address.toLockScript().codeHash;
   return hash;
 }
-
-export async function getTransferBuilder(
-  eth: string,
-  count?: string
-): Promise<string | boolean> {
-  const address = new Address(eth, AddressType.ckb);
-  const sudt = new SourlyCatType(
-    '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
-  );
-  // const cells = await getLiveCell(PWCore.provider.address);
-  // console.log(cells);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const options = { witnessArgs: Builder.WITNESS_ARGS.Secp256k1 };
-  const builder = new BatchCatBuilder(
-    sudt,
-    address,
-    1000,
-    new CatCollector(useConfig().indexer_rpc),
-    options
-  );
-  let txHash = '0x';
-  try {
-    txHash = await sendTransaction(builder);
-    console.log('txHash--', txHash);
-  } catch (e) {
-    console.log('e--', e);
-    return false;
-  }
-  if (txHash.startsWith('0x')) return false;
-  // todo 更新转账交易 from to tx
-  return txHash;
-}
-
 export async function getBattleCell(name?: string) {
+  const live = await ShowLiveCat();
+  console.log(live);
   if (!name) name = '雷兔';
   const data = { name };
   const res = await apiGet('/user/battle', data, true);
@@ -83,14 +39,9 @@ export async function getBattleCell(name?: string) {
   battle.battle = getAttribute('');
   battle.output = (resdata.battle.output as unknown) as Cell;
   battle.output_data = resdata.battle.output_data;
-  if (success) {
-    const mine = JSON.parse(resdata.mine.userdata) as NTFCat;
-    mine.address = resdata.mine.address;
-    mine.mine = true;
-    mine.attr = getAttribute(mine.hash);
+  if (live && success) {
+    const mine = live as NTFCat;
     mine.battle = getAttribute('');
-    mine.output = (resdata.mine.output as unknown) as Cell;
-    mine.output_data = resdata.mine.output_data;
     return { mine, battle };
   } else {
     const mine = undefined;

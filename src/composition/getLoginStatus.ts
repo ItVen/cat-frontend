@@ -20,12 +20,17 @@ export function isLogin(): boolean {
   if (token) return true;
   return false;
 }
-export async function login(ethAddress: string, address: string) {
+export async function login(
+  ethAddress: string,
+  address: string,
+  liveCells: number
+) {
   // 后台服务器绑定地址
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const data = await createUserInfo({
     ethAddress,
-    address
+    address,
+    liveCells
   });
   console.log(data);
   return data;

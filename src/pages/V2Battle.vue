@@ -29,7 +29,7 @@
             :win="win"
             :show="show"
             :cat="battleCat"
-            v-show="battleCat.attr"
+            v-show="battleCat && battleCat.attr"
           >
           </v-2-cat-info-little>
         </div>
@@ -41,7 +41,7 @@
           v-else
         >
           <v-2-cat-info-little
-            v-show="mineCat.attr"
+            v-show="mineCat && mineCat.attr"
             title="Your Cat"
             :win="win"
             :cat="mineCat"
@@ -121,6 +121,7 @@ export default defineComponent({
     onMounted(async () => {
       loading.value = true;
       const data = await getBattleCell(name);
+
       battleCat.value = data.battle;
       if (!data.mine) {
         login.value = true;

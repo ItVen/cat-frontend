@@ -1,3 +1,5 @@
+import { getAttribute } from './getHash';
+
 /*
  * @Author: Aven
  * @Date: 2021-04-07 15:31:25
@@ -63,4 +65,25 @@ export function hexToByteArray(h: string) {
     h = h.slice(2);
   }
   return array;
+}
+
+export function getHashData(hexData: string, mine: boolean, address: string) {
+  hexData = hexData.substring(2, hexData.length);
+  console.log(hexData.length);
+  const name = hexToByteArray(hexData.substring(0, 32))
+    .map(char => String.fromCharCode(char))
+    .join('');
+  const hash = hexData.substring(32, 72);
+  const attr = getAttribute(hash);
+  const fishes = hexToByteArray(hexData.substring(72, 80))
+    .map(char => String.fromCharCode(char))
+    .join('');
+  return {
+    name,
+    hash,
+    fishes,
+    mine,
+    attr,
+    address
+  };
 }
