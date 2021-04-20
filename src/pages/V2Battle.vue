@@ -121,7 +121,7 @@ export default defineComponent({
     onMounted(async () => {
       loading.value = true;
       const data = await getBattleCell(name);
-
+      console.log(data);
       battleCat.value = data.battle;
       if (!data.mine) {
         login.value = true;

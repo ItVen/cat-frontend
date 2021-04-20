@@ -105,7 +105,8 @@ export default defineComponent({
     mine: Boolean,
     title: String
   },
-  setup() {
+  setup(props) {
+    console.log(getCatIcon(props.cat.name));
     return {
       getCatIcon
     };

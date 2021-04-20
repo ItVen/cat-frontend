@@ -86,6 +86,7 @@ export default defineComponent({
     onMounted(async () => {
       loading.value = true;
       const data = await ShowLiveCat();
+      console.log(data);
       if (!data) {
         void ctx.root.$router.push({
           path: '/'

@@ -70,9 +70,14 @@ export function hexToByteArray(h: string) {
 export function getHashData(hexData: string, mine: boolean, address: string) {
   hexData = hexData.substring(2, hexData.length);
   console.log(hexData.length);
-  const name = hexToByteArray(hexData.substring(0, 32))
-    .map(char => String.fromCharCode(char))
-    .join('');
+  let name = hexToByteArray(hexData.substring(0, 32))
+    .map(char => {
+      console.log(char);
+      if (char != 0) String.fromCharCode(char);
+    })
+    .join('')
+    .trim();
+  name = name.toString();
   const hash = hexData.substring(32, 72);
   const attr = getAttribute(hash);
   const fishes = hexToByteArray(hexData.substring(72, 80))

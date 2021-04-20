@@ -26,7 +26,7 @@
         class="text-white text-body1 z-top full-width row  justify-center items-center "
       >
         <span class="text-center  z-top "
-          >Free to get your Sourly Cat NTF, <br />start your first game based on
+          >Free to get your Sourly Cat NFT, <br />start your first game based on
           blockchain</span
         >
       </div>

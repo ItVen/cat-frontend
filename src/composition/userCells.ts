@@ -25,10 +25,10 @@ export function getLockHash(): string {
   return hash;
 }
 export async function getBattleCell(name?: string) {
-  const live = await ShowLiveCat();
-  console.log(live);
+  const live = (await ShowLiveCat()) as NTFCat;
   if (!name) name = '雷兔';
-  const data = { name };
+  const data = { name, mine: name };
+  if (live) data.mine = live.name;
   const res = await apiGet('/user/battle', data, true);
   const success = (res?.data as ApiResponse).success;
   const resdata = (res?.data as ApiResponse).data as BattleCells;
@@ -40,7 +40,7 @@ export async function getBattleCell(name?: string) {
   battle.output = (resdata.battle.output as unknown) as Cell;
   battle.output_data = resdata.battle.output_data;
   if (live && success) {
-    const mine = live as NTFCat;
+    const mine = live;
     mine.battle = getAttribute('');
     return { mine, battle };
   } else {
