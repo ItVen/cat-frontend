@@ -148,7 +148,7 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
   userWin ? (cat.mine = true) : (cat.mine = false);
   userWin ? (mineCat = cat) : (battleCat = cat);
   console.log(mineCat, battleCat);
-  // await toBattleBuilder(mine, user, n.toString());
+  await toBattleBuilder(mine, user, n.toString());
   return {
     battleCat,
     mineCat
@@ -194,7 +194,7 @@ async function toBattleBuilder(mine: NTFCat, user: NTFCat, count: string) {
   // todo witnessArgs
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const witnessArgs = Builder.WITNESS_ARGS.RawSecp256k1;
+  const witnessArgs = Builder.WITNESS_ARGS.Secp256k1;
   witnessArgs.input_type = '0x' + setData(count, 2);
   const options = {
     witnessArgs

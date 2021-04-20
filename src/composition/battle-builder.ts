@@ -94,8 +94,17 @@ export class BattleBuilder extends Builder {
       '0x297fb72de7f76ba0784e63dff941b01cbbb372a26c0786d2d511ae9709d8ca57',
       '0x0'
     );
+    const pw = new OutPoint(
+      '0x57a62003daeab9d54aa29b944fc3b451213a5ebdf2e232216a3cfed0dde61b38',
+      '0x0'
+    );
     const catCelldep = new CellDep(DepType.code, outPoint);
-    const sudtCellDeps = [PWCore.config.defaultLock.cellDep, catCelldep];
+    const pwCelldep = new CellDep(DepType.code, pw);
+    const sudtCellDeps = [
+      PWCore.config.defaultLock.cellDep,
+      catCelldep,
+      pwCelldep
+    ];
     const tx = new Transaction(
       new RawTransaction(inputCells, outputCells, sudtCellDeps),
       // [Builder.WITNESS_ARGS.Secp256k1]

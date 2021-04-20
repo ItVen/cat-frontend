@@ -50,7 +50,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      to: '',
+      to: 'ckt1qyqrgtcp7wpu0h784rxu05px56s9wq80kdus8spf5w',
       isEmail,
       loading: ref(false),
       getTransferBuilder
@@ -74,7 +74,8 @@ export default defineComponent({
         if (!tx) {
           // 转账失败
         } else {
-          // 转账完成 去那里？
+          // 转账完成 去那里？提交服务器 tx from  to
+
           this.$emit('close');
         }
       } catch (e) {

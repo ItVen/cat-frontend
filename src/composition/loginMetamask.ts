@@ -15,7 +15,8 @@ import PWCore, {
   AddressType,
   Builder,
   Cell,
-  AmountUnit
+  AmountUnit,
+  DefaultSigner
 } from '@lay2/pw-core';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
@@ -28,6 +29,7 @@ import { SourlyCatType } from 'src/composition/sourlyCatType';
 import { putMyUserData } from './apiBase';
 import { Notify } from 'quasar';
 import { login } from './getLoginStatus';
+import { RPC, transformers } from 'ckb-js-toolkit';
 
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
@@ -183,20 +185,28 @@ export async function initPWCore(tologin?: boolean): Promise<PWCoreData> {
 }
 
 export async function getPw(): Promise<PWCore> {
-  console.log('=======console.log(pw);');
-  web3 = await haveWeb3();
+  try {
+    web3 = await haveWeb3();
+  } catch (e) {
+    // todo 弹窗警告
+    Notify.create({
+      message: 'not find MataMask',
+      position: 'bottom',
+      timeout: 2000,
+      color: 'negative'
+    });
+  }
   if (!pw) {
     pw = await new PWCore(useConfig().ckb_test_net).init(
       new Web3ModalProvider(web3), // http://cellapitest.ckb.pw/
-      new PwCollector(useConfig().socket_url)
+      collector
     );
   }
-  console.log(pw);
   return pw;
 }
 // 发起交易 todo buider
 export async function send(address: string, amount: string): Promise<string> {
-  if (!pw) return '';
+  const pw = await getPw();
   const ckbAddress = new Address(address, AddressType.ckb);
   console.log(ckbAddress);
   const txHash = await pw.send(ckbAddress, new Amount(amount));
@@ -204,9 +214,19 @@ export async function send(address: string, amount: string): Promise<string> {
 }
 
 export async function sendTransaction(builder: Builder): Promise<string> {
-  if (!pw) return '';
+  const pw = await getPw();
   console.log(builder);
-  const txHash = await pw.sendTransaction(builder);
+  const CKB_URL = 'https://testnet.ckb.dev';
+  const rpc = new RPC(CKB_URL);
+  const tx = await builder.build();
+  const signer = new DefaultSigner(PWCore.provider);
+  const data = transformers.TransformTransaction(await signer.sign(tx));
+  console.log(JSON.stringify(data));
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const txHash = (await rpc.send_transaction(data)) as string;
+
+  //
+  // const txHash = await pw.sendTransaction(builder);
   return txHash;
 }
 export async function setCellData(

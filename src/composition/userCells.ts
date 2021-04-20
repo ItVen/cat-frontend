@@ -46,10 +46,10 @@ export async function getTransferBuilder(
   const sudt = new SourlyCatType(
     '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
   );
-  const cells = await getLiveCell(PWCore.provider.address);
-  console.log(cells);
+  // const cells = await getLiveCell(PWCore.provider.address);
+  // console.log(cells);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const options = { witnessArgs: Builder.WITNESS_ARGS.RawSecp256k1 };
+  const options = { witnessArgs: Builder.WITNESS_ARGS.Secp256k1 };
   const builder = new BatchCatBuilder(
     sudt,
     address,

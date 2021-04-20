@@ -33,7 +33,8 @@ export class BatchCatBuilder extends Builder {
     const inputCells: Cell[] = [];
 
     const totalSendAmount = new Amount('10', AmountUnit.ckb);
-
+    console.log('eth账户地址，', PWCore.provider.address.addressString);
+    console.log('账户地址，', PWCore.provider.address.toLockScript());
     const receiverSUDTCells = await (this
       .collector as CatCollector).collectSUDT(
       this.sudt,
@@ -42,27 +43,25 @@ export class BatchCatBuilder extends Builder {
         neededAmount: totalSendAmount
       }
     );
-    console.log(receiverSUDTCells);
+    console.log('账户下的NTFCell', receiverSUDTCells);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!receiverSUDTCells || receiverSUDTCells.length < 1) {
       throw new Error('No live sudt cell to transfer');
     }
     let inputSum = Amount.ZERO;
-    console.log(inputSum);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const cell = receiverSUDTCells[0];
+    console.log('转账的cell', cell);
+    // cell.lock = PWCore.provider.address.toLockScript();
     inputCells.push(cell);
-    console.log('inputCells', inputCells);
+    console.log('放入输入数组', inputCells);
     inputSum = inputSum.add(new Amount('10', AmountUnit.ckb));
-    console.log('inputSum', inputSum);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const receiverOutputCell = cell.clone();
-    console.log('receiverOutputCell', receiverOutputCell);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     receiverOutputCell.lock = this.address.toLockScript();
+    console.log('转账方cell,克隆后 修改lock', receiverOutputCell);
     outputCells.push(receiverOutputCell);
-    console.log('outputCells', outputCells);
+    console.log('放入输入数组', outputCells);
     if (!inputSum.eq(totalSendAmount)) {
       throw new Error(
         `SUDT amount is not meet,  expect ${totalSendAmount.toString(
@@ -72,10 +71,7 @@ export class BatchCatBuilder extends Builder {
     }
     this.rectifyTx(inputCells, outputCells);
     let found = false;
-    console.log(found, '---------this.fee-', this.fee);
     for (const outputCell of outputCells) {
-      console.log(outputCell, '---------outputCell');
-      console.log(outputCell.availableFee().gte(this.fee), 'this.fee');
       if (outputCell.availableFee().gte(this.fee)) {
         outputCell.capacity = outputCell.capacity.sub(this.fee);
         found = true;
@@ -83,7 +79,6 @@ export class BatchCatBuilder extends Builder {
         break;
       }
     }
-    console.log(found, '---------found-');
     if (found) {
       return this.rectifyTx(inputCells, outputCells);
     }
@@ -117,8 +112,17 @@ export class BatchCatBuilder extends Builder {
       '0x3c6fbb3bbda63274635df9304a7cc55913a5454aafecb34bbefe3f17209d5f63',
       '0x0'
     );
+    const pw = new OutPoint(
+      '0x57a62003daeab9d54aa29b944fc3b451213a5ebdf2e232216a3cfed0dde61b38',
+      '0x0'
+    );
     const catCelldep = new CellDep(DepType.code, outPoint);
-    const sudtCellDeps = [PWCore.config.defaultLock.cellDep, catCelldep];
+    const pwCelldep = new CellDep(DepType.code, pw);
+    const sudtCellDeps = [
+      PWCore.config.defaultLock.cellDep,
+      catCelldep,
+      pwCelldep
+    ];
     const tx = new Transaction(
       new RawTransaction(inputCells, outputCells, sudtCellDeps),
       [this.witnessArgs]
