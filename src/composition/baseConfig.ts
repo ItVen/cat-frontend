@@ -15,7 +15,6 @@ interface Urls {
 const urls: Record<string, Urls> = {
   test: {
     base_url: 'https://api.sourlycat.com',
-
     // base_url: 'http://127.0.0.1:3000',
     socket_url: 'https://cellapitest.ckb.pw',
     ckb_test_net: 'https://testnet.ckb.dev',

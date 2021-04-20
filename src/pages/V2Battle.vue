@@ -109,7 +109,9 @@ import { getAttribute } from 'src/composition/getHash';
 export default defineComponent({
   components: { V2SetName, V2CatInfoLittle },
   name: 'Start',
-  setup() {
+  setup(props, ctx) {
+    let name = ctx.root.$route.query.name;
+    console.log(name);
     let loading = ref(false);
     let login = ref(false);
     let mineCat = ref(false);
@@ -118,7 +120,7 @@ export default defineComponent({
     let show = ref(false);
     onMounted(async () => {
       loading.value = true;
-      const data = await getBattleCell();
+      const data = await getBattleCell(name);
       battleCat.value = data.battle;
       if (!data.mine) {
         login.value = true;

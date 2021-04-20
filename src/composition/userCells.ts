@@ -65,12 +65,13 @@ export async function getTransferBuilder(
     console.log('e--', e);
     return false;
   }
-  if (txHash.endsWith('0x')) return false;
+  if (txHash.startsWith('0x')) return false;
   // todo 更新转账交易 from to tx
   return txHash;
 }
 
 export async function getBattleCell(name?: string) {
+  if (!name) name = '雷兔';
   const data = { name };
   const res = await apiGet('/user/battle', data, true);
   const success = (res?.data as ApiResponse).success;

@@ -48,7 +48,10 @@
           color="primary"
           label="Share"
           no-caps
-          @click="share"
+          @click="onShare"
+          v-clipboard:copy="share"
+          v-clipboard:success="onCopy"
+          v-clipboard:error="onError"
         >
         </q-btn>
       </div>
@@ -75,17 +78,23 @@ export default defineComponent({
     const cat = ref(false);
     let loading = ref(false);
     let address = ref('');
+    let share = ref('https://cat-frontend-kk2hib8ry-sourlycat.vercel.app/#/');
     onMounted(async () => {
       loading.value = true;
       const data = await getMineCat();
       cat.value = data;
       address.value = data.address;
+      share.value =
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        // 'https://cat-frontend-kk2hib8ry-sourlycat.vercel.app/#/battle/'
+        'http://localhost:8080/#/battle?name=' + data.name;
       loading.value = false;
     });
     return {
       loading,
       cat,
       address,
+      share,
       show: ref(false)
     };
   },
@@ -94,10 +103,16 @@ export default defineComponent({
       this.show = true;
       console.log('transfer');
     },
-    share() {
-      console.log('share');
-      // todo 分享功能
-      // nativeShare = new NativeShare({});
+    onShare() {
+      console.log(this.share);
+    },
+    onCopy(e) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      console.log(e.text);
+      console.log(this.share);
+    },
+    onError(e) {
+      console.log('无法复制文本！');
     }
   }
 });

@@ -10,13 +10,17 @@
   <div class="row">
     <span class="text-caption" style="margin-top: 4px;">{{ count }}</span>
     <div
-      v-if="state"
-      :class="{
-        'text-caption text-red-8': state && state > 0,
-        'text-caption text-green-8': state && state < 0
-      }"
+      v-if="state && state > 0"
+      class="text-caption text-green-8"
       style="transform: scale(0.7);"
       color="text-yellow"
+    >
+      +{{ state }}
+    </div>
+    <div
+      v-if="state && state < 0"
+      class="text-caption text-red-8"
+      style="transform: scale(0.7);"
     >
       {{ state }}
     </div>
