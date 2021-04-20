@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 18:37:42
+ * @LastEditTime: 2021-04-21 07:12:07
  * @Description: 
 -->
 <template>
@@ -69,6 +69,7 @@ export default defineComponent({
     let name = ctx.root.$route.query.name;
     const cat = ref(false);
     const loading = ref(false);
+
     onMounted(async () => {
       loading.value = true;
       const data = await getOneCat(name);
