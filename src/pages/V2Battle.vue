@@ -57,7 +57,6 @@
       />
 
       <div
-        v-show="!login"
         class="absolute-bottom full-width row  justify-around  z-top"
         style="margin:20px"
       >
@@ -121,7 +120,7 @@ export default defineComponent({
     onMounted(async () => {
       loading.value = true;
       const data = await getBattleCell(name);
-      console.log(data);
+      console.log(data, 'data');
       battleCat.value = data.battle;
       if (!data.mine) {
         login.value = true;

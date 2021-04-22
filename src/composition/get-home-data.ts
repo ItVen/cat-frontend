@@ -11,7 +11,7 @@ import { getHomeList, getCatInfoByName, getUserList, apiPost } from './apiBase';
 import { showAddress, hexToByteArray, getHashData } from './utils';
 import PWCore from '@lay2/pw-core';
 import { BattleCell, Cat, HomeCell, NTFCat, UserList } from './interface';
-import { initPWCore, setCellData } from './loginMetamask';
+import { initPWCore, setCellData, waitUntilCommitted } from './loginMetamask';
 import { getAttribute, setCellData2 } from './getHash';
 
 export async function getList() {
@@ -31,8 +31,14 @@ export async function getList() {
 export async function issuesCat(data: Record<string, string>) {
   console.log('/user/issues');
   const res = await apiPost('/user/issues', data, true);
-  console.log(res);
-  await setCellData2(data);
+  console.log(res, '------');
+  // todo 检查交易是否完成
+  if (res) {
+    const txState = await waitUntilCommitted(res as string, 200);
+    if (txState) {
+      await setCellData2(data);
+    }
+  }
 }
 
 export async function getUsetList(address: string) {
@@ -60,13 +66,17 @@ export async function getOneCat(name: string | null) {
     name = 'wewe';
   }
   const data = (await (await getCatInfoByName(name)).data) as BattleCell;
-  const cat = JSON.parse(data.userdata) as NTFCat;
-  console.log(data);
-  cat.address = data.address;
-  cat.attr = getAttribute(cat.hash);
-  cat.output_data = data.output_data;
-  console.log(cat);
-  return cat;
+  try {
+    const cat = JSON.parse(data.userdata) as NTFCat;
+    console.log(data);
+    cat.address = data.address;
+    cat.attr = getAttribute(cat.hash);
+    cat.output_data = data.output_data;
+    console.log(cat);
+    return cat;
+  } catch (e) {
+    return;
+  }
 }
 
 export async function getMineCat() {

@@ -19,6 +19,7 @@ import {
   CkbIndexer,
   HexString,
   IndexerCellToCell,
+  Order,
   Script,
   ScriptType,
   Terminator
@@ -126,7 +127,9 @@ export class CatCollector extends Collector {
       accCapacity = accCapacity.add(Amount.fromUInt128LE(cell.output_data));
       return { stop: false, push: true };
     };
-    const cells = await this.indexer.getCells(searchKey, terminator);
+    const cells = await this.indexer.getCells(searchKey, terminator, {
+      order: Order.desc
+    });
     return cells.map(cell => IndexerCellToCell(cell));
   }
 }

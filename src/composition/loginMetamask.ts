@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /*
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 14:44:15
+ * @LastEditTime: 2021-04-21 15:14:03
  * @Description:
  */
 
@@ -31,6 +32,7 @@ import { Notify } from 'quasar';
 import { login } from './getLoginStatus';
 import { RPC, transformers } from 'ckb-js-toolkit';
 import { getHashData } from './utils';
+import { BattleSigner } from './singer';
 
 let web3Modal: Web3Modal | undefined = undefined;
 let web3: Web3 | undefined = undefined;
@@ -40,6 +42,8 @@ const sudt = new SourlyCatType(
   '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
 );
 console.log(window.ethereum);
+const CKB_URL = 'https://testnet.ckb.dev';
+const rpc = new RPC(CKB_URL);
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const ethereum: any = window.ethereum;
 try {
@@ -173,10 +177,12 @@ export async function initPWCore(tologin?: boolean) {
 }
 export async function ShowLiveCat(): Promise<NTFCat | unknown> {
   await getPw();
-  const liveCells = await collector.collectSUDT(sudt, PWCore.provider.address, {
+  let liveCells = await collector.collectSUDT(sudt, PWCore.provider.address, {
     neededAmount: new Amount('1', AmountUnit.shannon)
   });
   console.log(liveCells);
+  liveCells = liveCells.reverse();
+  console.log(liveCells, 'revers');
   let cat;
   for (const item of liveCells) {
     cat = getHashData(
@@ -184,6 +190,7 @@ export async function ShowLiveCat(): Promise<NTFCat | unknown> {
       true,
       PWCore.provider.address.toCKBAddress()
     ) as NTFCat;
+    cat.output = item;
     if (cat.hash) break;
   }
   if (liveCells.length > 0) return cat as NTFCat;
@@ -220,17 +227,15 @@ export async function send(address: string, amount: string): Promise<string> {
 }
 
 export async function sendTransaction(builder: Builder): Promise<string> {
-  const pw = await getPw();
-  // console.log(builder);
-  // const CKB_URL = 'https://testnet.ckb.dev';
-  // const rpc = new RPC(CKB_URL);
-  // const tx = await builder.build();
-  // const signer = new DefaultSigner(PWCore.provider);
-  // const data = transformers.TransformTransaction(await signer.sign(tx));
-  // console.log(JSON.stringify(data));
-  // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  // const txHash = (await rpc.send_transaction(data)) as string;
-  const txHash = await pw.sendTransaction(builder);
+  await getPw();
+  console.log(builder);
+  const tx = await builder.build();
+  const signer = new BattleSigner(PWCore.provider);
+  const data = transformers.TransformTransaction(await signer.sign(tx));
+  console.log(JSON.stringify(data));
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const txHash = (await rpc.send_transaction(data)) as string;
+  // const txHash = await pw.sendTransaction(builder);
   console.log('txHash--------', txHash);
   return txHash;
 }
@@ -257,4 +262,27 @@ export async function setCellData(
     // return res;
   }
   return false;
+}
+export async function waitUntilCommitted(txHash: string, timeout = 180) {
+  for (let index = 0; index < timeout; index++) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const data = await rpc.get_transaction(txHash);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const status = data.tx_status.status;
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    console.log(`tx ${txHash} is ${status}, waited for ${index} seconds`);
+    console.log('asyncSleep 1000');
+    await asyncSleep(1000);
+    if (status === 'committed') {
+      return 'committed';
+    }
+  }
+  throw new Error(`tx ${txHash} not committed in ${timeout} seconds`);
+}
+function asyncSleep(ms: number) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('');
+    }, ms);
+  });
 }

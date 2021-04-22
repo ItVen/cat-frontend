@@ -1,8 +1,15 @@
+/*
+ * @Author: Aven
+ * @Date: 2021-04-20 16:10:45
+ * @LastEditors: Aven
+ * @LastEditTime: 2021-04-22 14:03:15
+ * @Description:
+ */
 import PWCore, { Address, AddressType, Builder } from '@lay2/pw-core';
 import { postMyTxData } from './apiBase';
 import { useConfig } from './baseConfig';
 import { CatCollector } from './catCollector';
-import { getPw, sendTransaction } from './loginMetamask';
+import { getPw, sendTransaction, waitUntilCommitted } from './loginMetamask';
 import { SourlyCatType } from './sourlyCatType';
 import { BatchCatBuilder } from './transferBuilder';
 
@@ -14,9 +21,6 @@ export async function getTransferBuilder(
   const sudt = new SourlyCatType(
     '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
   );
-  // const cells = await getLiveCell(PWCore.provider.address);
-  // console.log(cells);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const options = { witnessArgs: Builder.WITNESS_ARGS.Secp256k1 };
   const builder = new BatchCatBuilder(
     sudt,
@@ -33,8 +37,9 @@ export async function getTransferBuilder(
     return false;
   }
   if (txHash.endsWith('0x')) return false;
-  // todo 更新转账交易 from to tx
-  return txHash;
+  const txState = await waitUntilCommitted(txHash, 200);
+  if (txState) return txState;
+  return false;
 }
 export async function pushTransfer(txHash: string, to: string, name: string) {
   console.log('pushTransfer----', txHash, to, name);

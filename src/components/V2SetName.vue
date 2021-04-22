@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-18 00:23:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 18:42:16
+ * @LastEditTime: 2021-04-22 14:04:24
  * @Description: 
 -->
 <template>
@@ -83,7 +83,7 @@ export default defineComponent({
         return;
       }
       const data = await getCellCreateData(this.name);
-      console.log(data);
+      console.log(data, '--------getCellCreateData');
       // todo 更新卡片信息
       if (data) {
         await issuesCat(data);

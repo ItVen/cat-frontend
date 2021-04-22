@@ -4,7 +4,7 @@ import { getAttribute } from './getHash';
  * @Author: Aven
  * @Date: 2021-04-07 15:31:25
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-21 07:25:00
+ * @LastEditTime: 2021-04-22 13:57:36
  * @Description:
  */
 export function isEmail(email: string): boolean {
@@ -77,11 +77,9 @@ export function getHashData(hexData: string, mine: boolean, address: string) {
   }
 
   const name = nameArray.map(char => String.fromCharCode(char)).join('');
-  const hash = hexData.substring(32, 72);
+  const hash = '0x' + hexData.substring(32, 72);
   const attr = getAttribute(hash);
-  const fishes = hexToByteArray(hexData.substring(72, 80))
-    .map(char => String.fromCharCode(char))
-    .join('');
+  const fishes = parseInt(hexData.substring(72, 80), 16).toString();
   return {
     name,
     hash,

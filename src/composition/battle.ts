@@ -44,42 +44,51 @@ async function getResult(
     mine: loser.mine,
     output: loser.output
   };
-  let winer_fishes = loserAttr.ph * 0.1;
-  winer_fishes = parseInt(winer_fishes.toFixed());
-  let loser_fishes = winerAttr.atk * 0.1;
-  loser_fishes = parseInt(loser_fishes.toFixed());
+  const winer_fishes = Math.floor(loserAttr.ph * 0.1);
+  const loser_fishes = Math.floor(winerAttr.atk * 0.1);
+
   afterWiner.fishes = (parseInt(winer.fishes) + winer_fishes).toFixed();
   afterLoser.fishes = (parseInt(loser.fishes) - loser_fishes).toFixed();
-  if (loser.fishes == '0') {
-    loser.fishes = '999';
+
+  if (afterLoser.fishes == '0') {
+    afterLoser.fishes = '999';
   }
   const output = winer.output as Cell;
+
   const lock = JSON.stringify(output.lock);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const lockData = JSON.parse(lock).code_hash;
-  const loserHash = toHash(loser.hash, lockData);
+  let loserHash = toHash(loser.hash, lockData);
+  loserHash = loserHash.replace('0x', '');
   afterLoser.hash = loserHash;
   const output_data =
     '0x' +
     setData(loser.name, 16) +
-    setData(loserHash, 20) +
-    setData(afterLoser.fishes, 4);
+    loserHash +
+    Number(afterLoser.fishes)
+      .toString(16)
+      .padStart(8, '0');
   //   //todo data 更新
-
+  afterLoser.output_data = output_data;
+  console.log('loser_fishes:', loser_fishes, 'loser:', afterLoser.fishes);
+  console.log('winer_fishes:', loser_fishes, 'winner:', afterWiner);
+  console.log('afterLoser:', afterLoser.hash);
+  console.log('afterLoser.output_data:', output_data);
+  console.log('afterLoser.output_data:', afterLoser.output_data);
   // todo  更新后台数据库信息
-  const state = await postBattleData(
-    winer,
-    loser,
-    afterWiner,
-    afterLoser,
-    winer_fishes,
-    loser_fishes,
-    loserHash,
-    output_data,
-    count,
-    start
-  );
-  return { winer, loser, afterWiner, afterLoser, mineWin, state };
+  // const state = await postBattleData(
+  //   winer,
+  //   loser,
+  //   afterWiner,
+  //   afterLoser,
+  //   winer_fishes,
+  //   loser_fishes,
+  //   loserHash,
+  //   output_data,
+  //   count,
+  //   start
+  // );
+  return { winer, loser, afterWiner, afterLoser, mineWin, state: false };
 }
 export async function goBattle(mine: NTFCat, user: NTFCat) {
   const start = mine.name;
@@ -87,13 +96,19 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
   const mineAttr = getAttribute(mine.hash);
   const battleAttr = getAttribute(user.hash);
   // Hurt1 = ATK1*( 1 - DEF2/(DEF2 - LCK2*2 + 250) )
-  const hurtMine =
-    mineAttr.atk *
-    (1 - battleAttr.def / (battleAttr.def - battleAttr.lck * 2 + 250));
+  const hurtMine = Math.floor(
+    battleAttr.atk -
+      (battleAttr.atk * mineAttr.def) /
+        Math.floor(250 - mineAttr.lck * 2 + mineAttr.def)
+  );
+
   // Hurt2 = ATK2*( 1 - DEF1/(DEF1 - LCK1*2 + 250) )
-  const hurtBattle =
-    battleAttr.atk *
-    (1 - mineAttr.def / (mineAttr.def - mineAttr.lck * 2 + 250));
+  const hurtBattle = Math.floor(
+    mineAttr.atk -
+      (mineAttr.atk * battleAttr.def) /
+        (250 - battleAttr.lck * 2 + battleAttr.def)
+  );
+
   let userWin = false;
   let n = 0;
   let result;
@@ -101,10 +116,10 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
     // 传入任意 n 值，满足下列两个条件之一，则可以确认战斗结果
     //n * Hurt1 >= 10 * HP2 且 (n-1) * Hurt2 < 10 * HP1 则 <被挑战者> 胜利
     if (
-      hurtMine * n >= 10 * battleAttr.ph &&
-      hurtBattle * (n - 1) < 10 * mineAttr.ph
+      hurtMine * n >= 5 * mineAttr.ph &&
+      hurtBattle * (n - 1) < 5 * battleAttr.ph
     ) {
-      console.log('battle win');
+      console.log('battle win -----', n);
       userWin = true;
       result = await getResult(
         user,
@@ -117,10 +132,10 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
       );
       break;
     } else if (
-      hurtMine * n < 10 * battleAttr.ph &&
-      hurtBattle * n >= 10 * mineAttr.ph
+      hurtMine * n < 5 * mineAttr.ph &&
+      hurtBattle * n >= 5 * battleAttr.ph
     ) {
-      console.log('mine win');
+      console.log('mine win-----n', n);
       result = await getResult(
         mine,
         user,
@@ -148,7 +163,15 @@ export async function goBattle(mine: NTFCat, user: NTFCat) {
   userWin ? (cat.mine = true) : (cat.mine = false);
   userWin ? (mineCat = cat) : (battleCat = cat);
   console.log(mineCat, battleCat);
-  await toBattleBuilder(mine, user, n.toString());
+  console.log('tobuider----', n, result?.afterLoser.output_data);
+
+  await toBattleBuilder(
+    mine,
+    user,
+    n.toString(),
+    result?.afterLoser.output_data,
+    userWin
+  );
   return {
     battleCat,
     mineCat
@@ -170,6 +193,7 @@ async function postBattleData(
     winer,
     loser,
     afterWiner,
+
     afterLoser,
     winnerFishes,
     loserFishes,
@@ -182,23 +206,38 @@ async function postBattleData(
   return (res as BattleUsed).state;
 }
 
-async function toBattleBuilder(mine: NTFCat, user: NTFCat, count: string) {
+async function toBattleBuilder(
+  mine: NTFCat,
+  user: NTFCat,
+  count: string,
+  output_data: string,
+  userWin: boolean
+) {
   const sudt = new SourlyCatType(
     '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
   );
-  // const addressMine = new Address(mine.address, AddressType.ckb);
-  const addressUser = new Address(user.address, AddressType.ckb);
+  let addressUser = new Address(user.address, AddressType.eth);
+  if (user.address.startsWith('ckb')) {
+    addressUser = new Address(user.address, AddressType.ckb);
+  }
   // 挑战者 被挑战者
   const address = [addressUser];
+  console.log(address, 'address');
   const amount = new Amount('1');
   // todo witnessArgs
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const witnessArgs = Builder.WITNESS_ARGS.Secp256k1;
-  witnessArgs.input_type = '0x' + setData(count, 2);
+  witnessArgs.input_type =
+    '0x' +
+    Number(parseInt(count))
+      .toString(16)
+      .padStart(16, '0');
+  console.log(witnessArgs, count);
   const options = {
     witnessArgs
   };
+  console.log(mine, '--mine', mine, '---mine');
   const builder = new BattleBuilder(
     sudt,
     address,
@@ -206,8 +245,8 @@ async function toBattleBuilder(mine: NTFCat, user: NTFCat, count: string) {
     1000,
     new CatCollector(useConfig().indexer_rpc),
     options,
-    mine,
-    user
+    output_data,
+    userWin
   );
   console.log(builder);
   try {

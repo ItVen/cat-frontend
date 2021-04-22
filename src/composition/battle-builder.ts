@@ -3,7 +3,7 @@
  * @Author: Aven
  * @Date: 2021-04-16 02:18:43
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-17 00:06:46
+ * @LastEditTime: 2021-04-21 15:24:34
  * @Description:
  */
 import PWCore, {
@@ -34,8 +34,8 @@ export class BattleBuilder extends Builder {
     feeRate?: number,
     collector?: CatCollector,
     protected options: BuilderOption = {},
-    private mines?: NTFCat,
-    private user?: NTFCat
+    protected output_data: string,
+    protected userWin: boolean
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     super(feeRate, collector, options.witnessArgs);
@@ -43,6 +43,7 @@ export class BattleBuilder extends Builder {
   // 被挑战者的输入cell和输出cell对应第一位 input[] output[]
   // 挑战者的都在第二位 input[] output[]
   async build(): Promise<Transaction> {
+    console.log(this.output_data, this.userWin);
     const inputCells = [];
     let outputCells = [];
     let inputCKBSum = Amount.ZERO;
@@ -62,7 +63,7 @@ export class BattleBuilder extends Builder {
         neededAmount: new Amount('10', AmountUnit.shannon)
       }
     );
-    console.log(mineCells, 'mine');
+    console.log(mineCells, 'mine', userCells, 'userCells');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!userCells || userCells.length === 0) {
       throw new Error('The userCells has no sudt cell');
@@ -73,6 +74,11 @@ export class BattleBuilder extends Builder {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const mineCellInput = mineCells[0]; // 挑战者
     const mineCelloutPut = mineCellInput.clone();
+    if (this.userWin) {
+      mineCelloutPut.setHexData(this.output_data);
+    } else {
+      userCelloutPut.setHexData(this.output_data);
+    }
     mineCelloutPut.lock = PWCore.provider.address.toLockScript();
     inputCKBSum = inputCKBSum.add(mineCellInput.capacity);
     const ckbAmount = new Amount('10', AmountUnit.shannon);
@@ -91,7 +97,7 @@ export class BattleBuilder extends Builder {
 
   private rectifyTx(inputCells: Cell[], outputCells: Cell[]) {
     const outPoint = new OutPoint(
-      '0x297fb72de7f76ba0784e63dff941b01cbbb372a26c0786d2d511ae9709d8ca57',
+      '0x3c6fbb3bbda63274635df9304a7cc55913a5454aafecb34bbefe3f17209d5f63',
       '0x0'
     );
     const pw = new OutPoint(
@@ -108,11 +114,13 @@ export class BattleBuilder extends Builder {
     const tx = new Transaction(
       new RawTransaction(inputCells, outputCells, sudtCellDeps),
       // [Builder.WITNESS_ARGS.Secp256k1]
-      [this.witnessArgs]
+      [this.witnessArgs, this.witnessArgs]
     );
+    tx.witnesses[0] = '0x';
+
     // console.log(this.witnessArgs.lock, this.witnessArgs.lock.length);
     this.fee = Builder.calcFee(tx, this.feeRate);
-    console.log(JSON.stringify(tx), 'rectifyTx');
+    console.log(JSON.stringify(tx), '------rectifyTx');
     return tx;
   }
 }

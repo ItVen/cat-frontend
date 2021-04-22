@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 16:54:33
+ * @LastEditTime: 2021-04-21 14:37:10
  * @Description:
  */
 
@@ -11,9 +11,8 @@ import PWCore, { Blake2bHasher, byteArrayToHex } from '@lay2/pw-core';
 import { getLiveCell } from '../composition/rpcApi';
 import { date } from 'quasar';
 import { ApiResponse, NTFAttr } from './interface';
-import { initPWCore } from './loginMetamask';
+import { getPw, initPWCore, ShowLiveCat } from './loginMetamask';
 export function getAttribute(hash: string): NTFAttr {
-  console.log(hash);
   if (!hash)
     return {
       ph: 0,
@@ -28,10 +27,10 @@ export function getAttribute(hash: string): NTFAttr {
   }) as number[];
   const hashBuffer = new Uint8Array(array);
 
-  const ph = (hashBuffer[4] % 100) + 1;
-  const atk = (hashBuffer[9] % 100) + 1;
-  const def = (hashBuffer[14] % 100) + 1;
-  const lck = (hashBuffer[19] % 100) + 1;
+  const ph = Math.floor((hashBuffer[4] % 100) + 1);
+  const atk = Math.floor((hashBuffer[9] % 100) + 1);
+  const def = Math.floor((hashBuffer[14] % 100) + 1);
+  const lck = Math.floor((hashBuffer[19] % 100) + 1);
   return {
     ph,
     atk,
@@ -61,7 +60,11 @@ export async function setCellData2(
 ): Promise<boolean | ApiResponse> {
   // 获取还活在的cell
   const address = PWCore.provider.address;
+  const cat = await ShowLiveCat();
+  console.log(cat, 'ShowLiveCat');
   const cells = (await getLiveCell(address)) as unknown[];
+  console.log(cells, 'getLiveCell');
+
   delete userdata.output_data;
   const newdata = JSON.stringify(userdata);
   if (cells.length > 0) {
@@ -73,6 +76,8 @@ export async function setCellData2(
     });
     console.log(JSON.stringify(data));
     const res = await putMyUserData(data);
+    console.log(res);
+
     return res;
   }
   return false;
@@ -93,28 +98,29 @@ export async function getCellCreateData(
   try {
     lock_hash = PWCore.provider.address.toLockScript().codeHash;
   } catch (e) {
-    console.log(e);
-    await initPWCore();
+    await getPw();
     lock_hash = PWCore.provider.address.toLockScript().codeHash;
   }
   let hash = toHash(name, lock_hash);
   hash = hash.replace('0x', '');
-  console.log(hash, hash.length);
   // 获取小鱼干
   const attr = getAttribute(hash);
   // 计算小鱼干属性
   // const fishes = getfishers(attr);
-  const fishes = '100';
+  const fishes = Number(100).toString(16);
   //todo 转hash
-  const output_data = '0x' + setData(name, 16) + hash + setData(fishes, 4);
+  const output_data = '0x' + setData(name, 16) + hash + fishes.padStart(8, '0');
+  console.log(output_data);
   const data = {
     name,
     hash,
     fishes,
-    output_data
+    output_data,
+    ckb_address: PWCore.provider.address.toCKBAddress()
   };
   return data;
 }
+
 export function setData(data: string | number, length: number) {
   data = data as string;
   data = data + '';
