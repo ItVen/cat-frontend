@@ -10,7 +10,7 @@ import { putMyUserData } from './apiBase';
 import PWCore, { Blake2bHasher, byteArrayToHex } from '@lay2/pw-core';
 import { getLiveCell } from '../composition/rpcApi';
 import { date } from 'quasar';
-import { ApiResponse, NTFAttr } from './interface';
+import { ApiResponse, NTFAttr, NTFCat } from './interface';
 import { getPw, initPWCore, ShowLiveCat } from './loginMetamask';
 export function getAttribute(hash: string): NTFAttr {
   if (!hash)
@@ -60,26 +60,17 @@ export async function setCellData2(
 ): Promise<boolean | ApiResponse> {
   // 获取还活在的cell
   const address = PWCore.provider.address;
-  const cat = await ShowLiveCat();
-  console.log(cat, 'ShowLiveCat');
-  const cells = (await getLiveCell(address)) as unknown[];
-  console.log(cells, 'getLiveCell');
-
+  const cells = (await ShowLiveCat()) as NTFCat;
   delete userdata.output_data;
   const newdata = JSON.stringify(userdata);
-  if (cells.length > 0) {
-    const cell = cells[cells.length - 1];
-    const data = Object.assign(cell, {
-      name: userdata.name,
-      address: address.addressString,
-      userdata: newdata
-    });
-    console.log(JSON.stringify(data));
-    const res = await putMyUserData(data);
-    console.log(res);
-
-    return res;
-  }
+  const data = Object.assign(cells, {
+    name: userdata.name,
+    address: address.addressString,
+    userdata: newdata
+  });
+  console.log(JSON.stringify(data));
+  const res = await putMyUserData(data);
+  console.log(res);
   return false;
 }
 

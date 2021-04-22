@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-02 15:10:42
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-22 16:02:10
+ * @LastEditTime: 2021-04-22 16:02:45
  * @Description:
  */
 interface Urls {
