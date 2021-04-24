@@ -3,7 +3,7 @@
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
  * @LastEditTime: 2021-04-20 00:14:36
- * @Description: 
+ * @Description:
 -->
 <template>
   <q-page class="fullscreen bg-black column">
@@ -21,7 +21,7 @@
     >
       <div
         class="fixed-top  column wrap  justify-evenly items-center content-center"
-        style="height:50%"
+        style="height:56%"
       >
         <div>
           <v-2-cat-info-little
@@ -37,7 +37,7 @@
         <v-2-set-name v-if="login" height="50%"></v-2-set-name>
         <div
           class="fixed-bottom  column wrap  justify-evenly items-center content-center"
-          style="height:50%"
+          style="height:57%"
           v-else
         >
           <v-2-cat-info-little
