@@ -3,7 +3,7 @@
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
  * @LastEditTime: 2021-04-20 00:32:44
- * @Description: 
+ * @Description:
 -->
 <template>
   <div>
@@ -26,25 +26,25 @@
 
     <span class="center-start text-white text-subtitle">{{ title }}</span>
     <div class="column">
-      <q-card class="my-card self-center" style="border-radius: 10px;">
+      <q-card class="my-card self-center" style="border-radius: 15px;">
         <q-card-section horizontal>
-          <q-card-section class="fit column  justify-center items-center ">
+          <q-card-section class="fit column justify-center items-center ">
             <q-img
-              class="my-icon col-2"
+              class="q-ma-xs my-icon col-2"
               :src="getCatIcon(cat.name)"
               :ratio="1"
+              style="width:70%"
             />
             <div class="text-body1 text-weight-bold q-mt-sm q-mb-xs">
               {{ cat.name }}
             </div>
             <div
-              class="text-body2 text-weight-regular fit row  justify-center items-center content-center"
+              class="text-body2 text-weight-bold fit row justify-center items-center content-center"
             >
-              <br />
               <q-icon
-                class="self-center"
+                class="q-mx-xs q-mt-xs self-center"
                 name="img:icons/v2/fish-left.png"
-                size="15px"
+                size="13px"
               />
               <v-2-attr
                 class="self-center"
@@ -54,48 +54,49 @@
             </div>
 
             <div
-              class="fit row  justify-around q-mt-sm q-mb-xs items-center text-subtitle1 text-weight-bold"
+              class="fit row justify-around q-mt-xs items-center text-subtitle1 text-weight-bold"
             >
-              <div class="row  justify-center items-center content-center">
+              <div class="row justify-center items-center content-center">
                 <q-icon
-                  class="self-center"
+                  class="q-ml-sm q-mr-xs self-center"
                   name="img:icons/v2/health.png"
-                  size="15px"
-                  style="margin-right: 3px;"
+                  size="13px"
                 />
                 <v-2-attr
-                  class="self-center"
+                  class="q-mr-sm self-center"
                   :count="cat.attr.ph"
                   :state="cat.battle.ph"
                 ></v-2-attr>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon
-                  class="self-center"
+                  class="q-ml-sm q-mr-xs self-center"
                   name="img:icons/v2/attack.png"
-                  size="15px"
-                  style="margin-right: 3px;"
+                  size="13px"
                 />
                 <v-2-attr
-                  class="self-center"
+                  class="q-mr-sm self-center"
                   :count="cat.attr.atk"
                   :state="cat.battle.atk"
                 ></v-2-attr>
               </div>
               <div class="row  justify-center items-center content-center">
-                <q-icon name="img:icons/v2/defense.png" size="15px" />
+                <q-icon
+                  class="q-ml-sm q-mr-xs self-center"
+                  name="img:icons/v2/defense.png"
+                  size="13px"
+                />
                 <v-2-attr
-                  class="self-center"
+                  class="q-mr-sm self-center"
                   :count="cat.attr.def"
                   :state="cat.battle.def"
                 ></v-2-attr>
               </div>
               <div class="row  justify-center items-center content-center">
                 <q-icon
-                  class="self-center"
+                  class="q-ml-sm q-mr-xs self-center"
                   name="img:icons/v2/lucky.png"
-                  size="15px"
-                  style="margin-right: 3px;"
+                  size="13px"
                 />
                 <v-2-attr
                   class="self-center"

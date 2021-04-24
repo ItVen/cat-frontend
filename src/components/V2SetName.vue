@@ -3,15 +3,15 @@
  * @Date: 2021-04-18 00:23:18
  * @LastEditors: Aven
  * @LastEditTime: 2021-04-22 14:04:24
- * @Description: 
+ * @Description:
 -->
 <template>
   <div
     class="fixed-bottom full-width column wrap justify-start items-center content-center"
     style="padding:50px 40px 40px;40px; height:50%"
   >
-    <span class="text-center text-white text-body1">
-      Seem you don't have a Sourly Cat yet, adopt one for free
+    <span class="text-center text-white text-body1 q-mt-md">
+      Seem you don't have a Sourly Cat yet, create one for free
     </span>
     <div class="row full-width justify-around" style="margin-top:20px">
       <q-input
@@ -40,9 +40,9 @@
     <div class="full-width row justify-center" style="padding-top:10px">
       <q-btn
         no-caps
-        label="Adopt"
+        label="Create"
         :disable="disable"
-        class="text-grey col-6"
+        class="col-6"
         color="primary"
         @click="send"
       ></q-btn>

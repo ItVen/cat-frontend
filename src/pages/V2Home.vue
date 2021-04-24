@@ -3,7 +3,7 @@
  * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
  * @LastEditTime: 2021-04-19 17:36:38
- * @Description: 
+ * @Description:
 -->
 <template>
   <q-page class="fullscreen bg-black">
@@ -46,7 +46,7 @@
           dense
           class="col-4"
           color="primary"
-          label="Share"
+          label="Share battle link"
           no-caps
           @click="onShare"
           v-clipboard:copy="share"
