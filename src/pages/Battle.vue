@@ -1,94 +1,186 @@
 <!--
  * @Author: Aven
- * @Date: 2021-04-10 19:46:54
+ * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-16 10:20:25
+ * @LastEditTime: 2021-05-01 16:50:48
  * @Description: 
 -->
 <template>
-  <q-page class="fix row wrap  justify-center items-start content-center">
-    <div class="col-3 column content-center" v-if="battle">
-      <!-- 对方的cat -->
-      <span v-if="!reslut" class="text-h6" style="margin-left: 15px;"
-        >Owner:<span class="text-blue">{{ battle.name }} </span></span
-      >
-      <span v-else class="text-h5" style="margin-left: 15px;">{{
-        message
-      }}</span>
-      <cat-info class="self-center" :cat="battle"></cat-info>
-    </div>
-    <div class="self-center">
-      <q-btn
-        v-if="!reslut"
-        dense
-        icon="gamepad"
-        class="text-black"
-        label="battle"
-        @click="toBattle"
+  <q-page class="fullscreen bg-black column">
+    <img class="absolute-center img" src="/icons/v2/bg2.png" />
+    <div class="fixed-top full-width row  justify-center ">
+      <q-img
+        contain
+        width="250px "
+        src="/icons/v2/battle-logo-white.png"
+        style="margin:30px"
       />
-      <q-icon class="col-1" v-else name="today" />
     </div>
-
-    <div class="col-3 column  content-center " v-if="mine">
-      <!-- 自己的cat -->
-      <span v-if="!reslut" class="text-h6" style="margin-left: 15px;"
-        >Your Sourly Cat</span
+    <div
+      class="bg center-self full column wrap justify-start items-center content-center"
+    >
+      <div
+        class="fixed-top  column wrap  justify-evenly items-center content-center"
+        style="height:50%"
       >
-      <span v-else class="text-h5 invisible" style="margin-left: 15px;">{{
-        message
-      }}</span>
-      <cat-info class="self-baseline" :cat="mine"></cat-info>
+        <div>
+          <v-2-cat-info-little
+            title="Opponent Cat"
+            :win="win"
+            :show="show"
+            :cat="battleCat"
+            v-show="battleCat && battleCat.attr"
+          >
+          </v-2-cat-info-little>
+        </div>
+
+        <v-2-set-name v-if="login" height="50%"></v-2-set-name>
+        <div
+          class="fixed-bottom  column wrap  justify-evenly items-center content-center"
+          style="height:50%"
+          v-else
+        >
+          <v-2-cat-info-little
+            v-show="mineCat && mineCat.attr"
+            title="Your Cat"
+            :win="win"
+            :cat="mineCat"
+          >
+          </v-2-cat-info-little>
+        </div>
+      </div>
+      <q-img
+        class="absolute-center"
+        contain
+        width="200px"
+        src="/icons/v2/slogan.png"
+      />
+
+      <div
+        v-show="!login"
+        class="absolute-bottom full-width row  justify-around  z-top"
+        style="margin:20px"
+      >
+        <q-btn
+          dense
+          v-if="!start"
+          class="col-6"
+          color="primary"
+          label="Start Battle"
+          no-caps
+          @click="battle"
+        >
+        </q-btn>
+        <q-btn
+          dense
+          v-if="start"
+          class="col-4"
+          color="primary"
+          label="Go Home"
+          no-caps
+          @click="goHome"
+        >
+        </q-btn>
+        <q-btn
+          dense
+          v-if="start"
+          class="col-4"
+          color="primary"
+          label="Battle Again"
+          no-caps
+          @click="battleAgain"
+        >
+        </q-btn>
+      </div>
     </div>
-    <q-inner-loading :showing="loading">
+    <q-inner-loading :showing="loading" class="z-top">
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
   </q-page>
 </template>
-<script>
+
+<script lang="ts">
 import { defineComponent, ref, onMounted } from '@vue/composition-api';
-import CatInfo from 'src/components/CatInfo.vue';
-import { goBattle } from '../composition/battle';
+import V2CatInfoLittle from 'src/components/V2CatInfoLittle.vue';
+import V2SetName from 'src/components/V2SetName.vue';
 import { getBattleCell } from '../composition/userCells';
+import { goBattle } from '../composition/battle';
+import { getAttribute } from 'src/composition/getHash';
+import { NTFCat } from 'src/composition/interface';
+const MODULE_NAME = 'Battle';
 export default defineComponent({
-  components: { CatInfo },
-  name: 'Battle',
+  components: { V2SetName, V2CatInfoLittle },
+  name: MODULE_NAME,
   setup(props, ctx) {
-    let cat = ctx.root.$route.query.cat;
-    console.log(cat);
     let name = ctx.root.$route.query.name;
-    let mine = ref();
-    let battle = ref();
-    let battleName = ref();
+    console.log(name);
     let loading = ref(false);
-    if (name) {
-      onMounted(async () => {
-        loading.value = true;
-        // todo 获取两种卡片信息接口
-        const data = await getBattleCell(name);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        mine.value = data.mine;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        battle.value = data.battle;
-        console.log(mine, battle, battleName);
-        loading.value = false;
-      });
-    }
+    let login = ref(false);
+    let mineCat = ref();
+    let battleCat = ref();
+    let win = ref(false);
+    let show = ref(false);
+    onMounted(async () => {
+      loading.value = true;
+      const data = await getBattleCell(name as string);
+      console.log(data);
+      battleCat.value = data.battle;
+      if (!data.mine) {
+        login.value = true;
+      } else {
+        mineCat.value = data.mine;
+      }
+      loading.value = false;
+    });
     return {
-      mine,
-      battle,
-      goBattle,
-      reslut: ref(false),
-      message: ref(''),
-      loading: ref(false)
+      login,
+      start: ref(false),
+      loading: ref(false),
+      getBattleCell,
+      mineCat,
+      win,
+      show,
+      battleCat,
+      getAttribute,
+      goBattle
     };
   },
   methods: {
-    async toBattle() {
+    // t(type: string, name: string) {
+    //   return this.$t(`${MODULE_NAME}.${type}.${name}`);
+    // },
+    async battle() {
+      console.log('battle');
       this.loading = true;
-      await goBattle(this.mine, this.battle);
+      this.show = false;
+      this.win = false;
+      this.start = false;
+      const data = await goBattle(this.mineCat, this.battleCat);
+      this.mineCat = data.mineCat;
+      this.battleCat = data.battleCat;
+      console.log(data);
       this.loading = false;
-      // todo 更新界面
+      this.start = true;
+      this.show = true;
+      this.win = true;
+    },
+    battleAgain() {
+      this.show = false;
+      (this.mineCat as NTFCat).battle = getAttribute('');
+      (this.battleCat as NTFCat).battle = getAttribute('');
+      this.win = false;
+      this.start = false;
+    },
+    goHome() {
+      void this.$router.push({ path: '/home' });
     }
   }
 });
 </script>
+<style lang="scss" scoped>
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>

@@ -2,14 +2,13 @@
  * @Author: Aven
  * @Date: 2021-04-06 16:26:30
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 16:54:33
+ * @LastEditTime: 2021-05-01 14:20:10
  * @Description:
  */
 
 import { putMyUserData } from './apiBase';
 import PWCore, { Blake2bHasher, byteArrayToHex } from '@lay2/pw-core';
 import { getLiveCell } from '../composition/rpcApi';
-import { date } from 'quasar';
 import { ApiResponse, NTFAttr } from './interface';
 import { initPWCore } from './loginMetamask';
 export function getAttribute(hash: string): NTFAttr {
@@ -38,22 +37,6 @@ export function getAttribute(hash: string): NTFAttr {
     def,
     lck
   };
-}
-
-function getCount(array: Buffer) {
-  let sum = 1;
-  for (const item of array) {
-    sum += item;
-  }
-  return parseInt((sum % 100).toFixed());
-}
-
-function getfishers(data: NTFAttr) {
-  const sum = 100;
-  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-  const attr = (data.ph + data.def + data.lck + data.atk) * 0.2;
-
-  return (sum - attr).toFixed();
 }
 
 export async function setCellData2(
@@ -101,9 +84,6 @@ export async function getCellCreateData(
   hash = hash.replace('0x', '');
   console.log(hash, hash.length);
   // 获取小鱼干
-  const attr = getAttribute(hash);
-  // 计算小鱼干属性
-  // const fishes = getfishers(attr);
   const fishes = '100';
   //todo 转hash
   const output_data = '0x' + setData(name, 16) + hash + setData(fishes, 4);

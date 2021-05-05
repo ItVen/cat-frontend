@@ -3,33 +3,27 @@
  * @Author: Aven
  * @Date: 2021-04-09 11:47:05
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 14:44:15
+ * @LastEditTime: 2021-05-01 14:16:42
  * @Description:
  */
 
 import PWCore, {
   Web3ModalProvider,
-  PwCollector,
   Address,
   Amount,
   AddressType,
   Builder,
-  Cell,
-  AmountUnit,
-  DefaultSigner
+  AmountUnit
 } from '@lay2/pw-core';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import supported from 'src/composition/chains';
-import { ApiResponse, ChainsModel, NTFCat, PWCoreData } from './interface';
+import { ChainsModel, NTFCat } from './interface';
 import { useConfig } from './baseConfig';
-import { getLiveCell } from './rpcApi';
 import { CatCollector } from 'src/composition/catCollector';
 import { SourlyCatType } from 'src/composition/sourlyCatType';
-import { putMyUserData } from './apiBase';
 import { Notify } from 'quasar';
 import { login } from './getLoginStatus';
-import { RPC, transformers } from 'ckb-js-toolkit';
 import { getHashData } from './utils';
 
 let web3Modal: Web3Modal | undefined = undefined;
@@ -41,11 +35,11 @@ const sudt = new SourlyCatType(
 );
 console.log(window.ethereum);
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const ethereum: any = window.ethereum;
+const ethereum = window.ethereum;
 try {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  ethereum.on('accountsChanged', async function(accounts: any[]) {
-    await initPWCore(true);
+  ethereum.on('accountsChanged', async function() {
+    await initPWCore();
     window.location.reload();
   });
 } catch (e) {
@@ -135,7 +129,7 @@ function getChainData(chainId: number): ChainsModel {
   return chainData;
 }
 
-export async function initPWCore(tologin?: boolean) {
+export async function initPWCore() {
   try {
     web3 = await haveWeb3();
   } catch (e) {
@@ -171,7 +165,7 @@ export async function initPWCore(tologin?: boolean) {
     return true;
   }
 }
-export async function ShowLiveCat(): Promise<NTFCat | unknown> {
+export async function ShowLiveCat(): Promise<NTFCat | null> {
   await getPw();
   const liveCells = await collector.collectSUDT(sudt, PWCore.provider.address, {
     neededAmount: new Amount('1', AmountUnit.shannon)
@@ -187,7 +181,7 @@ export async function ShowLiveCat(): Promise<NTFCat | unknown> {
     if (cat.hash) break;
   }
   if (liveCells.length > 0) return cat as NTFCat;
-  return undefined;
+  return null;
 }
 
 export async function getPw(): Promise<PWCore> {
@@ -233,28 +227,4 @@ export async function sendTransaction(builder: Builder): Promise<string> {
   const txHash = await pw.sendTransaction(builder);
   console.log('txHash--------', txHash);
   return txHash;
-}
-export async function setCellData(
-  userdata?: Record<string, unknown>
-): Promise<boolean | ApiResponse> {
-  // 获取还活在的cell
-  const address = PWCore.provider.address;
-  const userCells = await collector.collectSUDT(sudt, PWCore.provider.address, {
-    neededAmount: new Amount('1', AmountUnit.shannon)
-  });
-  console.log('setCellData----------', userCells.length);
-  if (userCells.length > 0) {
-    const cell = userCells[0];
-    console.log(userdata);
-    console.log(cell.getData());
-    console.log(cell.getHexData());
-    // const data = Object.assign(cell, {
-    //   name: userdata.name,
-    //   address: address,
-    //   userdata: newdata
-    // });
-    // const res = await putMyUserData(data);
-    // return res;
-  }
-  return false;
 }

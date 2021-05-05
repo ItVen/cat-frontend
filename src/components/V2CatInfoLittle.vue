@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-20 00:32:44
+ * @LastEditTime: 2021-05-01 16:47:31
  * @Description: 
 -->
 <template>
@@ -117,7 +117,7 @@ import { getCatIcon } from '../composition/utils';
 import V2Attr from './V2Attr.vue';
 export default defineComponent({
   components: { V2Attr },
-  name: 'CatInfo',
+  name: 'CatInfoLittle',
   props: {
     cat: {
       name: {

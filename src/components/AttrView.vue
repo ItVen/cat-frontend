@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-09 20:11:54
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-11 22:58:05
+ * @LastEditTime: 2021-05-01 16:43:39
  * @Description: 
 -->
 <template>
@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 export default defineComponent({
   name: 'AttrView',

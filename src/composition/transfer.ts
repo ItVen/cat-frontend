@@ -1,22 +1,25 @@
+/*
+ * @Author: Aven
+ * @Date: 2021-05-01 13:41:33
+ * @LastEditors: Aven
+ * @LastEditTime: 2021-05-01 14:23:35
+ * @Description:
+ */
 import PWCore, { Address, AddressType, Builder } from '@lay2/pw-core';
 import { postMyTxData } from './apiBase';
 import { useConfig } from './baseConfig';
 import { CatCollector } from './catCollector';
-import { getPw, sendTransaction } from './loginMetamask';
+import { sendTransaction } from './loginMetamask';
 import { SourlyCatType } from './sourlyCatType';
 import { BatchCatBuilder } from './transferBuilder';
 
 export async function getTransferBuilder(
-  eth: string,
-  count?: string
+  eth: string
 ): Promise<string | boolean> {
   const address = new Address(eth, AddressType.ckb);
   const sudt = new SourlyCatType(
     '0x9ec9ae72e4579980e41554100f1219ff97599f8ab7e79c074b30f2fa241a790c'
   );
-  // const cells = await getLiveCell(PWCore.provider.address);
-  // console.log(cells);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const options = { witnessArgs: Builder.WITNESS_ARGS.Secp256k1 };
   const builder = new BatchCatBuilder(
     sudt,

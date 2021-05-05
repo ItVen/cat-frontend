@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-06 14:01:44
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 11:23:14
+ * @LastEditTime: 2021-05-01 14:24:26
  * @Description: 
 -->
 <template>
@@ -85,7 +85,6 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api';
-import { getAttribute } from '../composition/getHash';
 import { getCatIcon } from '../composition/utils';
 export default defineComponent({
   name: 'CatInfo',

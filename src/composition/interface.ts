@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-08 11:54:56
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 22:44:26
+ * @LastEditTime: 2021-05-01 14:25:59
  * @Description:
  */
 
@@ -56,7 +56,7 @@ export interface RpcResponse {
 }
 
 export interface ApiResponse {
-  list: any[];
+  list: [];
   address: string;
   code: number;
   message: string;

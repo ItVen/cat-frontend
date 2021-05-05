@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-19 19:46:57
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-20 00:18:37
+ * @LastEditTime: 2021-05-01 16:45:34
  * @Description: 
      
 -->
@@ -26,7 +26,7 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 export default defineComponent({
   name: 'V2Attr',
@@ -36,7 +36,7 @@ export default defineComponent({
   },
   setup(props) {
     let win = ref(false);
-    if (props.state > 0) {
+    if ((props.state as number) > 0) {
       win = ref(true);
     }
     return { win };

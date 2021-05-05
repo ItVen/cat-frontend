@@ -1,10 +1,10 @@
-import PWCore, { HashType, Script } from '@lay2/pw-core';
+import { HashType, Script } from '@lay2/pw-core';
 
 /*
  * @Author: Aven
  * @Date: 2021-04-14 14:34:27
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-14 15:16:27
+ * @LastEditTime: 2021-05-01 14:23:51
  * @Description:
  */
 export interface SudtInfo {

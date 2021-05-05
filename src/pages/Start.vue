@@ -54,7 +54,7 @@
   </q-page>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref, onMounted } from '@vue/composition-api';
 import SignUnipass from 'src/components/SignUnipass.vue';
 import V2CatInfo from 'src/components/V2CatInfo.vue';
@@ -67,13 +67,16 @@ export default defineComponent({
   name: 'Start',
   setup(props, ctx) {
     let name = ctx.root.$route.query.name;
-    const cat = ref(false);
+    const cat = ref();
     const loading = ref(false);
 
     onMounted(async () => {
       loading.value = true;
-      const data = await getOneCat(name);
-      cat.value = data;
+      const data = await getOneCat(name as string);
+      if (data) {
+        cat.value = data;
+      }
+
       loading.value = false;
     });
     return {
@@ -92,7 +95,7 @@ export default defineComponent({
   methods: {
     async start() {
       this.loading = true;
-      const pw = await initPWCore(true);
+      const pw = await initPWCore();
       if (pw) {
         void this.$router.push({
           path: '/battle',

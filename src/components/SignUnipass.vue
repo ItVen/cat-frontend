@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-18 11:51:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 01:11:52
+ * @LastEditTime: 2021-05-01 16:45:00
  * @Description: 
 -->
 <template>
@@ -17,7 +17,7 @@
     />
   </q-card>
 </template>
-<script>
+<script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({

@@ -1,3 +1,10 @@
+/*
+ * @Author: Aven
+ * @Date: 2021-05-01 14:20:14
+ * @LastEditors: Aven
+ * @LastEditTime: 2021-05-01 14:27:25
+ * @Description:
+ */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /*
  * @Author: Aven
@@ -10,8 +17,7 @@ import { useConfig } from './baseConfig';
 import { RpcResponse } from './interface';
 import { Address } from '@lay2/pw-core';
 
-const prcPost = async (params: Record<string, unknown>, url?: string) =>
-  post(params);
+const prcPost = async (params: Record<string, unknown>) => post(params);
 const post = async (params: Record<string, unknown>, url?: string) => {
   const body = JSON.stringify(params, null, '  ');
   if (!url) url = useConfig().indexer_rpc;

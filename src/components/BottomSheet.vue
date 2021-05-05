@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-16 02:18:43
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 17:37:21
+ * @LastEditTime: 2021-05-01 16:44:43
  * @Description: 
 -->
 <template>
@@ -39,7 +39,7 @@
     </q-inner-loading>
   </q-card>
 </template>
-<script>
+<script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import { isEmail } from '../composition/utils';
 import { pushTransfer, getTransferBuilder } from '../composition/transfer';
@@ -77,7 +77,7 @@ export default defineComponent({
           // 转账失败
         } else {
           // 转账完成 去那里？提交服务器 tx from  to
-          await pushTransfer(tx, this.to, this.catName);
+          await pushTransfer(tx as string, this.to, this.catName as string);
           this.$emit('close');
           void this.$router.push({
             path: '/'

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Notify, LocalStorage } from 'quasar';
+import { LocalStorage } from 'quasar';
 import axios, { AxiosError } from 'axios';
 import { useConfig } from './baseConfig';
-import { BindInfo, Cells } from './interface';
+import { BindInfo } from './interface';
 import { ApiResponse } from './interface';
 
-import TestData from '../composition/testJson';
 const TOKEN_KEY = 'scToken';
 export const CAT_DATA = 'cat_data';
 export function getToken(): string | null {

@@ -1,71 +1,117 @@
 <!--
  * @Author: Aven
- * @Date: 2021-04-06 22:04:05
+ * @Date: 2021-04-17 23:54:45
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 17:26:33
+ * @LastEditTime: 2021-05-01 16:29:16
  * @Description: 
 -->
 <template>
-  <q-page class="fit column wrap justify-start items-start content-center">
-    <q-input
-      outlined
-      flat
-      round
-      dense
-      v-model="search"
-      style="width:40vw;   margin-left: 35px; margin-top: 30px;"
-      placeholder="Search name and address"
-      @keyup.enter="onSearch"
+  <q-page class="fullscreen bg-black">
+    <div class="bg"></div>
+    <img class="absolute-center img" src="/icons/v2/bg1.png" />
+    <div class="fixed-top full-width row  justify-center">
+      <q-img
+        z-top
+        contain
+        src="/icons/v2/logo-white.png"
+        style="padding-top: 120px; width:180px; height:30px"
+      />
+    </div>
+
+    <div
+      class="center-self fullscreen column wrap justify-center items-start content-center "
     >
-      <template v-slot:prepend>
-        <q-icon name="search" />
-      </template>
-    </q-input>
-    <q-card class="col-8 my-card" style="margin: 30px;">
-      <cat-list
-        v-if="cat.length > 0"
-        class="col-8 self-center"
-        :list="cat"
-        title="10 Sourly Cat"
-      ></cat-list>
-    </q-card>
-    <q-inner-loading :showing="contactsLoading">
+      <div class="full-width row  justify-center ">
+        <v-2-cat-info
+          title="My Sourly Cat"
+          class="col-10"
+          v-if="cat"
+          :cat="cat"
+        ></v-2-cat-info>
+      </div>
+      <div
+        class="absolute-bottom full-width row   justify-around  "
+        style="padding-bottom: 100px; padding-top: 120px; width:180px; height:30px"
+      >
+        <q-btn
+          dense
+          class="col-4"
+          color="primary"
+          label="Transfer"
+          no-caps
+          @click="transfer"
+        >
+        </q-btn>
+        <q-btn dense class="col-4" color="primary" label="Share" no-caps>
+        </q-btn>
+      </div>
+    </div>
+    <q-dialog v-model="show" position="bottom">
+      <bottom-sheet
+        :catName="cat && cat.name"
+        :address="address"
+        @close="show = !show"
+      ></bottom-sheet>
+    </q-dialog>
+    <q-inner-loading :showing="loading">
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
   </q-page>
 </template>
-<script>
+
+<script lang="ts">
 import { defineComponent, ref, onMounted } from '@vue/composition-api';
-import CatList from 'src/components/CatList.vue';
-import { isLogin } from '../composition/getLoginStatus';
-import { getList } from '../composition/get-home-data';
+import BottomSheet from 'src/components/BottomSheet.vue';
+import V2CatInfo from 'src/components/V2CatInfo.vue';
+import { ShowLiveCat } from 'src/composition/loginMetamask';
+const MODULE_NAME = 'Home';
 export default defineComponent({
-  name: 'Home',
-  components: { CatList },
-  setup() {
-    const login = isLogin();
-    const contactsLoading = ref(false);
-    let cat = ref([]);
-    // 获取服务器上的cat
+  components: { V2CatInfo, BottomSheet },
+  name: MODULE_NAME,
+  setup(props, ctx) {
+    const cat = ref();
+    let loading = ref(false);
+    let address = ref('');
+    let share = ref('https://cat-frontend-git-v2-sourlycat.vercel.app/#/');
     onMounted(async () => {
-      contactsLoading.value = true;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      cat.value = await getList();
-      contactsLoading.value = false;
+      loading.value = true;
+      const data = await ShowLiveCat();
+      console.log(data);
+      if (!data) {
+        void ctx.root.$router.push({
+          path: '/'
+        });
+      }
+      if (data) {
+        cat.value = data;
+        address.value = data.address;
+        share.value =
+          'https://cat-frontend-git-v2-sourlycat.vercel.app/#/?name=' +
+          data.name;
+      }
+
+      loading.value = false;
     });
     return {
-      filter: ref(''),
-      login,
-      search: ref(''),
+      loading,
       cat,
-      contactsLoading
+      address,
+      share,
+      show: ref(false)
     };
   },
   methods: {
-    onSearch() {
-      console.log(this.search);
-      // todo 搜索
+    transfer() {
+      this.show = true;
+      console.log('transfer');
     }
   }
 });
 </script>
+<style lang="scss" scoped>
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>

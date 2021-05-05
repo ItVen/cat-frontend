@@ -3,15 +3,15 @@
  * @Author: Aven
  * @Date: 2021-04-12 15:05:46
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-21 07:26:58
+ * @LastEditTime: 2021-05-01 14:12:46
  * @Description:
  */
 
 import { getHomeList, getCatInfoByName, getUserList, apiPost } from './apiBase';
-import { showAddress, hexToByteArray, getHashData } from './utils';
+import { showAddress } from './utils';
 import PWCore from '@lay2/pw-core';
 import { BattleCell, Cat, HomeCell, NTFCat, UserList } from './interface';
-import { initPWCore, setCellData } from './loginMetamask';
+import { initPWCore } from './loginMetamask';
 import { getAttribute, setCellData2 } from './getHash';
 
 export async function getList() {

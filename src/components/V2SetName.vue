@@ -2,7 +2,7 @@
  * @Author: Aven
  * @Date: 2021-04-18 00:23:18
  * @LastEditors: Aven
- * @LastEditTime: 2021-04-19 18:42:16
+ * @LastEditTime: 2021-05-01 16:39:27
  * @Description: 
 -->
 <template>
@@ -53,8 +53,8 @@
     </q-inner-loading>
   </div>
 </template>
-<script>
-import { defineComponent, ref, onMounted, watch } from '@vue/composition-api';
+<script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
 import { getNameIsUsed } from 'src/composition/getLoginStatus';
 import { getCellCreateData } from 'src/composition/getHash';
 import { issuesCat } from 'src/composition/get-home-data';
@@ -74,6 +74,9 @@ export default defineComponent({
     };
   },
   methods: {
+    t(type: string, name: string) {
+      this.$t(type, name);
+    },
     async send() {
       console.log('send');
       this.loading = true;
@@ -86,14 +89,14 @@ export default defineComponent({
       console.log(data);
       // todo 更新卡片信息
       if (data) {
-        await issuesCat(data);
+        await issuesCat(data as Record<string, string>);
         location.reload();
         // void this.$router.push({ path: '/battle' });
       }
       // 失败
       this.loading = false;
     },
-    verify(name) {
+    verify(name: string) {
       const verify = verifyName(name);
       this.disable = !verify;
       console.log(verify, this.disable);

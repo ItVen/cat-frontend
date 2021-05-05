@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import PWCore, {
-  Address,
-  AddressType,
-  Amount,
-  Builder,
-  Cell
-} from '@lay2/pw-core';
+import { Address, AddressType, Amount, Builder, Cell } from '@lay2/pw-core';
 import { CatCollector } from 'src/composition/catCollector';
 import { SourlyCatType } from 'src/composition/sourlyCatType';
 import { apiPost } from './apiBase';
