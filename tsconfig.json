@@ -4,5 +4,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "target": "es6"
-  }
+  },
+  "exclude": [
+    "test/cypress",
+    "/dist",
+    ".quasar",
+    "node_modules"
+  ]
 }
